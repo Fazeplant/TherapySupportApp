@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_today"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="@string/title_today" />
+    <item
+        android:id="@+id/navigation_drug_plan"
+        android:icon="@android:drawable/ic_lock_idle_alarm"
+        android:title="@string/title_drug_plan" />
+
+    <item
+        android:id="@+id/navigation_calendar"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/title_calendar" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/title_settings" />
+
+</menu>
