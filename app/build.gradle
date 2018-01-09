@@ -31,4 +31,10 @@ dependencies {
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     compile "com.android.support:design:26.+"
 
+    //FragVav Library
+    implementation 'com.ncapdevi:frag-nav:2.4.0'
+
+    //BottomBar
+    compile 'com.roughike:bottom-bar:2.3.1'
+
 }
