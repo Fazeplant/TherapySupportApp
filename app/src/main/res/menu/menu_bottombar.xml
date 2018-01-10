@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        icon="@android:drawable/ic_menu_today"
+        id="@+id/bb_menu_recents"
+        title="@string/title_today"
+        />
+    <tab
+        icon="@drawable/ic_tag_faces_black_24dp"
+        id="@+id/bb_menu_favorites"
+        title="@string/title_drug_plan"
+        />
+    <tab
+        icon="@android:drawable/ic_menu_my_calendar"
+        id="@+id/bb_menu_nearby"
+        title="@string/title_calendar"
+        />
+    <tab
+        icon="@android:drawable/ic_menu_manage"
+        id="@+id/bb_menu_friends"
+        title="@string/title_settings"
+        />
+</tabs>
