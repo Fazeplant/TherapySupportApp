@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.activities.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,16 +30,11 @@ public class CalendarFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (btn != null) {
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mFragmentNavigation != null) {
-                        mFragmentNavigation.pushFragment(CalendarFragment.newInstance(mInt+1));
-                    }
-                }
-            });
-            btn.setText(getClass().getSimpleName() + " " + mInt);
-        }
+        getActivity().setTitle(R.string.title_calendar);
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_calendar, container, false);
     }
 }

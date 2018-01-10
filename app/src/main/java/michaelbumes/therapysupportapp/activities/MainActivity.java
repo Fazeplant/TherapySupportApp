@@ -14,6 +14,8 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.util.ArrayList;
+
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
@@ -29,15 +31,18 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     private final int INDEX_SETTINGS = FragNavController.TAB4;
     private FragNavController mNavController;
 
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
         boolean initial = savedInstanceState == null;
         if (initial) {
-            bottomBar.selectTabAtPosition(INDEX_CLENDAR);
+            bottomBar.selectTabAtPosition(INDEX_TODAY);
         }
         mNavController = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container)
+
                 .transactionListener(this)
                 .rootFragmentListener(this, 5)
                 .popStrategy(FragNavTabHistoryController.UNIQUE_TAB_HISTORY)
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     }
                 })
                 .build();
+
 
 
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -120,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         }
     }
 
+
     @Override
     public Fragment getRootFragment(int index) {
         switch (index) {
@@ -144,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         }
         return true;
     }
+
+
 
 
 }

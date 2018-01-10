@@ -29,16 +29,12 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (btn != null) {
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mFragmentNavigation != null) {
-                        mFragmentNavigation.pushFragment(SettingsFragment.newInstance(mInt+1));
-                    }
-                }
-            });
-            btn.setText(getClass().getSimpleName() + " " + mInt);
-        }
+        getActivity().setTitle(R.string.title_settings);
+
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 }
