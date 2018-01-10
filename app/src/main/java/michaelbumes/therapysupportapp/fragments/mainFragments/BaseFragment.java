@@ -1,4 +1,4 @@
-package michaelbumes.therapysupportapp.fragments;
+package michaelbumes.therapysupportapp.fragments.mainFragments;
 
 
 import android.content.Context;

@@ -14,14 +14,12 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.util.ArrayList;
-
 import michaelbumes.therapysupportapp.R;
-import michaelbumes.therapysupportapp.fragments.BaseFragment;
-import michaelbumes.therapysupportapp.fragments.CalendarFragment;
-import michaelbumes.therapysupportapp.fragments.DrugPlanFragment;
-import michaelbumes.therapysupportapp.fragments.SettingsFragment;
-import michaelbumes.therapysupportapp.fragments.TodayFragment;
+import michaelbumes.therapysupportapp.fragments.mainFragments.BaseFragment;
+import michaelbumes.therapysupportapp.fragments.mainFragments.CalendarFragment;
+import michaelbumes.therapysupportapp.fragments.mainFragments.DrugPlanFragment;
+import michaelbumes.therapysupportapp.fragments.mainFragments.SettingsFragment;
+import michaelbumes.therapysupportapp.fragments.mainFragments.TodayFragment;
 
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.FragmentNavigation, FragNavController.TransactionListener, FragNavController.RootFragmentListener{

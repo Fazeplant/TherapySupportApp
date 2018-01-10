@@ -1,4 +1,4 @@
-package michaelbumes.therapysupportapp.fragments;
+package michaelbumes.therapysupportapp.fragments.mainFragments;
 
 
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import michaelbumes.therapysupportapp.R;
-
+import michaelbumes.therapysupportapp.fragments.subFragments.AddMedicineFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +27,6 @@ public class DrugPlanFragment extends BaseFragment {
         return fragment;
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -42,7 +41,7 @@ public class DrugPlanFragment extends BaseFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentNavigation.pushFragment(DrugPlanFragment.newInstance(instanceInt+1));
+                fragmentNavigation.pushFragment(AddMedicineFragment.newInstance(instanceInt+1));
             }
         });
 
