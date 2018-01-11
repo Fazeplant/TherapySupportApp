@@ -1,15 +1,10 @@
 package michaelbumes.therapysupportapp.activities;
 
-import android.app.FragmentTransaction;
-import android.support.annotation.AnimRes;
-import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Pair;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.ncapdevi.fragnav.FragNavController;
 import com.ncapdevi.fragnav.FragNavSwitchController;
@@ -18,8 +13,6 @@ import com.ncapdevi.fragnav.tabhistory.FragNavTabHistoryController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
-
-import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.fragments.mainFragments.BaseFragment;
@@ -32,8 +25,9 @@ import michaelbumes.therapysupportapp.fragments.mainFragments.TodayFragment;
 public class MainActivity extends AppCompatActivity implements BaseFragment.FragmentNavigation, FragNavController.TransactionListener, FragNavController.RootFragmentListener{
     private final int INDEX_TODAY = FragNavController.TAB1;
     private final int INDEX_DRUGPLAN = FragNavController.TAB2;
-    private final int INDEX_CLENDAR = FragNavController.TAB3;
-    private final int INDEX_SETTINGS = FragNavController.TAB4;
+    private final int INDEX_BLANK = FragNavController.TAB3;
+    private final int INDEX_CALENDAR = FragNavController.TAB4;
+    private final int INDEX_SETTINGS = FragNavController.TAB5;
     private FragNavController mNavController;
     //private FragNavTransactionOptions mNavTransactionOptions;
 
@@ -46,6 +40,13 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         if (initial) {
             bottomBar.selectTabAtPosition(INDEX_TODAY);
         }
+        bottomBar.getTabAtPosition(2).setEnabled(false);
+
+        //bottomBar.getTabAtPosition(0).setPaddingRelative(0,0,100,0);
+        //bottomBar.getTabAtPosition(1).setPaddingRelative(0,0,100,0);
+        //bottomBar.getTabAtPosition(2).setPaddingRelative(100,0,0,0);
+        //bottomBar.getTabAtPosition(3).setPaddingRelative(100,0,0,0);
+
         //mNavTransactionOptions = FragNavTransactionOptions.newBuilder()
 
         //        .customAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right)
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         mNavController = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container)
 
                 .transactionListener(this)
-                .rootFragmentListener(this, 4)
+                .rootFragmentListener(this, 5)
                 .popStrategy(FragNavTabHistoryController.UNIQUE_TAB_HISTORY)
 
                 //.defaultTransactionOptions(FragNavTransactionOptions.newBuilder().transition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).build())
@@ -73,16 +74,16 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 switch (tabId) {
-                    case R.id.bb_menu_recents:
+                    case R.id.bb_menu_today:
                         mNavController.switchTab(INDEX_TODAY);
                         break;
-                    case R.id.bb_menu_favorites:
+                    case R.id.bb_menu_drug_plan:
                         mNavController.switchTab(INDEX_DRUGPLAN);
                         break;
-                    case R.id.bb_menu_nearby:
-                        mNavController.switchTab(INDEX_CLENDAR);
+                    case R.id.bb_menu_calendar:
+                        mNavController.switchTab(INDEX_CALENDAR);
                         break;
-                    case R.id.bb_menu_friends:
+                    case R.id.bb_menu_settings:
                         mNavController.switchTab(INDEX_SETTINGS);
                         break;
 
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                 return TodayFragment.newInstance(0);
             case INDEX_DRUGPLAN:
                 return DrugPlanFragment.newInstance(0);
-            case INDEX_CLENDAR:
+            case INDEX_CALENDAR:
                 return CalendarFragment.newInstance(0);
             case INDEX_SETTINGS:
                 return SettingsFragment.newInstance(0);

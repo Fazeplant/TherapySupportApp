@@ -2,22 +2,27 @@
 <tabs>
     <tab
         icon="@android:drawable/ic_menu_today"
-        id="@+id/bb_menu_recents"
+        id="@+id/bb_menu_today"
         title="@string/title_today"
         />
     <tab
         icon="@drawable/ic_tag_faces_black_24dp"
-        id="@+id/bb_menu_favorites"
+        id="@+id/bb_menu_drug_plan"
         title="@string/title_drug_plan"
         />
     <tab
+        icon="@drawable/ic_blank"
+        id="@+id/bb_menu_blank"
+        title="title_blank"
+        />
+    <tab
         icon="@android:drawable/ic_menu_my_calendar"
-        id="@+id/bb_menu_nearby"
+        id="@+id/bb_menu_calendar"
         title="@string/title_calendar"
         />
     <tab
         icon="@android:drawable/ic_menu_manage"
-        id="@+id/bb_menu_friends"
+        id="@+id/bb_menu_settings"
         title="@string/title_settings"
         />
 </tabs>
