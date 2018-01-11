@@ -1,10 +1,15 @@
 package michaelbumes.therapysupportapp.activities;
 
+import android.app.FragmentTransaction;
+import android.support.annotation.AnimRes;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ncapdevi.fragnav.FragNavController;
 import com.ncapdevi.fragnav.FragNavSwitchController;
@@ -13,6 +18,8 @@ import com.ncapdevi.fragnav.tabhistory.FragNavTabHistoryController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.fragments.mainFragments.BaseFragment;
@@ -28,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     private final int INDEX_CLENDAR = FragNavController.TAB3;
     private final int INDEX_SETTINGS = FragNavController.TAB4;
     private FragNavController mNavController;
-
+    //private FragNavTransactionOptions mNavTransactionOptions;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +46,27 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         if (initial) {
             bottomBar.selectTabAtPosition(INDEX_TODAY);
         }
+        //mNavTransactionOptions = FragNavTransactionOptions.newBuilder()
+
+        //        .customAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right)
+        //        .build();
+
+
         mNavController = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container)
 
                 .transactionListener(this)
-                .rootFragmentListener(this, 5)
+                .rootFragmentListener(this, 4)
                 .popStrategy(FragNavTabHistoryController.UNIQUE_TAB_HISTORY)
+
+                //.defaultTransactionOptions(FragNavTransactionOptions.newBuilder().transition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).build())
+                //.defaultTransactionOptions((FragNavTransactionOptions.newBuilder().customAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).build()))
                 .switchController(new FragNavSwitchController() {
                     @Override
-                    public void switchTab(int index, FragNavTransactionOptions transactionOptions) {
+                    public void switchTab(int index, FragNavTransactionOptions mNavTransactionOptions) {
                         bottomBar.selectTabAtPosition(index);
                     }
                 })
                 .build();
-
 
 
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -103,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     public void pushFragment(Fragment fragment) {
         if (mNavController != null) {
             mNavController.pushFragment(fragment);
+
         }
     }
 

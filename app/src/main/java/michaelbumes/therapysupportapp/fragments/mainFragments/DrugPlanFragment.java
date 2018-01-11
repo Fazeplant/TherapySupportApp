@@ -37,6 +37,7 @@ public class DrugPlanFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_drug_plan, container, false);
+
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,4 +48,5 @@ public class DrugPlanFragment extends BaseFragment {
 
         return view;
     }
+
 }
