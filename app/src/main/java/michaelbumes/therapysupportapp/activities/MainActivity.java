@@ -1,5 +1,6 @@
 package michaelbumes.therapysupportapp.activities;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
+        final FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+
         boolean initial = savedInstanceState == null;
         if (initial) {
             bottomBar.selectTabAtPosition(INDEX_TODAY);
@@ -68,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     }
                 })
                 .build();
-
 
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override

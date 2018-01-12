@@ -5,25 +5,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.MainActivity"
+    >
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomBar"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="65dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:scaleType="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:clickable="true"
+        app:elevation="50dp"
+        app:srcCompat="@drawable/ic_add" />
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
         app:bb_activeTabAlpha="1"
         app:bb_activeTabColor="#FFFFFF"
         app:bb_inActiveTabAlpha="0.4"
         app:bb_inActiveTabColor="#FFFFFF"
         app:bb_behavior="iconsOnly"
         app:bb_tabXmlResource="@menu/menu_bottombar"/>
+
+
+
 </RelativeLayout>
 
