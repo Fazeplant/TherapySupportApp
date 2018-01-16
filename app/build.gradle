@@ -39,5 +39,10 @@ dependencies {
     //BottomBar
     compile 'com.roughike:bottom-bar:2.3.1'
 
+    // Room
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    compile 'android.arch.persistence.room:runtime:'
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+
 
 }

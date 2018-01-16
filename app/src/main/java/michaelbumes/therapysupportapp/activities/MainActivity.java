@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.ncapdevi.fragnav.FragNavController;
 import com.ncapdevi.fragnav.FragNavSwitchController;
@@ -16,11 +18,13 @@ import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.fragments.mainFragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.mainFragments.CalendarFragment;
 import michaelbumes.therapysupportapp.fragments.mainFragments.DrugPlanFragment;
 import michaelbumes.therapysupportapp.fragments.mainFragments.SettingsFragment;
 import michaelbumes.therapysupportapp.fragments.mainFragments.TodayFragment;
+import michaelbumes.therapysupportapp.utils.DatabaseInitializer;
 
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.FragmentNavigation, FragNavController.TransactionListener, FragNavController.RootFragmentListener{
@@ -30,13 +34,24 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     private final int INDEX_CALENDAR = FragNavController.TAB4;
     private final int INDEX_SETTINGS = FragNavController.TAB5;
     private FragNavController mNavController;
-    //private FragNavTransactionOptions mNavTransactionOptions;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
+        final Button button = findViewById(R.id.button3);
+
+        //Button zur Datenbank initialisierung
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(getApplicationContext()));
+            }
+        });
+
+
         final FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
 
         boolean initial = savedInstanceState == null;
@@ -169,7 +184,10 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         return true;
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        AppDatabase.destroyInstance();
+        super.onDestroy();
+    }
 
 }
