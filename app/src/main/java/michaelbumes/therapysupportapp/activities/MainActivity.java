@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -40,18 +41,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
-        final Button button = findViewById(R.id.button3);
-
-        //Button zur Datenbank initialisierung
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(getApplicationContext()));
-            }
-        });
-
-
         final FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
 
         boolean initial = savedInstanceState == null;

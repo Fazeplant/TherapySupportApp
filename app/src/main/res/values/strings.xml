@@ -11,7 +11,10 @@
 
 
     <string name="drug_name">Medikament</string>
-    <string name="drug_manufacturer">Medikament</string>
+    <string name="drug_manufacturer">Hersteller</string>
+    <string name="drug_manufacturer_description">Hersteller</string>
+    <string name="drug_name_description">Name</string>
+
 
 
 

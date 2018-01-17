@@ -19,11 +19,6 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -45,9 +40,9 @@
         android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         app:bb_activeTabAlpha="1"
-        app:bb_activeTabColor="#FFFFFF"
+        app:bb_activeTabColor="#212121"
         app:bb_inActiveTabAlpha="0.4"
-        app:bb_inActiveTabColor="#FFFFFF"
+        app:bb_inActiveTabColor="#424242"
         app:bb_behavior="iconsOnly"
         app:bb_tabXmlResource="@menu/menu_bottombar"/>
 

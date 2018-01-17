@@ -6,13 +6,18 @@
     //<color name="colorAccent">#ffeb3b</color>
     //<color name="white">#ffffff</color>
     -->
-    <color name="colorPrimary">#304ffe</color>
-    <color name="colorPrimaryDark">#283593</color>
-    <color name="colorAccent">#fb8c00</color>
+    <color name="colorPrimary">#e0e0e0</color>
+    <color name="colorPrimaryDark">#bdbdbd</color>
+    <color name="colorAccent">#bdbdbd</color>
     <color name="white">#ffffff</color>
+    <color name="colorText">#000000</color>
+
 
     <color name="black_25_transparent">#40000000</color>
 
     <color name="transparent">#00000000</color>
     <color name="black">#000000</color>
+
+    <color name="actionBarText">#263238</color>
+
 </resources>

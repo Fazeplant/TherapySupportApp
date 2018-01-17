@@ -1,6 +1,7 @@
 package michaelbumes.therapysupportapp.fragments.mainFragments;
 
 
+import android.arch.persistence.room.Database;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
@@ -9,8 +10,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.dao.DrugDao;
+import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.fragments.subFragments.AddMedicineFragment;
 
 /**
@@ -18,6 +23,8 @@ import michaelbumes.therapysupportapp.fragments.subFragments.AddMedicineFragment
  */
 public class DrugPlanFragment extends BaseFragment {
     FloatingActionButton fab;
+    TextView textView;
+
 
     public static DrugPlanFragment  newInstance(int instance) {
         Bundle args = new Bundle();
@@ -37,6 +44,10 @@ public class DrugPlanFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_drug_plan, container, false);
+
+
+        textView = (TextView)view.findViewById(R.id.textView);
+
 
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
