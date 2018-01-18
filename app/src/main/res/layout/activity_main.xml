@@ -8,6 +8,11 @@
     tools:context=".activities.MainActivity"
     >
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/bottom_shadow" />
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -32,6 +37,11 @@
         android:clickable="true"
         app:elevation="50dp"
         app:srcCompat="@drawable/ic_add" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_shadow" />
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"

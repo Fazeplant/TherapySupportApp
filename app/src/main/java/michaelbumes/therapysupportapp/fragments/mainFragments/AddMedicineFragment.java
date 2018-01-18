@@ -1,4 +1,4 @@
-package michaelbumes.therapysupportapp.fragments.subFragments;
+package michaelbumes.therapysupportapp.fragments.mainFragments;
 
 
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,7 @@ import android.widget.EditText;
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.fragments.mainFragments.BaseFragment;
-import michaelbumes.therapysupportapp.fragments.mainFragments.DrugPlanFragment;
 import michaelbumes.therapysupportapp.utils.DatabaseInitializer;
-
-import static michaelbumes.therapysupportapp.fragments.mainFragments.BaseFragment.ARGS_INSTANCE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,7 +45,9 @@ public class AddMedicineFragment extends BaseFragment {
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createDrug(AppDatabase.getAppDatabase(getContext()));
+                //createDrug(AppDatabase.getAppDatabase(getContext()));
+                DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(getContext()), nameEdit.getText().toString(), manufacturerEdit.getText().toString());
+
             }
         });
 
@@ -68,18 +65,7 @@ public class AddMedicineFragment extends BaseFragment {
 
         return view;
     }
-    private static Drug addDrug(final AppDatabase db, Drug drug) {
-        db.drugDao().insertAll(drug);
-        return drug;
-    }
-    private void createDrug(AppDatabase db) {
-        drug = new Drug();
-        drug.setDrugName(nameEdit.getText().toString());
-        drug.setManufacturer(nameEdit.getText().toString());
-        addDrug(db, drug);
 
-    }
-    
     private void setupClickListeners() {
         nameEdit.addTextChangedListener(new TextWatcher() {
             @Override

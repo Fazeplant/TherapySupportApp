@@ -18,13 +18,13 @@ public class DatabaseInitializer {
 
     private static final String TAG = DatabaseInitializer.class.getName();
 
-    public static void populateAsync(@NonNull final AppDatabase db) {
-        PopulateDbAsync task = new PopulateDbAsync(db);
+    public static void populateAsync(@NonNull final AppDatabase db, String drugName, String drugManufacturer) {
+        PopulateDbAsync task = new PopulateDbAsync(db, drugName, drugManufacturer);
         task.execute();
     }
 
-    public static void populateSync(@NonNull final AppDatabase db) {
-        populateWithTestData(db);
+    public static void populateSync(@NonNull final AppDatabase db, String drugName, String drugManufacturer) {
+        populateWithTestData(db, drugName,drugManufacturer);
     }
 
     private static Drug addDrug(final AppDatabase db, Drug drug) {
@@ -32,10 +32,10 @@ public class DatabaseInitializer {
         return drug;
     }
 
-    private static void populateWithTestData(AppDatabase db) {
+    private static void populateWithTestData(AppDatabase db, String drugName, String drugManufacturer) {
         Drug drug = new Drug();
-        drug.setDrugName("Aspirin");
-        drug.setManufacturer("Bayer");
+        drug.setDrugName(drugName);
+        drug.setManufacturer(drugManufacturer);
         addDrug(db, drug);
 
         List<Drug> drugList = db.drugDao().getAll();
@@ -45,14 +45,18 @@ public class DatabaseInitializer {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final AppDatabase mDb;
+        private String mDrugName;
+        private String mDrugManufacturer;
 
-        PopulateDbAsync(AppDatabase db) {
+        PopulateDbAsync(AppDatabase db, String drugName, String drugManufacturer) {
             mDb = db;
+            String mDrugName = drugName;
+            String mDrugManufacturer = drugManufacturer;
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
-            populateWithTestData(mDb);
+            populateWithTestData(mDb, mDrugName, mDrugManufacturer);
             return null;
         }
 

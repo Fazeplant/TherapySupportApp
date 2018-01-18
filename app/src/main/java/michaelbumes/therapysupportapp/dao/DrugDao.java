@@ -27,6 +27,9 @@ public interface DrugDao {
     @Query("SELECT COUNT(*) from drug")
     int countDrugs();
 
+    @Query("DELETE FROM drug")
+    public void nukeTable();
+
     @Insert
     void insertAll(Drug... drugs);
 

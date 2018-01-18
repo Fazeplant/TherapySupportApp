@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
     android:layout_marginVertical="@dimen/activity_vertical_margin"
-    tools:context="michaelbumes.therapysupportapp.fragments.subFragments.AddMedicineFragment">
+    tools:context="michaelbumes.therapysupportapp.fragments.mainFragments.AddMedicineFragment">
 
     <EditText
         android:id="@+id/edit_drug_name"

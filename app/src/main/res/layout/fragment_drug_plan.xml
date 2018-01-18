@@ -14,20 +14,16 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
+            app:fabSize="mini"
+            android:scaleType="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/floating_margin"
             android:clickable="true"
-            app:srcCompat="?android:attr/colorAccent"
+            app:srcCompat="@drawable/ic_add"
 
          />
 
