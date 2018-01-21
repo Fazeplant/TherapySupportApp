@@ -59,8 +59,6 @@ public class AddMedicineFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view1 = inflater.inflate(R.layout.fragment_add_medicine, container, false);
-
-
         return view1;
     }
 
