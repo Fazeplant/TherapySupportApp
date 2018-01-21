@@ -9,7 +9,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class Drug {
 
     @PrimaryKey(autoGenerate = true)
-    private int did;
+    private int id;
 
     @ColumnInfo(name = "drug_name")
     private String drugName;
@@ -17,12 +17,12 @@ public class Drug {
     @ColumnInfo(name = "drug_manufacturer")
     private String manufacturer;
 
-    public int getDid() {
-        return did;
+    public int getId() {
+        return id;
     }
 
-    public void setDid(int did) {
-        this.did = did;
+    public void setId(int did) {
+        this.id = id;
     }
 
     public String getDrugName() {
