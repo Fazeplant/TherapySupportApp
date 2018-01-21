@@ -47,10 +47,9 @@ public class AddMedicineFragment extends BaseFragment {
             public void onClick(View view) {
                 //createDrug(AppDatabase.getAppDatabase(getContext()));
                 DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(getContext()), nameEdit.getText().toString(), manufacturerEdit.getText().toString());
-
+                AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs(); ///XXXXXXXXXX
             }
         });
-
 
 
     }
@@ -59,11 +58,10 @@ public class AddMedicineFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_medicine, container, false);
+        View view1 = inflater.inflate(R.layout.fragment_add_medicine, container, false);
 
 
-
-        return view;
+        return view1;
     }
 
     private void setupClickListeners() {
