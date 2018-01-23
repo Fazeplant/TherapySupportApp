@@ -1,4 +1,4 @@
-package michaelbumes.therapysupportapp.fragments.mainFragments;
+package michaelbumes.therapysupportapp.fragments;
 
 
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import michaelbumes.therapysupportapp.utils.DatabaseInitializer;
  * A simple {@link Fragment} subclass.
  */
 public class AddMedicineFragment extends BaseFragment {
+    private static final String TAG = AddMedicineFragment.class.getName();
 
     private EditText nameEdit, manufacturerEdit;
     private Button storeButton;
@@ -46,8 +48,11 @@ public class AddMedicineFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 //createDrug(AppDatabase.getAppDatabase(getContext()));
-                DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(getContext()), nameEdit.getText().toString(), manufacturerEdit.getText().toString());
-                AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs(); ///XXXXXXXXXX
+                Drug mDrug = new Drug();
+                mDrug.setDrugName(nameEdit.getText().toString());
+                mDrug.setManufacturer(manufacturerEdit.getText().toString());
+                AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(mDrug);
+                Log.d(AddMedicineFragment.TAG, "Rows Count: " + AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs());
             }
         });
 

@@ -1,4 +1,4 @@
-package michaelbumes.therapysupportapp.fragments.mainFragments;
+package michaelbumes.therapysupportapp.fragments;
 
 
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import michaelbumes.therapysupportapp.R;
-import michaelbumes.therapysupportapp.dao.DrugDao;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 
 

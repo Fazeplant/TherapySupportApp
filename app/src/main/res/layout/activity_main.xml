@@ -24,6 +24,37 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_note"
+            android:scaleType="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginLeft="@dimen/fab_margin_horizontal"
+            android:visibility="invisible"
+            android:src="@drawable/ic_event_note_black_24dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_mood"
+            android:scaleType="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="35dp"
+            android:visibility="invisible"
+
+            android:src="@drawable/ic_insert_emoticon_black_24dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_food"
+            android:scaleType="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="@dimen/fab_margin_horizontal"
+            android:visibility="invisible"
+            android:src="@drawable/ic_local_dining_black_24dp"/>
+
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -35,19 +66,13 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center_horizontal"
         android:clickable="true"
-        app:elevation="50dp"
+        app:elevation="25dp"
         app:srcCompat="@drawable/ic_add" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bottom_shadow" />
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         app:bb_activeTabAlpha="1"
         app:bb_activeTabColor="#212121"

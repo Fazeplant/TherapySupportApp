@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
     android:layout_marginVertical="@dimen/activity_vertical_margin"
-    tools:context="michaelbumes.therapysupportapp.fragments.mainFragments.AddMedicineFragment">
+    tools:context="michaelbumes.therapysupportapp.fragments.AddMedicineFragment">
 
     <EditText
         android:id="@+id/edit_drug_name"
@@ -43,10 +43,11 @@
         android:id="@+id/store_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="Button"
-        app:layout_constraintTop_toBottomOf="@+id/edit_drug_manufacturer"
-     />
+        android:text="Hinzufügen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_drug_manufacturer" />
 
 
 </android.support.constraint.ConstraintLayout>

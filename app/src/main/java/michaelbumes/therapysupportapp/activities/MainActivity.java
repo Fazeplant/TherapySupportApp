@@ -1,14 +1,16 @@
 package michaelbumes.therapysupportapp.activities;
 
+import android.animation.Animator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.ncapdevi.fragnav.FragNavController;
 import com.ncapdevi.fragnav.FragNavSwitchController;
@@ -20,44 +22,79 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.fragments.mainFragments.BaseFragment;
-import michaelbumes.therapysupportapp.fragments.mainFragments.CalendarFragment;
-import michaelbumes.therapysupportapp.fragments.mainFragments.DrugPlanFragment;
-import michaelbumes.therapysupportapp.fragments.mainFragments.SettingsFragment;
-import michaelbumes.therapysupportapp.fragments.mainFragments.TodayFragment;
-import michaelbumes.therapysupportapp.utils.DatabaseInitializer;
+import michaelbumes.therapysupportapp.fragments.BaseFragment;
+import michaelbumes.therapysupportapp.fragments.CalendarFragment;
+import michaelbumes.therapysupportapp.fragments.DrugPlanFragment;
+import michaelbumes.therapysupportapp.fragments.SettingsFragment;
+import michaelbumes.therapysupportapp.fragments.TodayFragment;
 
 
-public class MainActivity extends AppCompatActivity implements BaseFragment.FragmentNavigation, FragNavController.TransactionListener, FragNavController.RootFragmentListener{
+public class MainActivity extends AppCompatActivity implements BaseFragment.FragmentNavigation, FragNavController.TransactionListener, FragNavController.RootFragmentListener {
     private final int INDEX_TODAY = FragNavController.TAB1;
     private final int INDEX_DRUGPLAN = FragNavController.TAB2;
     private final int INDEX_BLANK = FragNavController.TAB3;
     private final int INDEX_CALENDAR = FragNavController.TAB4;
     private final int INDEX_SETTINGS = FragNavController.TAB5;
     private FragNavController mNavController;
+    FloatingActionButton floatingActionButton, fabNote, fabMood, fabFood;
+    Animation fabOpen, fabClose, rotateForward, rotateBackwards;
+    Boolean isOpen = false;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
-        final FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+
+        floatingActionButton = findViewById(R.id.floatingActionButton);
+        fabNote = findViewById(R.id.fab_note);
+        fabMood = findViewById(R.id.fab_mood);
+        fabFood = findViewById(R.id.fab_food);
+
+        fabOpen = AnimationUtils.loadAnimation(this,R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(this,R.anim.fab_close);
+
+        rotateForward = AnimationUtils.loadAnimation(this,R.anim.rotate_forward);
+        rotateBackwards = AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFab();
+            }
+        });
+        fabNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFab();
+                Toast.makeText(MainActivity.this, "Note fab Clicked!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fabMood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFab();
+                Toast.makeText(MainActivity.this, "Mood fab Clicked!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        fabFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFab();
+                Toast.makeText(MainActivity.this, "Food fab Clicked!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
 
         boolean initial = savedInstanceState == null;
         if (initial) {
             bottomBar.selectTabAtPosition(INDEX_TODAY);
         }
         bottomBar.getTabAtPosition(2).setEnabled(false);
-
-        //bottomBar.getTabAtPosition(0).setPaddingRelative(0,0,100,0);
-        //bottomBar.getTabAtPosition(1).setPaddingRelative(0,0,100,0);
-        //bottomBar.getTabAtPosition(2).setPaddingRelative(100,0,0,0);
-        //bottomBar.getTabAtPosition(3).setPaddingRelative(100,0,0,0);
-
-        //mNavTransactionOptions = FragNavTransactionOptions.newBuilder()
-
-        //        .customAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right)
-        //        .build();
 
 
         mNavController = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container)
@@ -75,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     }
                 })
                 .build();
-
+        //Unterte Leiste initialisieren
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -177,6 +214,30 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     protected void onDestroy() {
         AppDatabase.destroyInstance();
         super.onDestroy();
+    }
+
+    private void animateFab(){
+        if (isOpen){
+            floatingActionButton.startAnimation(rotateBackwards);
+            fabNote.startAnimation(fabClose);
+            fabMood.startAnimation(fabClose);
+            fabFood.startAnimation(fabClose);
+            fabNote.setClickable(false);
+            fabMood.setClickable(false);
+            fabFood.setClickable(false);
+            isOpen=false;
+
+        }
+        else {
+            floatingActionButton.startAnimation(rotateForward);
+            fabNote.startAnimation(fabOpen);
+            fabMood.startAnimation(fabOpen);
+            fabFood.startAnimation(fabOpen);
+            fabNote.setClickable(true);
+            fabMood.setClickable(true);
+            fabFood.setClickable(true);
+            isOpen = true;
+        }
     }
 
 }
