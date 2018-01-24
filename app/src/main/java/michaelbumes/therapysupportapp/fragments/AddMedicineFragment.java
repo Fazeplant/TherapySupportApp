@@ -15,6 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.ncapdevi.fragnav.FragNavController;
+import com.ncapdevi.fragnav.FragNavPopController;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
@@ -32,6 +36,7 @@ public class AddMedicineFragment extends BaseFragment {
     private Drug drug;
     AutoCompleteTextView nameEdit;
     String[] drugListNames;
+
 
     public static AddMedicineFragment newInstance(int instance) {
         Bundle args = new Bundle();
@@ -59,7 +64,8 @@ public class AddMedicineFragment extends BaseFragment {
                 mDrug.setDrugName(nameEdit.getText().toString());
                 mDrug.setManufacturer(manufacturerEdit.getText().toString());
                 AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(mDrug);
-                Log.d(AddMedicineFragment.TAG, "Rows Count: " + AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs());
+                getActivity().onBackPressed();
+                Toast.makeText(getContext(), "Medizin gespeichert!", Toast.LENGTH_SHORT).show();
             }
         });
 
