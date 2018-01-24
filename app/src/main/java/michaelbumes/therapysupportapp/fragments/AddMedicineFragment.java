@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -25,9 +27,11 @@ import michaelbumes.therapysupportapp.utils.DatabaseInitializer;
 public class AddMedicineFragment extends BaseFragment {
     private static final String TAG = AddMedicineFragment.class.getName();
 
-    private EditText nameEdit, manufacturerEdit;
+    private EditText manufacturerEdit;
     private Button storeButton;
     private Drug drug;
+    AutoCompleteTextView nameEdit;
+    String[] drugListNames;
 
     public static AddMedicineFragment newInstance(int instance) {
         Bundle args = new Bundle();
@@ -43,6 +47,9 @@ public class AddMedicineFragment extends BaseFragment {
         getActivity().setTitle(R.string.add_medicine);
         nameEdit = view.findViewById(R.id.edit_drug_name);
         manufacturerEdit = view.findViewById(R.id.edit_drug_manufacturer);
+        drugListNames = AppDatabase.getAppDatabase(getContext()).drugListDao().getAllNames();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,drugListNames);
+        nameEdit.setAdapter(adapter);
         storeButton = view.findViewById(R.id.store_button);
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
