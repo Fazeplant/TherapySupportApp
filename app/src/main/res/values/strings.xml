@@ -9,19 +9,14 @@
     <string name="add_medicine">Medizin hinzufügen</string>
 
 
-
     <string name="drug_name">Medikament</string>
     <string name="drug_manufacturer">Hersteller</string>
     <string name="drug_manufacturer_description">Hersteller</string>
-    <string name="drug_name_description">Name</string>
-
-
-
-
-
+    <string name="drug_name_description">Name des Medikaments</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="add_note">Notiz hinzufügen</string>
 </resources>

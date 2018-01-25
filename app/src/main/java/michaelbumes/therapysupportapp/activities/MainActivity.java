@@ -22,9 +22,11 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
+import michaelbumes.therapysupportapp.fragments.AddMedicineFragment;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
 import michaelbumes.therapysupportapp.fragments.DrugPlanFragment;
+import michaelbumes.therapysupportapp.fragments.NoteFragment;
 import michaelbumes.therapysupportapp.fragments.SettingsFragment;
 import michaelbumes.therapysupportapp.fragments.TodayFragment;
 
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     FloatingActionButton floatingActionButton, fabNote, fabMood, fabFood;
     Animation fabOpen, fabClose, rotateForward, rotateBackwards;
     Boolean isOpen = false;
+    int instanceInt = 0;
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             public void onClick(View view) {
                 animateFab();
                 Toast.makeText(MainActivity.this, "Note fab Clicked!", Toast.LENGTH_SHORT).show();
+                mNavController.pushFragment(NoteFragment.newInstance(instanceInt+1));
+
             }
         });
 
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     }
                 })
                 .build();
+
         //Unterte Leiste initialisieren
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -210,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         return true;
     }
 
+
     @Override
     protected void onDestroy() {
         AppDatabase.destroyInstance();
@@ -239,5 +247,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             isOpen = true;
         }
     }
+
 
 }
