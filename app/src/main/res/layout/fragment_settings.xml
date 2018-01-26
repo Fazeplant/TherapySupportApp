@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_vertical_margin"
+    tools:context="michaelbumes.therapysupportapp.fragments.SettingsFragment">
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/nuke_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nuke Table" />
+
+    <Button
+        android:id="@+id/create_drug_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Druglist" />
+
+
+
+</LinearLayout>

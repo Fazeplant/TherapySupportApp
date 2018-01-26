@@ -5,16 +5,5 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/nuke_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nuke Table" />
-
-    <Button
-        android:id="@+id/create_drug_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create Druglist" />
 
 </LinearLayout>
