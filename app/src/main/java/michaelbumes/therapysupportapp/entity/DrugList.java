@@ -72,7 +72,6 @@ public class DrugList {
     }
 
     public int getPzn() {
-
         return pzn;
     }
 

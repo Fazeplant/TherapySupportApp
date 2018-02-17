@@ -56,4 +56,5 @@ public class BaseFragment extends Fragment {
         void pushFragment(Fragment fragment);
     }
 
-}
+
+    }
