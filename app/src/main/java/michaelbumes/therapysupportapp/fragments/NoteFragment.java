@@ -2,7 +2,10 @@ package michaelbumes.therapysupportapp.fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +26,20 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import michaelbumes.therapysupportapp.BuildConfig;
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,11 +47,16 @@ import michaelbumes.therapysupportapp.activities.MainActivity;
 
 public class NoteFragment extends BaseFragment {
     private static final String TAG = NoteFragment.class.getName();
+    private static final int REQUEST_CAMERA_IMAGE = 0 ;
     EditText noteText;
     ImageButton micButton, photoButton, videoButton;
     Button addButton;
     ImageView noteImage;
-    private File imageFile;
+    String mCurrentPhotoPath;
+    static final int REQUEST_TAKE_PHOTO = 1;
+    File image;
+
+
 
 
 
@@ -65,19 +80,46 @@ public class NoteFragment extends BaseFragment {
         addButton = view.findViewById(R.id.ad_note);
         noteImage = view.findViewById(R.id.note_image);
 
-        videoButton.setOnClickListener(new View.OnClickListener() {
+
+        photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                String imageName = getImageName();
+                File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+                try {
+                     image = File.createTempFile(
+                            imageName,  /* prefix */
+                            ".jpg",         /* suffix */
+                            storageDir
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mCurrentPhotoPath = image.getAbsolutePath();
+
+                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                        "peter.provider",
+                        image);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
                 startActivityForResult(intent,0);
             }
         });
+
+
+    }
+
+    private String getImageName() {
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        return "noteImage" + timeStamp;
     }
 
     private String getPictureName() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy_HHmmss");
         String timestamp = simpleDateFormat.format(new Date());
-        return "Note Image" + timestamp + ".jpg";
+        return "Note Image" + timestamp;
     }
 
 
@@ -90,12 +132,5 @@ public class NoteFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        Bundle extras = data.getExtras();
-        Bitmap imageBitmap = (Bitmap) extras.get("data");
-        noteImage.setImageBitmap(imageBitmap);
-    }
 
 }

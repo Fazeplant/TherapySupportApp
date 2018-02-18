@@ -1,11 +1,16 @@
 package michaelbumes.therapysupportapp.activities;
 
+import android.Manifest;
 import android.animation.Animator;
+import android.content.pm.PackageManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -51,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
+
+        verifyPermissions();
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
         fabNote = findViewById(R.id.fab_note);
@@ -252,6 +259,21 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             isOpen = true;
         }
     }
+
+    private void verifyPermissions(){
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA};
+
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                permissions[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                permissions[1]) == PackageManager.PERMISSION_GRANTED){
+        }else {
+            ActivityCompat.requestPermissions(this, permissions, 1);
+        }
+
+    }
+
 
 
 }
