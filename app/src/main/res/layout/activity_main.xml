@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity"
-    >
+    android:background="#ffffff"
+    tools:context=".activities.MainActivity">
 
     <View
         android:layout_width="match_parent"
@@ -26,46 +25,47 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_note"
-            android:scaleType="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
             android:layout_marginLeft="@dimen/fab_margin_horizontal"
-            android:visibility="invisible"
-            android:src="@drawable/ic_event_note_black_24dp"/>
+            android:scaleType="center"
+            android:src="@drawable/ic_event_note_black_24dp"
+            android:visibility="invisible" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_mood"
-            android:scaleType="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="35dp"
-            android:visibility="invisible"
+            android:scaleType="center"
+            android:src="@drawable/ic_insert_emoticon_black_24dp"
 
-            android:src="@drawable/ic_insert_emoticon_black_24dp"/>
+            android:visibility="invisible" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_food"
-            android:scaleType="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginRight="@dimen/fab_margin_horizontal"
-            android:visibility="invisible"
-            android:src="@drawable/ic_local_dining_black_24dp"/>
+            android:scaleType="center"
+            android:src="@drawable/ic_local_dining_black_24dp"
+            android:visibility="invisible" />
 
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
-        android:scaleType="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center_horizontal"
         android:clickable="true"
+        android:scaleType="center"
+        app:backgroundTint="@color/colorAccent"
         app:elevation="25dp"
         app:srcCompat="@drawable/ic_add" />
 
@@ -74,13 +74,12 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
         app:bb_activeTabAlpha="1"
-        app:bb_activeTabColor="#212121"
-        app:bb_inActiveTabAlpha="0.4"
-        app:bb_inActiveTabColor="#424242"
+        app:bb_activeTabColor="@color/black"
         app:bb_behavior="iconsOnly"
-        app:bb_tabXmlResource="@menu/menu_bottombar"/>
-
+        app:bb_inActiveTabColor="@color/colorDark"
+        app:bb_tabXmlResource="@menu/menu_bottombar" />
 
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package michaelbumes.therapysupportapp.activities;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -81,7 +82,11 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             public void onClick(View view) {
                 animateFab();
                 Toast.makeText(MainActivity.this, "Note fab Clicked!", Toast.LENGTH_SHORT).show();
-                mNavController.pushFragment(NoteFragment.newInstance(instanceInt+1));
+                Intent intent = getIntent();
+                String value = intent.getStringExtra("key");
+                Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.NoteActivity.class);
+                myIntent.putExtra("key", value); //Optional parameters
+                MainActivity.this.startActivity(myIntent);
 
             }
         });
@@ -262,12 +267,14 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
     private void verifyPermissions(){
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.CAMERA};
+        Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
 
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 permissions[0]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[1]) == PackageManager.PERMISSION_GRANTED){
+                permissions[1]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                permissions[2]) == PackageManager.PERMISSION_GRANTED){
         }else {
             ActivityCompat.requestPermissions(this, permissions, 1);
         }

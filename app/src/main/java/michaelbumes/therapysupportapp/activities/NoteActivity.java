@@ -1,64 +1,59 @@
-package michaelbumes.therapysupportapp.fragments;
+package michaelbumes.therapysupportapp.activities;
 
 
-import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Bundle;
-import android.app.Fragment;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Toast;
-import android.widget.VideoView;
+        import android.content.Intent;
+        import android.content.res.AssetFileDescriptor;
+        import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
+        import android.net.Uri;
+        import android.os.Bundle;
+        import android.app.Fragment;
+        import android.os.Environment;
+        import android.provider.MediaStore;
+        import android.support.annotation.NonNull;
+        import android.support.annotation.Nullable;
+        import android.support.v4.content.FileProvider;
+        import android.support.v7.app.AppCompatActivity;
+        import android.text.TextUtils;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.view.Window;
+        import android.view.WindowManager;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.ImageButton;
+        import android.widget.ImageView;
+        import android.widget.Toast;
+        import android.widget.VideoView;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+        import java.io.File;
+        import java.io.FileInputStream;
+        import java.io.FileNotFoundException;
+        import java.io.FileOutputStream;
+        import java.io.IOException;
+        import java.text.SimpleDateFormat;
+        import java.util.Calendar;
+        import java.util.Date;
 
-import michaelbumes.therapysupportapp.R;
-import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.entity.MoodDiary;
+        import michaelbumes.therapysupportapp.R;
+        import michaelbumes.therapysupportapp.database.AppDatabase;
+        import michaelbumes.therapysupportapp.entity.MoodDiary;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
+        import static android.app.Activity.RESULT_CANCELED;
+        import static android.app.Activity.RESULT_OK;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 
-public class NoteFragment extends BaseFragment {
-    private static final String TAG = NoteFragment.class.getName();
+public class NoteActivity extends AppCompatActivity {
+
+    private static final String TAG = NoteActivity.class.getName();
     private static final int REQUEST_TAKE_PHOTO = 0;
     private static final int ACTIVITY_START_CAMERA_APP = 1;
     private static final int MIC_FLAG = 10;
     private static final int PHOTO_FLAG = 11;
     private static final int VIDEO_FLAG = 12;
-
-
-
-
 
     int flag = 0;
     EditText noteEdit;
@@ -72,30 +67,18 @@ public class NoteFragment extends BaseFragment {
     File image;
     File video;
 
-
-
-
-
-
-    public static NoteFragment newInstance(int instance) {
-        Bundle args = new Bundle();
-        args.putInt(ARGS_INSTANCE, instance);
-        NoteFragment fragment = new NoteFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(R.string.add_note);
-        noteEdit = view.findViewById(R.id.note_text);
-        micButton=view.findViewById(R.id.mic_button);
-        photoButton=view.findViewById(R.id.photo_button);
-        videoButton=view.findViewById(R.id.video_button);
-        addButton = view.findViewById(R.id.ad_note);
-        noteImage = view.findViewById(R.id.note_image);
-        noteVideo = view.findViewById(R.id.note_video);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_note);
+        this.setTitle(R.string.add_note);
+        noteEdit =  findViewById(R.id.note_text);
+        micButton = findViewById(R.id.mic_button);
+        photoButton = findViewById(R.id.photo_button);
+        videoButton = findViewById(R.id.video_button);
+        addButton = findViewById(R.id.ad_note);
+        noteImage = findViewById(R.id.note_image);
+        noteVideo = findViewById(R.id.note_video);
         noteVideo.setEnabled(false);
 
 
@@ -110,7 +93,7 @@ public class NoteFragment extends BaseFragment {
                     e.printStackTrace();
                 }
 
-                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
                         "peter.provider",
                         image);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -147,19 +130,6 @@ public class NoteFragment extends BaseFragment {
     }
 
 
-
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        View view1 = inflater.inflate(R.layout.fragment_note, container, false);
-        return view1;
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED){
@@ -180,8 +150,8 @@ public class NoteFragment extends BaseFragment {
 
             try {
                 String videoFileName = getVideoName();
-                File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-                AssetFileDescriptor videoAsset = getActivity().getContentResolver().openAssetFileDescriptor(data.getData(), "r");
+                File storageDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+                AssetFileDescriptor videoAsset = getContentResolver().openAssetFileDescriptor(data.getData(), "r");
                 FileInputStream fis = videoAsset.createInputStream();
 
                 video = new File(storageDir, videoFileName);
@@ -213,7 +183,7 @@ public class NoteFragment extends BaseFragment {
 
     private File createImageFile() throws IOException {
         String imageFileName = getImageName();
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -244,7 +214,7 @@ public class NoteFragment extends BaseFragment {
         File f = new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
+        sendBroadcast(mediaScanIntent);
     }
 
     private void addNote() {
@@ -275,9 +245,9 @@ public class NoteFragment extends BaseFragment {
                     break;
 
             }
-            AppDatabase.getAppDatabase(getContext()).moodDiaryDao().insertAll(moodDiary);
-            Toast.makeText(getContext(), "Notiz hinzugefügt", Toast.LENGTH_SHORT).show();
-            getActivity().onBackPressed();
+            AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);
+            Toast.makeText(this, "Notiz hinzugefügt", Toast.LENGTH_SHORT).show();
+            onBackPressed();
 
             return;
         }
@@ -288,3 +258,4 @@ public class NoteFragment extends BaseFragment {
 
 
 }
+
