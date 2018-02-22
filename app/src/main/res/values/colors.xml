@@ -6,8 +6,8 @@
     //<color name="colorAccent">#ffeb3b</color>
     //<color name="white">#ffffff</color>
     -->
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796b</color>
+    <color name="colorPrimary">#00bfa5</color>
+    <color name="colorPrimaryDark">#009688</color>
     <color name="colorAccent">#b2ff59</color>
     <color name="white">#ffffff</color>
     <color name="colorText">#000000</color>

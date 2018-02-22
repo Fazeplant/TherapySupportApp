@@ -40,7 +40,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".activities.NoteActivity"></activity>
+        <activity android:name=".activities.NoteActivity" />
+        <activity android:name=".activities.FoodActivity"/>
+        <activity android:name=".activities.MoodActivity"></activity>
     </application>
 
 </manifest>

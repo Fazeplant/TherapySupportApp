@@ -96,8 +96,11 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             public void onClick(View view) {
                 animateFab();
                 Toast.makeText(MainActivity.this, "Mood fab Clicked!", Toast.LENGTH_SHORT).show();
-                mNavController.pushFragment(MoodFragment.newInstance(instanceInt+1));
-
+                Intent intent = getIntent();
+                String value = intent.getStringExtra("key");
+                Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.MoodActivity.class);
+                myIntent.putExtra("key", value); //Optional parameters
+                MainActivity.this.startActivity(myIntent);
 
             }
         });
@@ -107,8 +110,11 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             public void onClick(View view) {
                 animateFab();
                 Toast.makeText(MainActivity.this, "Food fab Clicked!", Toast.LENGTH_SHORT).show();
-                mNavController.pushFragment(FoodFragment.newInstance(instanceInt+1));
-
+                Intent intent = getIntent();
+                String value = intent.getStringExtra("key");
+                Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.FoodActivity.class);
+                myIntent.putExtra("key", value); //Optional parameters
+                MainActivity.this.startActivity(myIntent);
             }
         });
 
