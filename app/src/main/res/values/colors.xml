@@ -11,6 +11,8 @@
     <color name="colorAccent">#b2ff59</color>
     <color name="white">#ffffff</color>
     <color name="colorText">#000000</color>
+    <color name="colorBackground">#f5f5f5</color>
+
 
     <color name="login">#bababa</color>
 
@@ -22,5 +24,15 @@
 
     <color name="actionBarText">#263238</color>
     <color name="colorDark">#00433b</color>
+
+    <color name="mood_normal">#64dd17</color>
+    <color name="mood_0">#2433ff</color>
+    <color name="mood_1">#3a7cff</color>
+    <color name="mood_2">#339dff</color>
+    <color name="mood_3">#fa6562</color>
+    <color name="mood_4">#ff4542</color>
+    <color name="mood_5">#e60c00</color>
+    <color name="cardview_custom_color">#eaeaea</color>
+
 
 </resources>

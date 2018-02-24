@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     private final int INDEX_BLANK = FragNavController.TAB3;
     private final int INDEX_CALENDAR = FragNavController.TAB4;
     private final int INDEX_SETTINGS = FragNavController.TAB5;
+
+    public final int ART_ID_NOTE = 3;
+    public final int ART_ID_MOOD = 1;
+    public final int ART_ID_FOOD = 2;
+
     private FragNavController mNavController;
     FloatingActionButton floatingActionButton, fabNote, fabMood, fabFood;
     Animation fabOpen, fabClose, rotateForward, rotateBackwards;
@@ -286,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         }
 
     }
+
 
 
 

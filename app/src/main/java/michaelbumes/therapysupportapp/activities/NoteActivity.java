@@ -25,6 +25,8 @@ package michaelbumes.therapysupportapp.activities;
         import android.widget.EditText;
         import android.widget.ImageButton;
         import android.widget.ImageView;
+        import android.widget.MediaController;
+        import android.widget.RelativeLayout;
         import android.widget.Toast;
         import android.widget.VideoView;
 
@@ -37,6 +39,7 @@ package michaelbumes.therapysupportapp.activities;
         import java.text.SimpleDateFormat;
         import java.util.Calendar;
         import java.util.Date;
+        import java.util.concurrent.ExecutionException;
 
         import michaelbumes.therapysupportapp.R;
         import michaelbumes.therapysupportapp.database.AppDatabase;
@@ -58,7 +61,8 @@ public class NoteActivity extends AppCompatActivity {
     int flag = 0;
     EditText noteEdit;
     String noteText;
-    ImageButton micButton, photoButton, videoButton;
+    Button photoButton, videoButton;
+    RelativeLayout relativeLayout;
     Button addButton;
     ImageView noteImage;
     VideoView noteVideo;
@@ -73,13 +77,13 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note);
         this.setTitle(R.string.add_note);
         noteEdit =  findViewById(R.id.note_text);
-        micButton = findViewById(R.id.mic_button);
         photoButton = findViewById(R.id.photo_button);
         videoButton = findViewById(R.id.video_button);
         addButton = findViewById(R.id.ad_note);
         noteImage = findViewById(R.id.note_image);
         noteVideo = findViewById(R.id.note_video);
-        noteVideo.setEnabled(false);
+        relativeLayout = findViewById(R.id.relative_layout);
+
 
 
         photoButton.setOnClickListener(new View.OnClickListener() {
@@ -119,34 +123,37 @@ public class NoteActivity extends AppCompatActivity {
                 startActivityForResult(callVideoIntent, ACTIVITY_START_CAMERA_APP);
             }
         });
-        micButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                noteVideo.start();
-            }
-        });
-
-
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED){
-            File deleteFile = new File(mCurrentPhotoPath);
-            boolean deleted = deleteFile.delete();
+            try {
+                File deleteFile = new File(mCurrentPhotoPath);
+                boolean deleted = deleteFile.delete();
+            }catch (Exception e){
+                System.out.println("Error " + e.getMessage());
+            }
         }
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bitmap myBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            noteImage.setVisibility(View.VISIBLE);
+            relativeLayout.setVisibility(View.VISIBLE);
             noteImage.setImageBitmap(myBitmap);
+            photoButton.setVisibility(View.GONE);
+            videoButton.setVisibility(View.GONE);
             flag = PHOTO_FLAG;
         }else if(requestCode == ACTIVITY_START_CAMERA_APP && resultCode == RESULT_OK){
             flag = VIDEO_FLAG;
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(noteVideo);
+            noteVideo.setMediaController(mediaController);
             Uri videoUri = data.getData();
-            noteVideo.setVisibility(View.VISIBLE);
-            noteVideo.setAlpha(1);
+            relativeLayout.setVisibility(View.VISIBLE);
+            photoButton.setVisibility(View.GONE);
+            videoButton.setVisibility(View.GONE);
             noteVideo.setVideoURI(videoUri);
+            noteVideo.seekTo(1);
 
             try {
                 String videoFileName = getVideoName();
@@ -248,14 +255,26 @@ public class NoteActivity extends AppCompatActivity {
             AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);
             Toast.makeText(this, "Notiz hinzugefügt", Toast.LENGTH_SHORT).show();
             onBackPressed();
-
-            return;
         }
     }
 
 
+    public void add_photo(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        try {
+            image = createImageFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                "peter.provider",
+                image);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
+        startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+
+    }
 }
 
