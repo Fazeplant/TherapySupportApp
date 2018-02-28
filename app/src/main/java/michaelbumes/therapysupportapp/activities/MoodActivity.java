@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -40,7 +42,9 @@ public class MoodActivity extends AppCompatActivity {
 
 
     Button moodButton0, moodButton1, moodButton2, moodButton3, moodButtonNormal, moodButton4, moodButton5 ,addMoodButton, expandMoodButton;
-    CardView cardViewMoodExpand;
+    ScrollView cardViewMoodExpand;
+
+    SeekBar seekBar1, seekBar2, seekBar3, seekBar4, seekBar5, seekBar6, seekBar7, seekBar8;
 
 
     @Override
@@ -48,7 +52,6 @@ public class MoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood);
         this.setTitle(R.string.title_mood);
-        moodView = findViewById(R.id.mood_view);
         addMoodButton = findViewById(R.id.add_mood_button);
         moodButton0 = findViewById(R.id.mood_button_0);
         moodButton1 = findViewById(R.id.mood_button_1);
@@ -59,6 +62,25 @@ public class MoodActivity extends AppCompatActivity {
         moodButtonNormal = findViewById(R.id.mood_button_nomal);
         expandMoodButton = findViewById(R.id.expand_mood_button);
         cardViewMoodExpand = findViewById(R.id.card_view_mood_extended);
+
+        seekBar1 = findViewById(R.id.seek_bar_mood_1);
+        seekBar2 = findViewById(R.id.seek_bar_mood_2);
+        seekBar3 = findViewById(R.id.seek_bar_mood_3);
+        seekBar4 = findViewById(R.id.seek_bar_mood_4);
+        seekBar5 = findViewById(R.id.seek_bar_mood_5);
+        seekBar6 = findViewById(R.id.seek_bar_mood_6);
+        seekBar7 = findViewById(R.id.seek_bar_mood_7);
+        seekBar8 = findViewById(R.id.seek_bar_mood_8);
+
+        seekBar1.setMax(8);
+        seekBar2.setMax(8);
+        seekBar3.setMax(8);
+        seekBar4.setMax(8);
+        seekBar5.setMax(8);
+        seekBar6.setMax(8);
+        seekBar7.setMax(8);
+        seekBar8.setMax(8);
+
 
 
         moodButton0.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +187,25 @@ public class MoodActivity extends AppCompatActivity {
                 if (moodFlag == MOOD_ERROR){
                     Toast.makeText(MoodActivity.this, "Bitte wählen Sie eine Stimmung", Toast.LENGTH_SHORT).show();
                     return;
-                }else {
+                }else  if (isExpanded){
+                    Calendar calendar = Calendar.getInstance();
+                    MoodDiary moodDiary = new MoodDiary();
+                    moodDiary.setDate(((int) calendar.getTimeInMillis()));
+                    moodDiary.setInfo1(String.valueOf(moodFlag));
+                    moodDiary.setArtID(1);
+                    String arrayMood[] = {String.valueOf(seekBar1.getProgress()),String.valueOf(seekBar2.getProgress()),String.valueOf(seekBar3.getProgress()),String.valueOf(seekBar4.getProgress()),String.valueOf(seekBar5.getProgress()),String.valueOf(seekBar6.getProgress()),String.valueOf(seekBar7.getProgress()),String.valueOf(seekBar8.getProgress())};
+
+                    StringBuilder buffer = new StringBuilder();
+                    for (String each : arrayMood)
+                        buffer.append(",").append(each);
+                    String joined = buffer.deleteCharAt(0).toString();
+
+                    moodDiary.setInfo2(joined);
+                    AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);
+                    Toast.makeText(getApplicationContext(), "Stimmung hinzugefügt", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+
+                }else{
                     Calendar calendar = Calendar.getInstance();
                     MoodDiary moodDiary = new MoodDiary();
                     moodDiary.setDate(((int) calendar.getTimeInMillis()));

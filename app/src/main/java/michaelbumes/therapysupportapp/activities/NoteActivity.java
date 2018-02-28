@@ -5,6 +5,8 @@ package michaelbumes.therapysupportapp.activities;
         import android.content.res.AssetFileDescriptor;
         import android.graphics.Bitmap;
         import android.graphics.BitmapFactory;
+        import android.graphics.Matrix;
+        import android.media.ExifInterface;
         import android.net.Uri;
         import android.os.Bundle;
         import android.app.Fragment;
@@ -70,6 +72,8 @@ public class NoteActivity extends AppCompatActivity {
     String mCurrentVideoPath;
     File image;
     File video;
+
+    ExifInterface exif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +141,22 @@ public class NoteActivity extends AppCompatActivity {
             }
         }
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            //Bild korrekt drehen
+            try {
+                exif = new ExifInterface(mCurrentPhotoPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int rotationInDegrees = exifToDegrees(rotation);
+            Matrix matrix = new Matrix();
+            if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
+
             Bitmap myBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+
+            Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+            noteImage.setImageBitmap(adjustedBitmap);
+
             relativeLayout.setVisibility(View.VISIBLE);
             noteImage.setImageBitmap(myBitmap);
             photoButton.setVisibility(View.GONE);
@@ -276,5 +295,13 @@ public class NoteActivity extends AppCompatActivity {
         startActivityForResult(intent,REQUEST_TAKE_PHOTO);
 
     }
+
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
+
 }
 

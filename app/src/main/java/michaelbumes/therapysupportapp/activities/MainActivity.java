@@ -1,9 +1,10 @@
 package michaelbumes.therapysupportapp.activities;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -11,11 +12,13 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ncapdevi.fragnav.FragNavController;
@@ -28,13 +31,9 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.fragments.AddMedicineFragment;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
 import michaelbumes.therapysupportapp.fragments.DrugPlanFragment;
-import michaelbumes.therapysupportapp.fragments.FoodFragment;
-import michaelbumes.therapysupportapp.fragments.MoodFragment;
-import michaelbumes.therapysupportapp.fragments.NoteFragment;
 import michaelbumes.therapysupportapp.fragments.SettingsFragment;
 import michaelbumes.therapysupportapp.fragments.TodayFragment;
 
@@ -50,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     public final int ART_ID_MOOD = 1;
     public final int ART_ID_FOOD = 2;
 
+    ImageView dim_layout;
+
     private FragNavController mNavController;
     FloatingActionButton floatingActionButton, fabNote, fabMood, fabFood;
     Animation fabOpen, fabClose, rotateForward, rotateBackwards;
@@ -63,12 +64,17 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
 
+
+
         verifyPermissions();
 
+
+        dim_layout  =findViewById(R.id.dim_layout);
         floatingActionButton = findViewById(R.id.floatingActionButton);
         fabNote = findViewById(R.id.fab_note);
         fabMood = findViewById(R.id.fab_mood);
         fabFood = findViewById(R.id.fab_food);
+
 
         fabOpen = AnimationUtils.loadAnimation(this,R.anim.fab_open);
         fabClose = AnimationUtils.loadAnimation(this,R.anim.fab_close);
@@ -255,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     private void animateFab(){
         if (isOpen){
             floatingActionButton.startAnimation(rotateBackwards);
+            dim_layout.setVisibility(View.GONE);
             fabNote.startAnimation(fabClose);
             fabMood.startAnimation(fabClose);
             fabFood.startAnimation(fabClose);
@@ -266,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         }
         else {
             floatingActionButton.startAnimation(rotateForward);
+            dim_layout.setVisibility(View.VISIBLE);
             fabNote.startAnimation(fabOpen);
             fabMood.startAnimation(fabOpen);
             fabFood.startAnimation(fabOpen);
@@ -293,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     }
 
 
-
-
+    public void dim_layout_on_click(View view) {
+        animateFab();
+    }
 }

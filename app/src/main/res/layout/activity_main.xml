@@ -7,56 +7,84 @@
     android:background="@color/colorBackground"
     tools:context=".activities.MainActivity">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/bottom_shadow" />
-
     <RelativeLayout
-        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="65dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/dim_layout"
+            android:visibility="gone"
+            android:onClick="dim_layout_on_click"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="50dp"
+            android:src="@color/black_150_transparent"/>
+
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/fab_mood"
-            android:scaleType="center"
-            android:src="@drawable/ic_event_note_black_24dp"
-            android:visibility="invisible" />
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="65dp"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="vertical">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_mood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        </RelativeLayout>
+
+        <com.roughike.bottombar.BottomBar
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="30dp"
-
-            android:scaleType="center"
-            android:src="@drawable/ic_insert_emoticon_black_24dp"
-            android:visibility="invisible" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_food"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/fab_mood"
-            android:scaleType="center"
-            android:src="@drawable/ic_local_dining_black_24dp"
-            android:visibility="invisible" />
-
+            android:background="@color/white"
+            app:bb_activeTabColor="@color/colorPrimary"
+            app:bb_behavior="iconsOnly"
+            app:bb_inActiveTabColor="@color/black"
+            app:bb_inActiveTabAlpha="0.8"
+            app:bb_tabXmlResource="@menu/menu_bottombar" />
     </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_note"
+        android:elevation="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:layout_toLeftOf="@+id/fab_mood"
+        android:scaleType="center"
+        android:src="@drawable/ic_event_note_black_24dp"
+        android:visibility="invisible" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_mood"
+        android:elevation="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="95dp"
+
+        android:scaleType="center"
+        android:src="@drawable/ic_insert_emoticon_black_24dp"
+        android:visibility="invisible" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_food"
+        android:elevation="25dp"
+        android:layout_marginBottom="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/fab_mood"
+        android:scaleType="center"
+        android:src="@drawable/ic_local_dining_black_24dp"
+        android:visibility="invisible" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -65,23 +93,17 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center_horizontal"
+        app:backgroundTint="@color/black"
+        android:src="@drawable/custom_fab"
         android:clickable="true"
         android:scaleType="center"
-        app:backgroundTint="@color/colorAccent"
-        app:elevation="25dp"
-        app:srcCompat="@drawable/ic_add" />
+        app:elevation="25dp" />
 
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        app:bb_activeTabAlpha="1"
-        app:bb_activeTabColor="@color/black"
-        app:bb_behavior="iconsOnly"
-        app:bb_inActiveTabColor="@color/colorDark"
-        app:bb_tabXmlResource="@menu/menu_bottombar" />
+
+
+
+
+
 
 
 </RelativeLayout>

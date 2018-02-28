@@ -24,7 +24,7 @@ public interface DrugListDao {
     @Query("SELECT * FROM drug_list where name LIKE  :name")
     DrugList findByName(String name);
 
-    @Query("SELECT * FROM drug_list where pzn =  :pzn")
+    @Query("SELECT * FROM drug_list where pzn=:pzn")
     DrugList findByPzn(int pzn);
 
     @Query("SELECT COUNT(*) from drug_list")
