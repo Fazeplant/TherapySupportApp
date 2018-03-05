@@ -15,9 +15,9 @@
                 android:angle="180"
                 android:centerX="50%"
                 android:startColor="@color/colorPrimaryDark"
-                android:endColor="@color/colorPrimary"
+                android:endColor="@color/colorPrimary">
 
-                ></gradient>
+            </gradient>
 
             <corners android:radius="10dp" />
         </shape>

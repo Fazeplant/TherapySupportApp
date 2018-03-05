@@ -25,7 +25,10 @@ public interface DrugListDao {
     DrugList findByName(String name);
 
     @Query("SELECT * FROM drug_list where pzn=:pzn")
-    DrugList findByPzn(int pzn);
+    DrugList findByPzn(String pzn);
+
+    @Query("SELECT * FROM drug_list where manufacturer_id =:manufactuereId")
+    DrugList findByManufacturerId(int manufactuereId);
 
     @Query("SELECT COUNT(*) from drug_list")
     int countDrugList();

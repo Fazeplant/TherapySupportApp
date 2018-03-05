@@ -28,39 +28,40 @@
                 android:id="@+id/drug_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_toRightOf="@id/image_drug"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/drug_manufacturer"
                 android:paddingTop="10dp"
                 android:text="LITHIUM"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="#000000"
-                android:textSize="25sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/drug_manufacturer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/image_alarm"
                 android:layout_below="@id/drug_name"
                 android:layout_marginLeft="60dp"
-                android:layout_marginTop="2dp"
                 android:layout_toRightOf="@id/image_drug"
                 android:text="Program"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textSize="22sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textViewRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_below="@id/image_drug"
                 android:layout_marginTop="9dp"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimaryDark"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="08:00"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
             <ImageView
                 android:id="@+id/image_alarm"
@@ -68,6 +69,7 @@
                 android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
+                android:layout_alignParentBottom="true"
                 android:layout_below="@id/image_drug"
                 app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 

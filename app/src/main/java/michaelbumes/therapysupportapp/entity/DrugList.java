@@ -23,7 +23,7 @@ public class DrugList {
 
 
     @ColumnInfo(name = "pzn")
-    private int pzn;
+    private String pzn;
 
     @ColumnInfo(name = "dosage_form_id")
     private int dosageFormId;
@@ -55,7 +55,7 @@ public class DrugList {
         return manufacturerId;
     }
 
-    public void setPzn(int pzn) {
+    public void setPzn(String pzn) {
         this.pzn = pzn;
     }
 
@@ -71,7 +71,7 @@ public class DrugList {
         this.sideEffects = sideEffects;
     }
 
-    public int getPzn() {
+    public String getPzn() {
         return pzn;
     }
 

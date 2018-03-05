@@ -1,5 +1,6 @@
 package michaelbumes.therapysupportapp.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
+import michaelbumes.therapysupportapp.entity.Manufacturer;
 
 /**
  * Created by Michi on 31.01.2018.
@@ -18,6 +21,8 @@ import michaelbumes.therapysupportapp.entity.Drug;
 
 public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
    List<Drug> drugs;
+    private Context context;
+
 
     public DrugAdapter(List<Drug> drugs) {
         this.drugs = drugs;
@@ -26,13 +31,18 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
     @Override
     public DrugAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.drugs_row, parent,false );
+        context = parent.getContext();
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(DrugAdapter.ViewHolder holder, int position) {
         holder.drugName.setText(drugs.get(position).getDrugName());
-        holder.drugManufacturer.setText(drugs.get(position).getManufacturer());
+        Manufacturer manufacturer =  AppDatabase.getAppDatabase(context).manufacturerDao().findById(drugs.get(position).getManufacturerId());
+        String manufactuereName = manufacturer.getManufacturerName();
+        holder.drugManufacturer.setText(manufactuereName);
+        //        holder.drugManufacturer.setText((CharSequence) AppDatabase.getAppDatabase(context).manufacturerDao().findById(drugs.get(position).getManufacturerId()));
+
 
     }
 

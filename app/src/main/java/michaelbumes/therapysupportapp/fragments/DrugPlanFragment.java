@@ -29,7 +29,6 @@ public class DrugPlanFragment extends BaseFragment {
     RecyclerView.Adapter adapter;
 
 
-
     public static DrugPlanFragment  newInstance(int instance) {
         Bundle args = new Bundle();
         args.putInt(ARGS_INSTANCE, instance);

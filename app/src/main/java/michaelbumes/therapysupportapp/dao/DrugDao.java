@@ -27,6 +27,12 @@ public interface DrugDao {
     @Query("SELECT COUNT(*) from drug")
     int countDrugs();
 
+    @Query("SELECT * FROM drug where pzn=:pzn")
+    Drug findByPzn(String pzn);
+
+    @Query("SELECT * FROM drug where id=:manufacturerId")
+    Drug findByManufacturerId(int manufacturerId);
+
     @Query("DELETE FROM drug")
     public void nukeTable();
 

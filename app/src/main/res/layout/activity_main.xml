@@ -28,7 +28,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="65dp"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
@@ -38,53 +39,21 @@
         <com.roughike.bottombar.BottomBar
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="56dp"
+            android:elevation="8dp"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
             app:bb_activeTabColor="@color/colorPrimary"
             app:bb_behavior="iconsOnly"
             app:bb_inActiveTabColor="@color/black"
             app:bb_inActiveTabAlpha="0.8"
-            app:bb_tabXmlResource="@menu/menu_bottombar" />
+            app:bb_tabXmlResource="@menu/menu_bottombar" >
+
+        </com.roughike.bottombar.BottomBar>
+
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_note"
-        android:elevation="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
-        android:layout_toLeftOf="@+id/fab_mood"
-        android:scaleType="center"
-        android:src="@drawable/ic_event_note_black_24dp"
-        android:visibility="invisible" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_mood"
-        android:elevation="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="95dp"
-
-        android:scaleType="center"
-        android:src="@drawable/ic_insert_emoticon_black_24dp"
-        android:visibility="invisible" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_food"
-        android:elevation="25dp"
-        android:layout_marginBottom="60dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/fab_mood"
-        android:scaleType="center"
-        android:src="@drawable/ic_local_dining_black_24dp"
-        android:visibility="invisible" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -93,17 +62,45 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center_horizontal"
-        app:backgroundTint="@color/black"
         android:src="@drawable/custom_fab"
         android:clickable="true"
         android:scaleType="center"
-        app:elevation="25dp" />
+        app:elevation="12dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_mood"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="93dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_insert_emoticon_black_24dp" />
 
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_note"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:layout_toLeftOf="@id/fab_mood"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_event_note_black_24dp" />
 
-
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_food"
+        android:visibility="invisible"
+        android:layout_marginBottom="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/fab_mood"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_local_dining_black_24dp" />
 
 
 </RelativeLayout>

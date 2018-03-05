@@ -6,16 +6,20 @@
     //<color name="colorAccent">#ffeb3b</color>
     //<color name="white">#ffffff</color>
     -->
-    <color name="colorPrimary">#487CB9</color>
+<!--    <color name="colorPrimary">#487CB9</color>
     <color name="colorPrimaryDark">#3A6394</color>
-    <color name="colorAccent">#FFD54F</color>
-    <!--<color name="colorAccent">#55F8FF</color>-->
+    <color name="colorAccent">#FFD54F</color>-->
+
+    <color name="colorPrimary">#88C542</color>
+    <color name="colorPrimaryDark">#5a9216</color>
+    <color name="colorAccent">#F9ED3A</color>
+    <color name="colorAccent2">#F0A32F</color>
 
     <color name="colorLila">#6200ea</color>
     <color name="colorAccentDark">#3F4D5F</color>
     <color name="white">#ffffff</color>
     <color name="colorText">#000000</color>
-    <color name="colorBackground">#f5f5f5</color>
+    <color name="colorBackground">#EAEAEA</color>
 
 
     <color name="login">#bababa</color>
@@ -38,6 +42,7 @@
     <color name="mood_5">#e60c00</color>
     <color name="cardview_custom_color">#eaeaea</color>
     <color name="black_150_transparent">#96000000</color>
+    <color name="grey">#757575</color>
 
 
 </resources>

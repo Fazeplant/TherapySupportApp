@@ -91,13 +91,13 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         fabNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animateFab();
                 Toast.makeText(MainActivity.this, "Note fab Clicked!", Toast.LENGTH_SHORT).show();
                 Intent intent = getIntent();
                 String value = intent.getStringExtra("key");
                 Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.NoteActivity.class);
                 myIntent.putExtra("key", value); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
+                animateFab();
 
             }
         });
@@ -105,13 +105,13 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         fabMood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animateFab();
                 Toast.makeText(MainActivity.this, "Mood fab Clicked!", Toast.LENGTH_SHORT).show();
                 Intent intent = getIntent();
                 String value = intent.getStringExtra("key");
                 Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.MoodActivity.class);
                 myIntent.putExtra("key", value); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
+                animateFab();
 
             }
         });
@@ -119,13 +119,13 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         fabFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animateFab();
                 Toast.makeText(MainActivity.this, "Food fab Clicked!", Toast.LENGTH_SHORT).show();
                 Intent intent = getIntent();
                 String value = intent.getStringExtra("key");
                 Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.FoodActivity.class);
                 myIntent.putExtra("key", value); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
+                animateFab();
             }
         });
 
@@ -247,6 +247,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             case android.R.id.home:
                 mNavController.popFragment();
                 break;
+            case R.id.save_drug:
+                return false;
         }
         return true;
     }

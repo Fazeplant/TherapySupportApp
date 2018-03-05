@@ -30,6 +30,8 @@ import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugList;
 import michaelbumes.therapysupportapp.utils.DatabaseInitializer;
 
+import static android.app.Activity.RESULT_CANCELED;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -41,6 +43,9 @@ public class AddMedicineFragment extends BaseFragment {
     AutoCompleteTextView nameEdit;
     String[] drugListNames;
     DrugList drugList;
+    String pzn = "-1";
+    boolean isQR = false;
+
 
 
 
@@ -62,11 +67,29 @@ public class AddMedicineFragment extends BaseFragment {
         nameEdit.setAdapter(adapter);
         storeButton = view.findViewById(R.id.store_button);
         qrButton = view.findViewById(R.id.qr_button);
+        nameEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                isQR = false;
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                isQR = false;
+            }
+        });
+
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 IntentIntegrator integrator = IntentIntegrator.forSupportFragment(AddMedicineFragment.this);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
                 integrator.setPrompt("Scanne Barcode");
                 integrator.setBeepEnabled(false);
                 integrator.setOrientationLocked(false);
@@ -77,12 +100,24 @@ public class AddMedicineFragment extends BaseFragment {
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //createDrug(AppDatabase.getAppDatabase(getContext()));
-                Drug mDrug = new Drug();
-                mDrug.setDrugName(nameEdit.getText().toString());
-                AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(mDrug);
-                getActivity().onBackPressed();
-                Toast.makeText(getContext(), "Medizin gespeichert!", Toast.LENGTH_SHORT).show();
+                String drugName = nameEdit.getText().toString();
+                if (drugName.isEmpty()) {
+                    nameEdit.setError("Geben Sie einen Namen ein");
+                    return;
+                }else if(isQR ==false) {
+                    drugList = AppDatabase.getAppDatabase(getContext()).drugListDao().findByName(drugName);
+                    if (drugList == null){
+                        Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
+                        return;
+                    }else {
+                        pzn = drugList.getPzn();
+                    }
+                }if (pzn == "-1"){
+                    Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
+                    return;
+                }else {
+                    fragmentNavigation.pushFragment(DrugFragment.newInstance(instanceInt + 1, pzn));
+                }
             }
         });
 
@@ -99,17 +134,34 @@ public class AddMedicineFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED){
+            isQR = false;
+        }
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                Toast.makeText(getContext(), "Cancelled1", Toast.LENGTH_LONG).show();
-            }else{
-                int pzn = Integer.parseInt(result.getContents());
-                if (AppDatabase.getAppDatabase(getContext()).drugListDao().findByPzn(pzn) != null) {
+                Toast.makeText(getContext(), "Abgebrochen", Toast.LENGTH_LONG).show();
+                return;
+
+            }else {
+                try {
+                    String string = result.getContents();
+                    pzn = string.replace("\n", "");
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Barcode nicht unterstützt", Toast.LENGTH_SHORT).show();
+                }
+                try {
                     drugList = AppDatabase.getAppDatabase(getContext()).drugListDao().findByPzn(pzn);
-                    nameEdit.setText(drugList.getName());
-                }else {
+                } catch (Exception e) {
                     Toast.makeText(getContext(), "PZN nicht in Datenbank gefunden", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (drugList != null) {
+                    nameEdit.setText(drugList.getName());
+                    isQR = true;
+                } else {
+                    Toast.makeText(getContext(), "PZN nicht in Datenbank gefunden", Toast.LENGTH_SHORT).show();
+                    return;
                 }
             }
         } else {
