@@ -20,7 +20,7 @@ import michaelbumes.therapysupportapp.entity.Manufacturer;
  */
 
 public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
-   List<Drug> drugs;
+    List<Drug> drugs;
     private Context context;
 
 

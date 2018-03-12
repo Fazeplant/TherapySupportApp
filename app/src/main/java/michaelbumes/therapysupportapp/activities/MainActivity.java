@@ -306,4 +306,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     public void dim_layout_on_click(View view) {
         animateFab();
     }
+
+    public  FragNavController getmNavController(){
+
+        return mNavController;
+    }
 }

@@ -19,6 +19,7 @@
                 android:id="@+id/image_drug"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginTop="12dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="13dp"
@@ -42,14 +43,14 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/image_alarm"
                 android:layout_below="@id/drug_name"
-                android:layout_marginLeft="60dp"
+                android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@id/image_drug"
                 android:text="Program"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textViewRating"
+                android:id="@+id/textViewAlarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
