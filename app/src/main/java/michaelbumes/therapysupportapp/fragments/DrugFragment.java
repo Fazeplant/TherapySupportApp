@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,11 @@ import android.widget.Toast;
 
 import com.ncapdevi.fragnav.FragNavController;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -44,6 +50,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private int kindOfTakingFlag = REGULARLY;
     private View view1;
 
+    private Drug drug;
+
 
     FragNavController mFragmentNavigation;
 
@@ -55,40 +63,37 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     //exeriemt
     private int postitionsCheck = 1;
 
-    CustomListViewDrugTime customListViewDrugTime;
+    private CustomListViewDrugTime customListViewDrugTime;
 
 
 
     boolean timeButtonClicked = false;
 
-    ListView lst ,lst2, lst3, lst4, lstDrugTime;
-    Button addTimeButton;
 
-    String[] stringList1;
-    String[] stringList2;
-    String[] stringList3;
-    String[] stringList4;
-    String[] stringList5;
-    String[] stringList6;
-    String[] stringList7;
-    String[] stringList8;
-    ArrayList<String> stringTime;
-    ArrayList<String> stringDosage;
-    ArrayList<String> stringDosageForm;
+    private ListView lst ,lst2, lst3, lst4, lstDrugTime;
+    private  Button addTimeButton;
 
-    RunningTimeFragment runningTimeFragment = null;
-    DrugDetailFragment drugDetailFragment = null;
-    TakingPatternFragment takingPatternFragment = null;
-    AlarmFragment alarmFragment = null;
+    private  String[] stringList1;
+    private   String[] stringList2;
+    private    String[] stringList3;
+    private   String[] stringList4;
+    private   String[] stringList5;
+    private  String[] stringList6;
+    private   String[] stringList7;
+    private  String[] stringList8;
+    private  ArrayList<String> stringTime;
+    private  ArrayList<String> stringDosage;
+    private  ArrayList<String> stringDosageForm;
 
-    //NumberPicker Liste
-    String[] numberDosage;
-    Spinner spinnerDosage;
+    private   RunningTimeFragment runningTimeFragment = null;
+    private  DrugDetailFragment drugDetailFragment = null;
+    private  TakingPatternFragment takingPatternFragment = null;
+    private   AlarmFragment alarmFragment = null;
 
 
-    DrugList drugList;
-    String parentPzn;
-    CardView cardView1, cardView2, cardView3, cardViewDrugTime;
+
+    private String parentPzn;
+    private    CardView cardView1, cardView2, cardView3, cardViewDrugTime;
     private static int mCurCheckPosition;
     private boolean isSaved = false;
 
@@ -108,11 +113,13 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         setRetainInstance(true);
         getActivity().setTitle(R.string.drug);
         parentPzn = getArguments().getString("pzn", "-1");
-        try {
-            drugList = AppDatabase.getAppDatabase(getContext()).drugListDao().findByPzn(parentPzn);
-        } catch (Exception e) {
-        }
+
         mFragmentNavigation = ((MainActivity) getActivity()).getmNavController();
+
+        DrugEvent mDrugEvent = EventBus.getDefault().getStickyEvent(DrugEvent.class);
+        drug = mDrugEvent.getDrug();
+
+
 
 /*
         numberDosage = new String[]{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"};
@@ -125,6 +132,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         spinnerDosage.setAdapter(adapter);
 */
 
+        //tempDrug
+
+        final Bundle bundle = new Bundle();
+        bundle.putSerializable("drug", drug);
 
 
 
@@ -144,8 +155,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         lstDrugTime = view.findViewById(R.id.list_view_drug_time);
 
 
-        stringList1 = new String[]{drugList.getName(), "Art der Einnahme"};
-        stringList2 =  new String[]{AppDatabase.getAppDatabase(getContext()).manufacturerDao().findById(drugList.getManufacturerId()).getManufacturerName(), "Regelmäßig"};
+        stringList1 = new String[]{drug.getDrugName(), "Art der Einnahme"};
+        stringList2 =  new String[]{AppDatabase.getAppDatabase(getContext()).manufacturerDao().findById(drug.getManufacturerId()).getManufacturerName(), "Regelmäßig"};
         stringList3 =  new String[]{"Laufzeit", "Einnahmemuster"};
         stringList4 = new String[]{"Unbegrenzte Laufzeit", "Täglich"};
         stringList5 =  new String[]{"Alarm"};
@@ -200,10 +211,11 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             @Override
             public void onClick(View view) {
                 if (timeButtonClicked ==false) {
-                    justifyListViewHeightBasedOnChildren(lstDrugTime);
                     cardViewDrugTime.setVisibility(View.VISIBLE);
                     timeButtonClicked = true;
                     customListViewDrugTime.notifyDataSetChanged();
+                    justifyListViewHeightBasedOnChildren(lstDrugTime);
+
                 }else {
                     stringTime.add("09:00");
                     stringDosage.add(String.valueOf(postitionsCheck++));
@@ -258,7 +270,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 switch (i) {
                     case 0:
                         if (drugDetailFragment == null){
-                            drugDetailFragment = DrugDetailFragment.newInstance(instanceInt+1, parentPzn);
+                            drugDetailFragment = DrugDetailFragment.newInstance(instanceInt+1);
+                            drugDetailFragment.setArguments(bundle);
                         }
                         mFragmentNavigation.pushFragment(drugDetailFragment);
                         customListView1.notifyDataSetChanged();
@@ -267,6 +280,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                     case 1:
                         if (kindOfTakingFlag == REGULARLY) {
                             kindOfTakingFlag = ONLY_WHEN_REQUIRED;
+                            cardViewDrugTime.setVisibility(View.GONE);
                             stringList2[1] = "Nur bei Bedarf";
                             cardView2.setVisibility(View.GONE);
                             cardView3.setVisibility(View.GONE);
@@ -274,6 +288,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                             customListView2.notifyDataSetChanged();
                             break;
                         } else {
+                            if (timeButtonClicked ==true) {
+                                cardViewDrugTime.setVisibility(View.VISIBLE);
+
+                            }
                             kindOfTakingFlag = REGULARLY;
                             stringList2[1] = "Regelmäßig";
                             cardView2.setVisibility(View.VISIBLE);
@@ -348,13 +366,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     public boolean onOptionsItemSelected(MenuItem item) {
         int resID = item.getItemId();
         if (resID == R.id.save_drug) {
-            Drug drug = new Drug();
-            drug.setDrugName(drugList.getName());
-            drug.setDosageFormId(drugList.getDosageFormId());
-            drug.setManufacturerId(drugList.getManufacturerId());
-            drug.setPzn(drugList.getPzn());
-            drug.setSideEffects(drugList.getSideEffects());
-            drug.setTakingNote(drugList.getTakingNote());
+
             AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
             Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
             mFragmentNavigation.clearStack();
@@ -446,6 +458,30 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
     }
 
+    public class Alarm implements Serializable {
+        int id;
+        String name;
+
+        // GETTERS AND SETTERS
+    }
+
+    //EventBus
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(DrugEvent event){
+        Log.d("event", "Event Angekommen Drug");
+    }
 
 
 

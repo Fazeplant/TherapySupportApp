@@ -24,6 +24,10 @@ import com.google.zxing.integration.android.IntentResult;
 import com.ncapdevi.fragnav.FragNavController;
 import com.ncapdevi.fragnav.FragNavPopController;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
@@ -116,6 +120,19 @@ public class AddMedicineFragment extends BaseFragment {
                     Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
                     return;
                 }else {
+                    drug = new Drug();
+                    drug.setDrugName(drugList.getName());
+                    drug.setDosageFormId(drugList.getDosageFormId());
+                    drug.setManufacturerId(drugList.getManufacturerId());
+                    drug.setPzn(drugList.getPzn());
+                    drug.setSideEffects(drugList.getSideEffects());
+                    drug.setTakingNote(drugList.getTakingNote());
+
+                    DrugEvent event = new DrugEvent();
+                    event.setDrug(drug);
+                    EventBus.getDefault().removeAllStickyEvents();
+                    EventBus.getDefault().postSticky(event);
+
                     fragmentNavigation.pushFragment(DrugFragment.newInstance(instanceInt + 1, pzn));
                 }
             }
@@ -168,4 +185,23 @@ public class AddMedicineFragment extends BaseFragment {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(DrugEvent event){
+    }
+
+
+
 }

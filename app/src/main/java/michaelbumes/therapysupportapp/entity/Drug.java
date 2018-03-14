@@ -2,11 +2,14 @@ package michaelbumes.therapysupportapp.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+
+import java.io.Serializable;
+
 /**
  * Created by Michi on 16.01.2018.
  */
 @Entity(tableName = "drug")
-public class Drug {
+public class Drug implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;

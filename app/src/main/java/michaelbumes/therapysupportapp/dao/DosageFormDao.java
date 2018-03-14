@@ -27,6 +27,9 @@ public interface DosageFormDao {
     @Query("SELECT * FROM dosage_form where id=:dosageFormId")
     DosageForm findById(int dosageFormId);
 
+    @Query("SELECT dosage_form_name FROM dosage_form")
+    String[] getAllNames();
+
     @Insert
     void insertAll(DosageForm... dosageForms);
 

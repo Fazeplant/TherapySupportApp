@@ -33,6 +33,7 @@ import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
+import michaelbumes.therapysupportapp.fragments.DrugDetailFragment;
 import michaelbumes.therapysupportapp.fragments.DrugPlanFragment;
 import michaelbumes.therapysupportapp.fragments.SettingsFragment;
 import michaelbumes.therapysupportapp.fragments.TodayFragment;
@@ -186,7 +187,12 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
     @Override
     public void onBackPressed() {
-        if (!mNavController.popFragment()) {
+        switch (mNavController.getCurrentFrag().getClass().getName()){
+            case "michaelbumes.therapysupportapp.fragments.DrugDetailFragment":
+                Toast.makeText(this, "Funzt Lol", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        if(!mNavController.popFragment()) {
             super.onBackPressed();
         }
     }
