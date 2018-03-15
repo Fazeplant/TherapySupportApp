@@ -18,8 +18,8 @@ public class DrugList {
     @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "manufacturer_id")
-    private int manufacturerId;
+    @ColumnInfo(name = "manufacturer")
+    private String manufacturer;
 
 
     @ColumnInfo(name = "pzn")
@@ -51,8 +51,8 @@ public class DrugList {
         this.name = name;
     }
 
-    public int getManufacturerId() {
-        return manufacturerId;
+    public String getManufacturer() {
+        return manufacturer;
     }
 
     public void setPzn(String pzn) {
@@ -87,8 +87,8 @@ public class DrugList {
         return sideEffects;
     }
 
-    public void setManufacturerId(int manufacturerId) {
-        this.manufacturerId = manufacturerId;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
 

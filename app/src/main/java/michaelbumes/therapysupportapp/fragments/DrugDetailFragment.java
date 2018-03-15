@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.CustomListView;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.entity.DrugList;
 
 /**
  * Created by Michi on 08.03.2018.
@@ -33,7 +31,7 @@ public class DrugDetailFragment extends BaseFragment {
     private final int CHANGE_NAME = 1;
     private final int CHANGE_MANUFACTURER = 2;
 
-
+    private View view1;
     private  ListView lst1;
     private String[] string1;
     private String[] string2;
@@ -42,7 +40,6 @@ public class DrugDetailFragment extends BaseFragment {
     private CustomListView customListView;
     private Drug drug;
     private  String dosageForm, name, manufacturer;
-    private  DrugEvent returnDrugEvent;
     private DrugEvent mDrugEvent;
 
 
@@ -73,7 +70,7 @@ public class DrugDetailFragment extends BaseFragment {
         dosageFormList = AppDatabase.getAppDatabase(getContext()).dosageFormDao().getAllNames();
 
         name = drug.getDrugName();
-        manufacturer = AppDatabase.getAppDatabase(getContext()).manufacturerDao().findById(drug.getManufacturerId()).getManufacturerName();
+        manufacturer = drug.getManufacturer();
         dosageForm = dosageFormList[drug.getDosageFormId() -1];
 
         string1 = new String[]{"Name", "Hersteller", "Darreichungsform"};
@@ -91,8 +88,7 @@ public class DrugDetailFragment extends BaseFragment {
                         createAlertDialogText("Name ändern", CHANGE_NAME);
                         break;
                     case 1:
-                        //createAlertDialogText("Hersteller ändern", CHANGE_MANUFACTURER);
-                        Toast.makeText(getContext(), "Hersteller noch nicht änderbar", Toast.LENGTH_SHORT).show();
+                        createAlertDialogText("Hersteller ändern", CHANGE_MANUFACTURER);
                         break;
                     case 2:
                         createAlertDialogDosageFrom();
@@ -110,7 +106,9 @@ public class DrugDetailFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view1 = inflater.inflate(R.layout.fragment_drug_detail, container, false);
+        if (view1 == null) {
+            view1 = inflater.inflate(R.layout.fragment_drug_detail, container, false);
+        }
         return view1;
     }
 
@@ -183,9 +181,8 @@ public class DrugDetailFragment extends BaseFragment {
                 }
                 customListView.notifyDataSetChanged();
 
-                returnDrugEvent = new DrugEvent();
-                returnDrugEvent.setDrug(drug);
-                EventBus.getDefault().post(returnDrugEvent);
+                mDrugEvent.setDrug(drug);
+                EventBus.getDefault().post(mDrugEvent);
 
                 alertDialogDosageForm.dismiss();
             }
@@ -211,15 +208,14 @@ public class DrugDetailFragment extends BaseFragment {
                 if(mode == CHANGE_NAME) {
                     drug.setDrugName(input.getText().toString());
                     string2[0] = drug.getDrugName();
-                    DrugEvent drugEvent = new DrugEvent();
-                    drugEvent.setDrug(drug);
-                    EventBus.getDefault().post(drugEvent);
                     customListView.notifyDataSetChanged();
                 }else{
-                    //TODO: Hersteller Id oder String?
-                    Toast.makeText(getContext(), "Hersteller nicht änderbar", Toast.LENGTH_SHORT).show();
-
+                    drug.setManufacturer(input.getText().toString());
+                    string2[1] = drug.getManufacturer();
+                    customListView.notifyDataSetChanged();
                 }
+                mDrugEvent.setDrug(drug);
+                EventBus.getDefault().post(mDrugEvent);
             }
         });
         builder.setNegativeButton("Abbruch", new DialogInterface.OnClickListener() {

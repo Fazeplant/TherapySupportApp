@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -32,7 +31,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
@@ -40,7 +43,6 @@ import michaelbumes.therapysupportapp.adapter.CustomListView;
 import michaelbumes.therapysupportapp.adapter.CustomListViewDrugTime;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.entity.DrugList;
 
 
 public class DrugFragment extends BaseFragment implements NumberPicker.OnValueChangeListener {
@@ -84,23 +86,25 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private  ArrayList<String> stringTime;
     private  ArrayList<String> stringDosage;
     private  ArrayList<String> stringDosageForm;
+    private String[] tempString;
 
     private   RunningTimeFragment runningTimeFragment = null;
     private  DrugDetailFragment drugDetailFragment = null;
     private  TakingPatternFragment takingPatternFragment = null;
     private   AlarmFragment alarmFragment = null;
+    private DrugEvent mDrugEvent;
+
+    private CustomListView customListView1,customListView2, customListView3, customListView4;
 
 
 
-    private String parentPzn;
     private    CardView cardView1, cardView2, cardView3, cardViewDrugTime;
     private static int mCurCheckPosition;
     private boolean isSaved = false;
 
-    public static DrugFragment newInstance(int instance, String pzn) {
+    public static DrugFragment newInstance(int instance) {
         Bundle args = new Bundle();
         args.putInt(ARGS_INSTANCE, instance);
-        args.putString("pzn", pzn);
         DrugFragment fragment = new DrugFragment();
         fragment.setArguments(args);
         return fragment;
@@ -112,12 +116,13 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         super.onViewCreated(view, savedInstanceState);
         setRetainInstance(true);
         getActivity().setTitle(R.string.drug);
-        parentPzn = getArguments().getString("pzn", "-1");
 
         mFragmentNavigation = ((MainActivity) getActivity()).getmNavController();
 
-        DrugEvent mDrugEvent = EventBus.getDefault().getStickyEvent(DrugEvent.class);
+        mDrugEvent = EventBus.getDefault().getStickyEvent(DrugEvent.class);
         drug = mDrugEvent.getDrug();
+
+        setStrings();
 
 
 
@@ -133,9 +138,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 */
 
         //tempDrug
-
-        final Bundle bundle = new Bundle();
-        bundle.putSerializable("drug", drug);
 
 
 
@@ -155,29 +157,13 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         lstDrugTime = view.findViewById(R.id.list_view_drug_time);
 
 
-        stringList1 = new String[]{drug.getDrugName(), "Art der Einnahme"};
-        stringList2 =  new String[]{AppDatabase.getAppDatabase(getContext()).manufacturerDao().findById(drug.getManufacturerId()).getManufacturerName(), "Regelmäßig"};
-        stringList3 =  new String[]{"Laufzeit", "Einnahmemuster"};
-        stringList4 = new String[]{"Unbegrenzte Laufzeit", "Täglich"};
-        stringList5 =  new String[]{"Alarm"};
-        stringList6 = new String[]{"Standard"};
-        stringList7 = new String[]{"Kauferinnerung"};
-        stringList8 = new String[]{""};
-
-        stringTime = new ArrayList<String>();
-        stringTime.add("08:00");
-        stringDosage = new ArrayList<String>();
-        stringDosage.add("1");
-        stringDosageForm = new ArrayList<String>();
-        stringDosageForm.add("Tablette(n)");
 
 
 
-
-        final CustomListView customListView1 = new CustomListView(getActivity(), stringList1, stringList2);
-        final CustomListView customListView2 = new CustomListView(getActivity(), stringList3, stringList4);
-        final CustomListView customListView3 = new CustomListView(getActivity(), stringList5, stringList6);
-        final CustomListView customListView4 = new CustomListView(getActivity(), stringList7, stringList8);
+        customListView1 = new CustomListView(getActivity(), stringList1, stringList2);
+        customListView2 = new CustomListView(getActivity(), stringList3, stringList4);
+        customListView3 = new CustomListView(getActivity(), stringList5, stringList6);
+        customListView4 = new CustomListView(getActivity(), stringList7, stringList8);
 
         customListViewDrugTime = new CustomListViewDrugTime(getActivity(), stringTime, stringDosage, stringDosageForm);
 
@@ -271,7 +257,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                     case 0:
                         if (drugDetailFragment == null){
                             drugDetailFragment = DrugDetailFragment.newInstance(instanceInt+1);
-                            drugDetailFragment.setArguments(bundle);
                         }
                         mFragmentNavigation.pushFragment(drugDetailFragment);
                         customListView1.notifyDataSetChanged();
@@ -428,6 +413,123 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         });
         AlertDialog alertDialog = d.create();
         alertDialog.show();
+
+    }
+    private void setStrings(){
+
+
+        stringList1 = new String[]{drug.getDrugName(), "Art der Einnahme"};
+        stringList2 =  new String[]{drug.getManufacturer(), "Regelmäßig"};
+        stringList3 =  new String[]{"Laufzeit", "Einnahmemuster"};
+        stringList4 = new String[]{"Unbegrenzte Laufzeit", "Täglich"};
+        stringList5 =  new String[]{"Alarm"};
+        stringList6 = new String[]{"Standard"};
+        stringList7 = new String[]{"Kauferinnerung"};
+        stringList8 = new String[]{""};
+
+
+
+        stringTime = new ArrayList<String>();
+        stringTime.add("08:00");
+        stringDosage = new ArrayList<String>();
+        stringDosage.add("1");
+        stringDosageForm = new ArrayList<String>();
+        stringDosageForm.add("Tablette(n)");
+
+        if (mDrugEvent.getEndDate() != "-1"){
+            stringList4[0] = "bis " + mDrugEvent.getEndDate();
+
+        }
+        switch (mDrugEvent.getTakingPattern()){
+            case 1:
+                stringList4[1] = "Täglich";
+                break;
+            case 2:
+                stringList4[1] = "Täglich, alle N Stunden";
+                break;
+
+            case 3:
+                stringList4[1] = "Alle " + mDrugEvent.getTakingPatternEveryOtherDay() + " Tage";
+                break;
+
+            case 4:
+                boolean[] weekdays = new boolean[7];
+                weekdays[0] = true;
+                weekdays[1] = true;
+                weekdays[2] = true;
+                weekdays[3] = true;
+                weekdays[4] = true;
+                weekdays[5] = false;
+                weekdays[6] = false;
+
+                boolean[] weekend = new boolean[7];
+                weekend[0] = false;
+                weekend[1] = false;
+                weekend[2] = false;
+                weekend[3] = false;
+                weekend[4] = false;
+                weekend[5] = true;
+                weekend[6] = true;
+
+                if (Arrays.equals(mDrugEvent.getTakingPatternWeekdays(),weekdays)){
+                    stringList4[1] = "Wochentage";
+                    break;
+                }else if (Arrays.equals(mDrugEvent.getTakingPatternWeekdays(),weekend)){
+                    stringList4[1] = "Wochenende";
+                    break;
+                }else {
+                    tempString = new String[7];
+                    boolean[] takingPattern = mDrugEvent.getTakingPatternWeekdays();
+                    for (int i = 0; i < 7 ; i++) {
+                        if (takingPattern[i] == true){
+                            switch (i){
+                                case 0:
+                                    tempString[i] = "Mo";
+                                    break;
+                                case 1:
+                                    tempString[i] = "Di";
+                                    break;
+                                case 2:
+                                    tempString[i] = "Mi";
+                                    break;
+                                case 3:
+                                    tempString[i] = "Do";
+                                    break;
+                                case 4:
+                                    tempString[i] = "Fr";
+                                    break;
+                                case 5:
+                                    tempString[i] = "Sa";
+                                    break;
+                                case 6:
+                                    tempString[i] = "So";
+                                    break;
+
+
+                            }
+                        }
+
+                    }
+                    //Null entfernen
+                    List<String> list = new ArrayList<String>(Arrays.asList(tempString));
+                    list.removeAll(Collections.singleton(null));
+                    tempString = list.toArray(new String[list.size()]);
+
+                    StringBuilder buffer = new StringBuilder();
+                    for (String each : tempString)
+                        buffer.append(". ").append(each);
+                    String joined = buffer.deleteCharAt(0).toString();
+
+                    stringList4[1] = joined;
+                    break;
+                }
+
+            case 5:
+                stringList4[1] = String.valueOf(mDrugEvent.getTakingPatternDaysWithIntake()) + " mit Einnahme, " + String.valueOf(mDrugEvent.getTakingPatternDaysWithOutIntake()) + " ohne Einnahme";
+                break;
+        }
+
+
 
     }
 

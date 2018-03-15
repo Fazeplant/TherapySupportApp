@@ -17,15 +17,15 @@ public class Drug implements Serializable {
     @ColumnInfo(name = "drug_name")
     private String drugName;
 
-    @ColumnInfo(name = "drug_manufacturer_id")
-    private int manufacturerId;
+    @ColumnInfo(name = "drug_manufacturer")
+    private String manufacturer;
 
-    public int getManufacturerId() {
-        return manufacturerId;
+    public String getManufacturer() {
+        return manufacturer;
     }
 
-    public void setManufacturerId(int manufacturerId) {
-        this.manufacturerId = manufacturerId;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public int getDosageFormId() {

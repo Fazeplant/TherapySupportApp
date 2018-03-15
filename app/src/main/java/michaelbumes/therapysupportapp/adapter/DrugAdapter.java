@@ -7,13 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.entity.Manufacturer;
 
 /**
  * Created by Michi on 31.01.2018.
@@ -38,10 +36,8 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(DrugAdapter.ViewHolder holder, int position) {
         holder.drugName.setText(drugs.get(position).getDrugName());
-        Manufacturer manufacturer =  AppDatabase.getAppDatabase(context).manufacturerDao().findById(drugs.get(position).getManufacturerId());
-        String manufactuereName = manufacturer.getManufacturerName();
-        holder.drugManufacturer.setText(manufactuereName);
-        //        holder.drugManufacturer.setText((CharSequence) AppDatabase.getAppDatabase(context).manufacturerDao().findById(drugs.get(position).getManufacturerId()));
+        holder.drugManufacturer.setText(drugs.get(position).getManufacturer());
+        //        holder.drugManufacturer.setText((CharSequence) AppDatabase.getAppDatabase(context).manufacturerDao().findById(drugs.get(position).getManufacturer()));
 
 
     }

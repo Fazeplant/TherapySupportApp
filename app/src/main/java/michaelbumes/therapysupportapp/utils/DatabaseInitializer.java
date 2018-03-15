@@ -23,7 +23,7 @@ public class DatabaseInitializer {
         task.execute();
     }
 
-    public static void populateSync(@NonNull final AppDatabase db, String drugName, int drugManufacturer) {
+    public static void populateSync(@NonNull final AppDatabase db, String drugName, String drugManufacturer) {
         populateWithTestData(db, drugName,drugManufacturer);
     }
 
@@ -32,10 +32,10 @@ public class DatabaseInitializer {
         return drug;
     }
 
-    private static void populateWithTestData(AppDatabase db, String drugName, int drugManufacturer) {
+    private static void populateWithTestData(AppDatabase db, String drugName, String drugManufacturer) {
         Drug drug = new Drug();
         drug.setDrugName(drugName);
-        drug.setManufacturerId(drugManufacturer);
+        drug.setManufacturer(drugManufacturer);
         addDrug(db, drug);
 
         List<Drug> drugList = db.drugDao().getAll();
@@ -46,7 +46,7 @@ public class DatabaseInitializer {
 
         private final AppDatabase mDb;
         private String mDrugName;
-        private int mDrugManufacturer;
+        private String mDrugManufacturer;
 
         PopulateDbAsync(AppDatabase db, String drugName, String drugManufacturer) {
             mDb = db;

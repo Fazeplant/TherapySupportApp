@@ -30,8 +30,8 @@ public interface DrugDao {
     @Query("SELECT * FROM drug where pzn=:pzn")
     Drug findByPzn(String pzn);
 
-    @Query("SELECT * FROM drug where id=:manufacturerId")
-    Drug findByManufacturerId(int manufacturerId);
+    @Query("SELECT * FROM drug where drug_manufacturer LIKE :manufacturer")
+    Drug findByManufacturer(String manufacturer);
 
     @Query("DELETE FROM drug")
     public void nukeTable();

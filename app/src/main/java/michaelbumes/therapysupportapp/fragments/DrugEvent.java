@@ -1,5 +1,9 @@
 package michaelbumes.therapysupportapp.fragments;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import michaelbumes.therapysupportapp.entity.Drug;
 
 /**
@@ -7,6 +11,11 @@ import michaelbumes.therapysupportapp.entity.Drug;
  */
 
 class DrugEvent {
+    final Calendar c = Calendar.getInstance();
+    Date currentDate = c.getTime();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+
     public Drug getDrug() {
         return drug;
     }
@@ -25,7 +34,8 @@ class DrugEvent {
         this.startingDate = startingDate;
     }
 
-    private String startingDate;
+    private String startingDate = sdf.format(currentDate);
+    ;
 
     public String getEndDate() {
         return endDate;
@@ -37,13 +47,80 @@ class DrugEvent {
 
     private String endDate = "-1";
 
-    public boolean isRunningTimeDefined() {
-        return runningTimeDefined;
+    public int getTakingPattern() {
+        return takingPattern;
     }
 
-    public void setRunningTimeDefined(boolean runningTimeDefined) {
-        this.runningTimeDefined = runningTimeDefined;
+    public void setTakingPattern(int takingPattern) {
+        this.takingPattern = takingPattern;
     }
 
-    private boolean runningTimeDefined = false;
+    private int takingPattern = 1;
+    private int takingPatternStart = 1;
+
+    public int getTakingPatternStart() {
+        return takingPatternStart;
+    }
+
+    public void setTakingPatternStart(int takingPatternStart) {
+        this.takingPatternStart = takingPatternStart;
+    }
+
+    public int getTakingPatternDaysWithIntake() {
+        return takingPatternDaysWithIntake;
+    }
+
+    public void setTakingPatternDaysWithIntake(int takingPatternDaysWithIntake) {
+        this.takingPatternDaysWithIntake = takingPatternDaysWithIntake;
+    }
+
+    public int getTakingPatternDaysWithOutIntake() {
+        return takingPatternDaysWithOutIntake;
+    }
+
+    public void setTakingPatternDaysWithOutIntake(int takingPatternDaysWithOutIntake) {
+        this.takingPatternDaysWithOutIntake = takingPatternDaysWithOutIntake;
+    }
+
+    private int takingPatternDaysWithIntake = -1;
+    private int takingPatternDaysWithOutIntake = -1;
+
+    public int getTakingPatternEveryOtherDay() {
+        return takingPatternEveryOtherDay;
+    }
+
+    public void setTakingPatternEveryOtherDay(int takingPatternEveryOtherDay) {
+        this.takingPatternEveryOtherDay = takingPatternEveryOtherDay;
+    }
+
+    private int takingPatternEveryOtherDay = -1;
+
+    public boolean[] getTakingPatternWeekdays() {
+        return takingPatternWeekdays;
+    }
+
+    public void setTakingPatternWeekdays(boolean[] takingPatternWeekdays) {
+        this.takingPatternWeekdays = takingPatternWeekdays;
+    }
+
+    private boolean[] takingPatternWeekdays = new boolean[7];
+
+    private boolean isRecurringReminder = false;
+    private int alarmType = 1;
+
+    public boolean isRecurringReminder() {
+        return isRecurringReminder;
+    }
+
+    public void setRecurringReminder(boolean recurringReminder) {
+        isRecurringReminder = recurringReminder;
+    }
+
+    public int getAlarmType() {
+        return alarmType;
+    }
+
+    public void setAlarmType(int alarmType) {
+        this.alarmType = alarmType;
+    }
 }

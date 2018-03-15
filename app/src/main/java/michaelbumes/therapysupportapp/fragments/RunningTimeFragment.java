@@ -164,7 +164,10 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.radio_button_unlimited_term) {
+                    runningTimeFlag = -1;
                     cardView2.setVisibility(View.GONE);
+                    myDrugEvent.setEndDate("-1");
+                    EventBus.getDefault().postSticky(myDrugEvent);
 
                 } else if (i == R.id.radio_button_defined_end_date) {
                     runningTimeFlag = DEFINED;
@@ -172,10 +175,8 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
                     cardView2.setVisibility(View.VISIBLE);
                     stringMain2[0] = "Letzte Erinnerung";
                     if (myDrugEvent.getEndDate() == "-1"){
-                        DrugEvent drugEvent = new DrugEvent();
-                        drugEvent.setDrug(drug);
-                        drugEvent.setEndDate(sdf.format(cAddTime.getTime()));
-                        EventBus.getDefault().postSticky(drugEvent);
+                        myDrugEvent.setEndDate(sdf.format(cAddTime.getTime()));
+                        EventBus.getDefault().postSticky(myDrugEvent);
                         stringSecond2[0] = sdf.format(cAddTime.getTime());
                     }else {
                         stringSecond2[0] = myDrugEvent.getEndDate();
@@ -190,10 +191,8 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
                     stringMain2[0] = "Laufzeit";
 
                     if (myDrugEvent.getEndDate() == "-1"){
-                        DrugEvent drugEvent = new DrugEvent();
-                        drugEvent.setDrug(drug);
-                        drugEvent.setEndDate(sdf.format(cAddTime.getTime()));
-                        EventBus.getDefault().postSticky(drugEvent);
+                        myDrugEvent.setEndDate(sdf.format(cAddTime.getTime()));
+                        EventBus.getDefault().postSticky(myDrugEvent);
                         stringSecond2[0] = "10";
                     }else {
                         try {
@@ -226,23 +225,20 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        DrugEvent drugEvent = new DrugEvent();
-        drugEvent.setDrug(drug);
         String date = String.valueOf(day) + "/" + String.valueOf(month + 1) + "/" + String.valueOf(year);
 
         if (notificationFlag == START) {
-            drugEvent.setStartingDate(date);
+            myDrugEvent.setStartingDate(date);
             stringStartDate[0] = date;
             customListView1.notifyDataSetChanged();
         }else if(notificationFlag == END){
-            drugEvent.setRunningTimeDefined(mIsRunningTimeDefined);
-            drugEvent.setEndDate(date);
+            myDrugEvent.setEndDate(date);
             stringSecond2[0] = date;
             customListView2.notifyDataSetChanged();
 
 
         }
-        EventBus.getDefault().postSticky(drugEvent);
+        EventBus.getDefault().postSticky(myDrugEvent);
 
     }
 
@@ -266,16 +262,14 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 stringSecond2[0] = String.valueOf(numberPicker.getValue());
-                DrugEvent drugEvent = new DrugEvent();
-                drugEvent.setDrug(drug);
+
                 Calendar calendar = Calendar.getInstance();
                 Date currentDate = calendar.getTime();
                 calendar.setTime(currentDate);
                 calendar.add(Calendar.DATE, numberPicker.getValue());
 
-                drugEvent.setEndDate(sdf.format(calendar.getTime()));
-                drugEvent.setRunningTimeDefined(mIsRunningTimeDefined);
-                EventBus.getDefault().postSticky(drugEvent);
+                myDrugEvent.setEndDate(sdf.format(calendar.getTime()));
+                EventBus.getDefault().postSticky(myDrugEvent);
 
                 customListView2.notifyDataSetChanged();
 

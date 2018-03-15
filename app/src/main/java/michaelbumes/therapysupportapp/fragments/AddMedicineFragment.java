@@ -8,21 +8,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.ncapdevi.fragnav.FragNavController;
-import com.ncapdevi.fragnav.FragNavPopController;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,7 +27,6 @@ import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugList;
-import michaelbumes.therapysupportapp.utils.DatabaseInitializer;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -123,7 +117,7 @@ public class AddMedicineFragment extends BaseFragment {
                     drug = new Drug();
                     drug.setDrugName(drugList.getName());
                     drug.setDosageFormId(drugList.getDosageFormId());
-                    drug.setManufacturerId(drugList.getManufacturerId());
+                    drug.setManufacturer(drugList.getManufacturer());
                     drug.setPzn(drugList.getPzn());
                     drug.setSideEffects(drugList.getSideEffects());
                     drug.setTakingNote(drugList.getTakingNote());
@@ -133,7 +127,7 @@ public class AddMedicineFragment extends BaseFragment {
                     EventBus.getDefault().removeAllStickyEvents();
                     EventBus.getDefault().postSticky(event);
 
-                    fragmentNavigation.pushFragment(DrugFragment.newInstance(instanceInt + 1, pzn));
+                    fragmentNavigation.pushFragment(DrugFragment.newInstance(instanceInt + 1));
                 }
             }
         });
