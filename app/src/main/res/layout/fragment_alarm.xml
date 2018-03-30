@@ -45,7 +45,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Errinerungstöne"
+                android:text="Ton"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -62,18 +62,18 @@
                     android:layout_gravity="start"
                     android:layout_marginTop="4dp"
                     android:layoutDirection="rtl"
-                    android:text="@string/standard"
+                    android:text="@string/alarm"
                     android:textAlignment="textStart"
                     android:textSize="18sp" />
 
                 <RadioButton
-                    android:id="@+id/radio_button_alarm_long"
+                    android:id="@+id/radio_button_alarm_sound"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginTop="4dp"
                     android:layoutDirection="rtl"
-                    android:text="@string/mLong"
+                    android:text="@string/notification"
                     android:textAlignment="textStart"
                     android:textSize="18sp" />
 

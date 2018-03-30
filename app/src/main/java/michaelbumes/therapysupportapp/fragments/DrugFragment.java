@@ -389,8 +389,16 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         int resID = item.getItemId();
         if (resID == R.id.save_drug) {
             Bundle bundle = new Bundle();
-            AlarmMain alarm = new AlarmMain(getContext(), bundle, 1);
+            bundle.putString("drugName", drug.getDrugName());
+            bundle.putInt("alarmType", mDrugEvent.getAlarmType());
+            bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+            if (mDrugEvent.getAlarmType() != 3){
+                AlarmMain alarm = new AlarmMain(getContext(), bundle, 5);
+            }else if (mDrugEvent.getAlarmType() == 1){
+                AlarmMain alarm = new AlarmMain(getContext(), bundle, 5);
 
+
+            }
             AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
             Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
             mFragmentNavigation.clearStack();

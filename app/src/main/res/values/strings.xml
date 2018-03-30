@@ -128,4 +128,5 @@
     <string name="only_vibration">Nur Vibration</string>
     <string name="discrete_notification">Diskrete Erinnerung</string>
     <string name="recurring_reminder">Wiederkehrende Erinnerungen</string>
+    <string name="notification">Benachrichtigungston</string>
 </resources>

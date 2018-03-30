@@ -1,6 +1,7 @@
 package michaelbumes.therapysupportapp.activities;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
@@ -335,9 +338,21 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             switch (intent.getAction()) {
                 case OK_ACTION:
                     Toast.makeText(this, "Bestätigt", Toast.LENGTH_SHORT).show();
+                    NotificationManagerCompat.from(getApplicationContext()).cancel(1);
+                    try {
+                        AlarmMain.ringtone.stop();
+                    }catch (Exception e){
+
+                    }
                     break;
                 case CANCLE_ACTION:
                     Toast.makeText(this, "Übersprungen", Toast.LENGTH_SHORT).show();
+                    NotificationManagerCompat.from(getApplicationContext()).cancel(1);
+                    try {
+                        AlarmMain.ringtone.stop();
+                    }catch (Exception e){
+
+                    }
                     break;
             }
         }

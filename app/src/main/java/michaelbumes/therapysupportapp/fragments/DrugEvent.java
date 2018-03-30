@@ -15,6 +15,22 @@ class DrugEvent {
     final Calendar c = Calendar.getInstance();
     Date currentDate = c.getTime();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private Drug drug;
+    private String startingDate = sdf.format(currentDate);
+    private String endDate = "-1";
+    private int takingPattern = 1;
+    private int takingPatternStart = 1;
+    private int takingPatternDaysWithIntake = -1;
+    private int takingPatternDaysWithOutIntake = -1;
+    private int takingPatternEveryOtherDay = -1;
+    private boolean[] takingPatternWeekdays = new boolean[7];
+    private boolean isRecurringReminder = false;
+    private int alarmType = 2;
+    private List<String> alarmTime;
+    private List<Integer> dosage;
+
+
+
 
 
     public Drug getDrug() {
@@ -25,7 +41,6 @@ class DrugEvent {
         this.drug = drug;
     }
 
-    private Drug drug;
 
     public String getStartingDate() {
         return startingDate;
@@ -35,8 +50,6 @@ class DrugEvent {
         this.startingDate = startingDate;
     }
 
-    private String startingDate = sdf.format(currentDate);
-    ;
 
     public String getEndDate() {
         return endDate;
@@ -46,7 +59,6 @@ class DrugEvent {
         this.endDate = endDate;
     }
 
-    private String endDate = "-1";
 
     public int getTakingPattern() {
         return takingPattern;
@@ -56,8 +68,6 @@ class DrugEvent {
         this.takingPattern = takingPattern;
     }
 
-    private int takingPattern = 1;
-    private int takingPatternStart = 1;
 
     public int getTakingPatternStart() {
         return takingPatternStart;
@@ -83,8 +93,7 @@ class DrugEvent {
         this.takingPatternDaysWithOutIntake = takingPatternDaysWithOutIntake;
     }
 
-    private int takingPatternDaysWithIntake = -1;
-    private int takingPatternDaysWithOutIntake = -1;
+
 
     public int getTakingPatternEveryOtherDay() {
         return takingPatternEveryOtherDay;
@@ -94,7 +103,6 @@ class DrugEvent {
         this.takingPatternEveryOtherDay = takingPatternEveryOtherDay;
     }
 
-    private int takingPatternEveryOtherDay = -1;
 
     public boolean[] getTakingPatternWeekdays() {
         return takingPatternWeekdays;
@@ -104,10 +112,7 @@ class DrugEvent {
         this.takingPatternWeekdays = takingPatternWeekdays;
     }
 
-    private boolean[] takingPatternWeekdays = new boolean[7];
 
-    private boolean isRecurringReminder = false;
-    private int alarmType = 1;
 
     public boolean isRecurringReminder() {
         return isRecurringReminder;
@@ -125,7 +130,6 @@ class DrugEvent {
         this.alarmType = alarmType;
     }
 
-    private List<String> alarmTime;
 
     public List<String> getAlarmTime() {
         return alarmTime;
@@ -143,5 +147,4 @@ class DrugEvent {
         this.dosage = dosage;
     }
 
-    private List<Integer> dosage;
 }

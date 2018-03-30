@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,6 +47,8 @@ public class AlarmFragment extends BaseFragment {
         drug = mDrugEvent.getDrug();
 
         radioGroup = view.findViewById(R.id.radio_group_alarm);
+        RadioButton radioButton2 = view.findViewById(R.id.radio_button_alarm_sound);
+        radioButton2.setChecked(true);
         aSwitch = view.findViewById(R.id.switch_alarm_recurring_reminder);
 
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -68,7 +70,7 @@ public class AlarmFragment extends BaseFragment {
                 if (i == R.id.radio_button_alarm_standard) {
                     mDrugEvent.setAlarmType(1);
 
-                } else if (i == R.id.radio_button_alarm_long) {
+                } else if (i == R.id.radio_button_alarm_sound) {
                     mDrugEvent.setAlarmType(2);
 
                 } else if (i == R.id.radio_button_alarm_no_notification) {

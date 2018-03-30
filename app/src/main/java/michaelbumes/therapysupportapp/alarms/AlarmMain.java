@@ -8,6 +8,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -28,6 +32,8 @@ public class AlarmMain extends BroadcastReceiver {
     private final String NOTIFICATION_CHANNEL = "MyNotificationChannel";
     private NotificationManager notifManager;
     NotificationHelper helper;
+    android.support.v4.app.NotificationCompat.Builder builder;
+    public static Ringtone ringtone;
 
 
     public AlarmMain() {
@@ -53,11 +59,31 @@ public class AlarmMain extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // here you can get the extras you passed in when creating the alarm
-        //intent.getBundleExtra(REMINDER_BUNDLE));
+        Bundle bundle = intent.getBundleExtra(REMINDER_BUNDLE);
+        String drugName = bundle.getString("drugName");
+        int alarmType = bundle.getInt("alarmType");
+        String dosageForm = bundle.getString("dosageForm");
+
+
+        if (alarmType == 1) {
+            Uri alarmUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            if (alarmUri == null) {
+                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            }
+            ringtone = RingtoneManager.getRingtone(context, alarmUri);
+            ringtone.setStreamType(AudioManager.STREAM_ALARM);
+            ringtone.play();
+
+
+        }
+
         helper = new NotificationHelper(context);
-        android.support.v4.app.NotificationCompat.Builder builder = helper.getChannelNotification("Title", "Body");
+        if (alarmType < 4){
+            builder = helper.getChannelNotification("Medizin einehmen!", drugName + " 1 " + dosageForm, alarmType );
+        }else {
+            builder = helper.getChannelNotificationSilent("Medizin einehmen!", drugName + " 1 " + dosageForm, alarmType );
+        }
         helper.getManger().notify(1, builder.build());
-        Toast.makeText(context, "Alarm went off", Toast.LENGTH_SHORT).show();
     }
 
 }
