@@ -38,6 +38,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <receiver android:name=".alarms.AlarmMain" />
+
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

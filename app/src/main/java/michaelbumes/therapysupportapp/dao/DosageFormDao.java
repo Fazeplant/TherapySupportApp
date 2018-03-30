@@ -30,6 +30,9 @@ public interface DosageFormDao {
     @Query("SELECT dosage_form_name FROM dosage_form")
     String[] getAllNames();
 
+    @Query("SELECT dosage_form_name FROM dosage_form where id=:dosageFormId")
+    String getNamebyId(int dosageFormId);
+
     @Insert
     void insertAll(DosageForm... dosageForms);
 

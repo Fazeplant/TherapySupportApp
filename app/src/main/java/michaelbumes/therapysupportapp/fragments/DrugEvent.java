@@ -3,6 +3,7 @@ package michaelbumes.therapysupportapp.fragments;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import michaelbumes.therapysupportapp.entity.Drug;
 
@@ -123,4 +124,24 @@ class DrugEvent {
     public void setAlarmType(int alarmType) {
         this.alarmType = alarmType;
     }
+
+    private List<String> alarmTime;
+
+    public List<String> getAlarmTime() {
+        return alarmTime;
+    }
+
+    public void setAlarmTime(List<String> alarmTime) {
+        this.alarmTime = alarmTime;
+    }
+
+    public List<Integer> getDosage() {
+        return dosage;
+    }
+
+    public void setDosage(List<Integer> dosage) {
+        this.dosage = dosage;
+    }
+
+    private List<Integer> dosage;
 }

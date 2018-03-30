@@ -41,6 +41,7 @@ import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
 import michaelbumes.therapysupportapp.adapter.CustomListView;
 import michaelbumes.therapysupportapp.adapter.CustomListViewDrugTime;
+import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
 
@@ -87,6 +88,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private  ArrayList<String> stringDosage;
     private  ArrayList<String> stringDosageForm;
     private String[] tempString;
+
+    List<String> mAlarmTime;
+    List<Integer> mDosage;
+    List<String> mTimeList;
 
     private   RunningTimeFragment runningTimeFragment = null;
     private  DrugDetailFragment drugDetailFragment = null;
@@ -199,13 +204,38 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 if (timeButtonClicked ==false) {
                     cardViewDrugTime.setVisibility(View.VISIBLE);
                     timeButtonClicked = true;
+
+                    mDosage = new ArrayList<Integer>();
+                    mDosage.add(1);
+                    mDrugEvent.setDosage(mDosage);
+
+                    mAlarmTime = new ArrayList<String>();
+                    mAlarmTime.add("08:00");
+                    mDrugEvent.setAlarmTime(mAlarmTime);
+
+                    EventBus.getDefault().postSticky(mDrugEvent);
                     customListViewDrugTime.notifyDataSetChanged();
                     justifyListViewHeightBasedOnChildren(lstDrugTime);
 
+
                 }else {
-                    stringTime.add("09:00");
-                    stringDosage.add(String.valueOf(postitionsCheck++));
-                    stringDosageForm.add("Tablette(n)");
+                    mDosage = new ArrayList<Integer>(mDrugEvent.getDosage());
+                    mDosage.add(1);
+                    mDrugEvent.setDosage(mDosage);
+                    stringTime.add("08:00");
+
+
+                    mAlarmTime = new ArrayList<String>(mDrugEvent.getAlarmTime());
+
+                    mAlarmTime.add("08:00");
+
+                    mDrugEvent.setAlarmTime(mAlarmTime);
+
+                    EventBus.getDefault().postSticky(mDrugEvent);
+
+
+                    stringDosage.add("1");
+                    stringDosageForm.add(AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
                     justifyListViewHeightBasedOnChildren(lstDrugTime);
                     customListViewDrugTime.notifyDataSetChanged();
                 }
@@ -218,6 +248,14 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 stringTime.remove(postition);
                 stringDosageForm.remove(postition);
                 stringDosage.remove(postition);
+                List<Integer> tempInt = new ArrayList<Integer>(mDrugEvent.getDosage());
+                List<String> tempString = new ArrayList<String>(mDrugEvent.getAlarmTime());
+                tempInt.remove(postition);
+                tempString.remove(postition);
+                mDrugEvent.setAlarmTime(tempString);
+                mDrugEvent.setDosage(tempInt);
+                EventBus.getDefault().postSticky(mDrugEvent);
+
                 customListViewDrugTime.notifyDataSetChanged();
                 lstDrugTime.setAdapter(customListViewDrugTime);
                 justifyListViewHeightBasedOnChildren(lstDrugTime);
@@ -336,7 +374,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         if (view1 ==null) {
             view1 = inflater.inflate(R.layout.fragment_drug, container, false);
         }
-        setRetainInstance(true);
         setHasOptionsMenu(true);
         return view1;
     }
@@ -351,6 +388,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     public boolean onOptionsItemSelected(MenuItem item) {
         int resID = item.getItemId();
         if (resID == R.id.save_drug) {
+            Bundle bundle = new Bundle();
+            AlarmMain alarm = new AlarmMain(getContext(), bundle, 1);
 
             AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
             Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
@@ -400,9 +439,17 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         d.setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                mDosage = mDrugEvent.getDosage();
+                if (mDosage.size() == position){
+                    mDosage.add(position, numberPicker.getValue());
+                }else {
+                    mDosage.set(position, numberPicker.getValue());
+                }
+                mDrugEvent.setDosage(mDosage);
                 stringDosage.set(position, String.valueOf(numberPicker.getValue()));
                 customListViewDrugTime.notifyDataSetChanged();
                 lstDrugTime.setAdapter(customListViewDrugTime);
+                EventBus.getDefault().postSticky(mDrugEvent);
 
             }
         });
@@ -427,14 +474,31 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         stringList7 = new String[]{"Kauferinnerung"};
         stringList8 = new String[]{""};
 
-
-
         stringTime = new ArrayList<String>();
-        stringTime.add("08:00");
         stringDosage = new ArrayList<String>();
-        stringDosage.add("1");
         stringDosageForm = new ArrayList<String>();
-        stringDosageForm.add("Tablette(n)");
+
+        if (timeButtonClicked) {
+            mTimeList = mDrugEvent.getAlarmTime();
+            List<String> mDosageList = new ArrayList<String>(mDrugEvent.getDosage().size());
+            for (Integer myInt : mDrugEvent.getDosage()) {
+                mDosageList.add(String.valueOf(myInt));
+            }
+            stringTime = new ArrayList<String>((ArrayList<String>) mTimeList);
+            stringDosage = new ArrayList<String>((ArrayList<String>) mDosageList);
+            for (int i = 0; i <  mTimeList.size(); i++) {
+                stringDosageForm.add(AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+            }
+
+        }
+        else{
+
+            stringTime.add("08:00");
+            stringDosage.add("1");
+            stringDosageForm.add(AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+
+        }
+
 
         if (mDrugEvent.getEndDate() != "-1"){
             stringList4[0] = "bis " + mDrugEvent.getEndDate();
@@ -533,19 +597,26 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
     }
 
-    private void pickTime(int position){
-        Calendar mcurrentTime = Calendar.getInstance();
+    private void pickTime(final int position){
+        final Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
         TimePickerDialog mTimePicker;
-        final int mPosition = position;
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 String curTime = String.format("%02d:%02d", selectedHour, selectedMinute);
-                stringTime.set( mPosition , curTime);
+                mAlarmTime = mDrugEvent.getAlarmTime();
+                if (mAlarmTime.size() == position){
+                    mAlarmTime.add(position, curTime);
+                }else {
+                    mAlarmTime.set(position, curTime);
+                }
+                stringTime.set( position , curTime);
+                mDrugEvent.setAlarmTime(mAlarmTime);
                 customListViewDrugTime.notifyDataSetChanged();
                 lstDrugTime.setAdapter(customListViewDrugTime);
+                EventBus.getDefault().postSticky(mDrugEvent);
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Zeit wählen");
@@ -582,7 +653,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(DrugEvent event){
-        Log.d("event", "Event Angekommen Drug");
+        drug = event.getDrug();
+        mDrugEvent = event;
     }
 
 

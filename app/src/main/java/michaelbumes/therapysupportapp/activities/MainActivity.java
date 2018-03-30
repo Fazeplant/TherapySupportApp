@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     private final int INDEX_CALENDAR = FragNavController.TAB4;
     private final int INDEX_SETTINGS = FragNavController.TAB5;
 
+    private static final String OK_ACTION ="michaelbumes.therapysupportapp.OK_ACTION" ;
+    private static final String CANCLE_ACTION ="michaelbumes.therapysupportapp.CANCLE_ACTION" ;
+
     public final int ART_ID_NOTE = 3;
     public final int ART_ID_MOOD = 1;
     public final int ART_ID_FOOD = 2;
@@ -64,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
+
+
+        processIntentAction(getIntent());
+
 
 
 
@@ -317,4 +324,30 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
         return mNavController;
     }
+
+    private Intent getNotificationIntent() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return intent;
+    }
+    private void processIntentAction(Intent intent) {
+        if (intent.getAction() != null) {
+            switch (intent.getAction()) {
+                case OK_ACTION:
+                    Toast.makeText(this, "Bestätigt", Toast.LENGTH_SHORT).show();
+                    break;
+                case CANCLE_ACTION:
+                    Toast.makeText(this, "Übersprungen", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        processIntentAction(intent);
+        super.onNewIntent(intent);
+    }
+
+
 }
