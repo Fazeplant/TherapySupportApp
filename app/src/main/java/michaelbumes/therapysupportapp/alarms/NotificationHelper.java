@@ -7,12 +7,18 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
+
 
 /**
  * Created by Michi on 30.03.2018.
@@ -20,12 +26,14 @@ import michaelbumes.therapysupportapp.activities.MainActivity;
 
 public class NotificationHelper extends ContextWrapper {
     private static final String NOTIFICATION_ID_SOUND = "notification_channel_sound_id";
+    private String notificationChannel = "notification_channel_id";
     private static final String NOTIFICATION_ID_SILENT = "notification_channel_silent_id";
     private static final String NOTIFICATION_NAME_SILENT = "Medizineinnahme ohne Ton";
     private static final String NOTIFICATION_NAME_SOUND = "Medizineinnahme Ton";
     private static final String OK_ACTION ="michaelbumes.therapysupportapp.OK_ACTION" ;
     private static final String CANCLE_ACTION ="michaelbumes.therapysupportapp.CANCLE_ACTION" ;
-    long[] vibratePattern;
+    private Uri notiUri;
+    public static Ringtone ringtone;
     int notificationMode = -1;
 
     private NotificationManager manager;
@@ -93,39 +101,59 @@ public class NotificationHelper extends ContextWrapper {
         }
         return manager;
     }
+    //Channels werden nur von Android.O aufwärts untertützt deswegen muss man den Ton und die Vibration manuell setzen
+    //notificationChannel gibt an in welchen Channel die Notifikation kommen soll (mit/ohne Ton)
+    //notiUri zeigt auf die Standart Notifikation
+    //notiUri wird auf null gesetzt um die Nachricht ohne Ton abzuspielen
+
     public NotificationCompat.Builder getChannelNotification(String title, String body, int alarmtype){
         Intent okIntent = getNotificationIntent();
         int resId = getResources().getIdentifier("ic_medical_pills_couple", "drawable", getPackageName());
         okIntent.setAction(OK_ACTION);
-        Intent cancelIntent = getNotificationIntent();
-        cancelIntent.setAction(CANCLE_ACTION);
-
-
-            return new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_ID_SOUND)
-                    .setDefaults(notificationMode)
-                    .setAutoCancel(true)
-                    .setContentText(body)
-                    .setContentTitle(title)
-                    .setWhen(System.currentTimeMillis())
-                    .addAction(R.drawable.ic_check_black_24dp , "Bestätigen" , PendingIntent.getActivity(this, 0, okIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                    .addAction(R.drawable.ic_cancel_black_24dp, "Überspringen", PendingIntent.getActivity(this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                    .setSmallIcon(resId);
-    }
-    public NotificationCompat.Builder getChannelNotificationSilent(String title, String body, int alarmtype){
-        Intent okIntent = getNotificationIntent();
-        int resId = getResources().getIdentifier("ic_medical_pills_couple", "drawable", getPackageName());
-        okIntent.setAction(OK_ACTION);
         switch(alarmtype){
+            case 1:
+                notiUri = null;
+                Uri alarmUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                if (alarmUri == null) {
+                    alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                }
+                ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
+                ringtone.setStreamType(AudioManager.STREAM_ALARM);
+                ringtone.play();
+
+                notificationChannel = NOTIFICATION_ID_SOUND;
+                break;
+            case 2:
+                notiUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                try {
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.setStreamType(AudioManager.STREAM_ALARM);
+                    r.play();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                notificationChannel = NOTIFICATION_ID_SOUND;
+                break;
+            case 3:
+                break;
             case 4:
-                vibratePattern = new long[]{0L};
+                notificationChannel = NOTIFICATION_ID_SILENT;
+                notiUri = null;
                 notificationMode = Notification.DEFAULT_LIGHTS;
                 break;
             case 5:
-                vibratePattern = new long[]{0, 100, 1000};
+                notificationChannel = NOTIFICATION_ID_SILENT;
+                notiUri = null;
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
                 notificationMode = Notification.DEFAULT_VIBRATE;
                 break;
             case 6:
-                vibratePattern = new long[]{0L};
+                notificationChannel = NOTIFICATION_ID_SILENT;
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator.vibrate(500);
+                notiUri = null;
                 notificationMode = Notification.DEFAULT_ALL;
                 //TODO Diskrete Notifikation
                 title = "Custom Message";
@@ -137,17 +165,22 @@ public class NotificationHelper extends ContextWrapper {
 
         Intent cancelIntent = getNotificationIntent();
         cancelIntent.setAction(CANCLE_ACTION);
+        PendingIntent cancelPendingIntent = PendingIntent.getActivity(this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        return new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_ID_SILENT)
+
+
+        return new NotificationCompat.Builder(getApplicationContext(), notificationChannel)
+
                 .setDefaults(notificationMode)
                 .setAutoCancel(true)
+                .setSound(notiUri)
                 .setContentText(body)
-                .setVibrate(vibratePattern)
                 .setContentTitle(title)
                 .setWhen(System.currentTimeMillis())
                 .addAction(R.drawable.ic_check_black_24dp , "Bestätigen" , PendingIntent.getActivity(this, 0, okIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                 .addAction(R.drawable.ic_cancel_black_24dp, "Überspringen", PendingIntent.getActivity(this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .setDeleteIntent(cancelPendingIntent)
                 .setSmallIcon(resId);
     }
 

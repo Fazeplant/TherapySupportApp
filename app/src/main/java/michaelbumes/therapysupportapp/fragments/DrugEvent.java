@@ -11,7 +11,7 @@ import michaelbumes.therapysupportapp.entity.Drug;
  * Created by Michi on 13.03.2018.
  */
 
-class DrugEvent {
+public class DrugEvent {
     final Calendar c = Calendar.getInstance();
     Date currentDate = c.getTime();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

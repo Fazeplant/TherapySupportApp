@@ -33,6 +33,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.alarms.AlarmMain;
+import michaelbumes.therapysupportapp.alarms.NotificationHelper;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
@@ -340,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     Toast.makeText(this, "Bestätigt", Toast.LENGTH_SHORT).show();
                     NotificationManagerCompat.from(getApplicationContext()).cancel(1);
                     try {
-                        AlarmMain.ringtone.stop();
+                        NotificationHelper.ringtone.stop();
                     }catch (Exception e){
 
                     }
@@ -349,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     Toast.makeText(this, "Übersprungen", Toast.LENGTH_SHORT).show();
                     NotificationManagerCompat.from(getApplicationContext()).cancel(1);
                     try {
-                        AlarmMain.ringtone.stop();
+                        NotificationHelper.ringtone.stop();
                     }catch (Exception e){
 
                     }

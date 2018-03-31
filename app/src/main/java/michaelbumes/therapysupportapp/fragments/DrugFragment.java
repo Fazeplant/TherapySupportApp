@@ -219,6 +219,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
 
                 }else {
+                    //TODO zwei mal selbe Zeit machte keinen sinn
                     mDosage = new ArrayList<Integer>(mDrugEvent.getDosage());
                     mDosage.add(1);
                     mDrugEvent.setDosage(mDosage);
@@ -393,11 +394,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             bundle.putInt("alarmType", mDrugEvent.getAlarmType());
             bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
             if (mDrugEvent.getAlarmType() != 3){
-                AlarmMain alarm = new AlarmMain(getContext(), bundle, 5);
-            }else if (mDrugEvent.getAlarmType() == 1){
-                AlarmMain alarm = new AlarmMain(getContext(), bundle, 5);
-
-
+                AlarmMain alarm = new AlarmMain(getContext(), bundle, 5, mDrugEvent);
             }
             AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
             Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
@@ -478,13 +475,36 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         stringList3 =  new String[]{"Laufzeit", "Einnahmemuster"};
         stringList4 = new String[]{"Unbegrenzte Laufzeit", "Täglich"};
         stringList5 =  new String[]{"Alarm"};
-        stringList6 = new String[]{"Standard"};
+        stringList6 = new String[]{"Benachrichtigungston"};
         stringList7 = new String[]{"Kauferinnerung"};
         stringList8 = new String[]{""};
 
         stringTime = new ArrayList<String>();
         stringDosage = new ArrayList<String>();
         stringDosageForm = new ArrayList<String>();
+
+
+        switch(mDrugEvent.getAlarmType()){
+            case 1:
+                stringList6[0] = getString(R.string.alarm);
+                break;
+            case 2:
+                stringList6[0] = getString(R.string.notification);
+                break;
+            case 3:
+                stringList6[0] = getString(R.string.no_notification);
+                break;
+            case 4:
+                stringList6[0] = getString(R.string.silent_notification);
+                break;
+            case 5:
+                stringList6[0] = getString(R.string.only_vibration);
+                break;
+            case 6:
+                stringList6[0] = getString(R.string.discrete_notification);
+                break;
+
+        }
 
         if (timeButtonClicked) {
             mTimeList = mDrugEvent.getAlarmTime();

@@ -17,7 +17,12 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import michaelbumes.therapysupportapp.fragments.DrugEvent;
+
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import michaelbumes.therapysupportapp.R;
@@ -33,27 +38,44 @@ public class AlarmMain extends BroadcastReceiver {
     private NotificationManager notifManager;
     NotificationHelper helper;
     android.support.v4.app.NotificationCompat.Builder builder;
-    public static Ringtone ringtone;
+    Calendar calendar;
+    AlarmManager alarmMgr;
+
 
 
     public AlarmMain() {
 
     }
 
-    public AlarmMain(Context context, Bundle extras, int timeoutInSeconds) {
+    public AlarmMain(Context context, Bundle extras, int timeoutInSeconds, DrugEvent drugEvent) {
 
-        AlarmManager alarmMgr =
-                (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm", Locale.GERMANY);
+
+        calendar = Calendar.getInstance();
+        List<String> alarmTime = drugEvent.getAlarmTime();
+        int alarmSize = alarmTime.size();
+
+
+
+
+
+
+        alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmMain.class);
         intent.putExtra(REMINDER_BUNDLE, extras);
-        PendingIntent pendingIntent =
-                PendingIntent.getBroadcast(context, 0, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-        Calendar time = Calendar.getInstance();
-        time.setTimeInMillis(System.currentTimeMillis());
-        time.add(Calendar.SECOND, timeoutInSeconds);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),
-                pendingIntent);
+        for (int i = 0; i < alarmSize; i++) {
+            String s = alarmTime.get(i);
+            int hr = Integer.parseInt(s.substring(0, 2));
+            int min = Integer.parseInt(s.substring(3, 5));
+            calendar.set(Calendar.HOUR_OF_DAY, hr);
+            calendar.set(Calendar.MINUTE, min);
+            calendar.set(Calendar.SECOND, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+
+
     }
 
     @Override
@@ -65,25 +87,16 @@ public class AlarmMain extends BroadcastReceiver {
         String dosageForm = bundle.getString("dosageForm");
 
 
-        if (alarmType == 1) {
-            Uri alarmUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            if (alarmUri == null) {
-                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            }
-            ringtone = RingtoneManager.getRingtone(context, alarmUri);
-            ringtone.setStreamType(AudioManager.STREAM_ALARM);
-            ringtone.play();
-
-
-        }
-
         helper = new NotificationHelper(context);
-        if (alarmType < 4){
-            builder = helper.getChannelNotification("Medizin einehmen!", drugName + " 1 " + dosageForm, alarmType );
-        }else {
-            builder = helper.getChannelNotificationSilent("Medizin einehmen!", drugName + " 1 " + dosageForm, alarmType );
-        }
+        builder = helper.getChannelNotification("Medizin einehmen!", drugName + " 1 " + dosageForm, alarmType );
         helper.getManger().notify(1, builder.build());
+    }
+
+    public String firstTwo(String str) {
+        return str.length() < 2 ? str : str.substring(0, 2);
+    }
+    public void cancleAlarm(PendingIntent pendingIntent){
+        alarmMgr.cancel(pendingIntent);
     }
 
 }
