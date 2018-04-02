@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             switch (intent.getAction()) {
                 case OK_ACTION:
                     Toast.makeText(this, "Bestätigt", Toast.LENGTH_SHORT).show();
-                    NotificationManagerCompat.from(getApplicationContext()).cancel(1);
+                    NotificationManagerCompat.from(getApplicationContext()).cancel(intent.getBundleExtra("notiBundle").getInt("id"));
                     try {
                         NotificationHelper.ringtone.stop();
                     }catch (Exception e){
@@ -347,8 +347,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     }
                     break;
                 case CANCLE_ACTION:
+
                     Toast.makeText(this, "Übersprungen", Toast.LENGTH_SHORT).show();
-                    NotificationManagerCompat.from(getApplicationContext()).cancel(1);
+                    NotificationManagerCompat.from(getApplicationContext()).cancel(intent.getBundleExtra("notiBundle").getInt("id"));
                     try {
                         NotificationHelper.ringtone.stop();
                     }catch (Exception e){

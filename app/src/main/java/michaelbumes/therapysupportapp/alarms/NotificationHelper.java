@@ -12,6 +12,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
@@ -106,8 +107,11 @@ public class NotificationHelper extends ContextWrapper {
     //notiUri zeigt auf die Standart Notifikation
     //notiUri wird auf null gesetzt um die Nachricht ohne Ton abzuspielen
 
-    public NotificationCompat.Builder getChannelNotification(String title, String body, int alarmtype){
+    public NotificationCompat.Builder getChannelNotification(String title, String body, int alarmtype, int id){
         Intent okIntent = getNotificationIntent();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        okIntent.putExtra("notiBundle",bundle);
         int resId = getResources().getIdentifier("ic_medical_pills_couple", "drawable", getPackageName());
         okIntent.setAction(OK_ACTION);
         switch(alarmtype){
@@ -164,8 +168,9 @@ public class NotificationHelper extends ContextWrapper {
         }
 
         Intent cancelIntent = getNotificationIntent();
+        cancelIntent.putExtra("notiBundle",bundle);
         cancelIntent.setAction(CANCLE_ACTION);
-        PendingIntent cancelPendingIntent = PendingIntent.getActivity(this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent cancelPendingIntent = PendingIntent.getActivity(this, id, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
 
@@ -178,8 +183,8 @@ public class NotificationHelper extends ContextWrapper {
                 .setContentText(body)
                 .setContentTitle(title)
                 .setWhen(System.currentTimeMillis())
-                .addAction(R.drawable.ic_check_black_24dp , "Bestätigen" , PendingIntent.getActivity(this, 0, okIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                .addAction(R.drawable.ic_cancel_black_24dp, "Überspringen", PendingIntent.getActivity(this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .addAction(R.drawable.ic_check_black_24dp , "Bestätigen" , PendingIntent.getActivity(this, id, okIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .addAction(R.drawable.ic_cancel_black_24dp, "Überspringen", PendingIntent.getActivity(this, id, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setDeleteIntent(cancelPendingIntent)
                 .setSmallIcon(resId);
     }

@@ -24,6 +24,16 @@ public class DrugEvent {
     private int takingPatternDaysWithOutIntake = -1;
     private int takingPatternEveryOtherDay = -1;
     private String takingPatternHourStart = "-1";
+    private int takingPatternHourNumber = -1;
+    private int takingPatternHourInterval = -1;
+
+
+    private boolean[] takingPatternWeekdays = new boolean[7];
+    private boolean isRecurringReminder = false;
+    private int alarmType = 2;
+    private List<String> alarmTime;
+    private List<Integer> dosage;
+
 
     public int getTakingPatternHourInterval() {
         return takingPatternHourInterval;
@@ -41,15 +51,6 @@ public class DrugEvent {
         this.takingPatternHourNumber = takingPatternHourNumber;
     }
 
-    private int takingPatternHourNumber = -1;
-    private int takingPatternHourInterval = -1;
-
-
-    private boolean[] takingPatternWeekdays = new boolean[7];
-    private boolean isRecurringReminder = false;
-    private int alarmType = 2;
-    private List<String> alarmTime;
-    private List<Integer> dosage;
 
 
     public String getTakingPatternHourStart() {

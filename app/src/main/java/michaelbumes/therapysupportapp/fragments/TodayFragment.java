@@ -14,6 +14,7 @@ import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
+import michaelbumes.therapysupportapp.entity.DrugList;
 
 
 /**
@@ -36,12 +37,12 @@ public class TodayFragment extends BaseFragment {
         getActivity().setTitle(R.string.title_today);
 
         Button cancleButton = view.findViewById(R.id.cancleIntentButton);
-        final Drug drug = AppDatabase.getAppDatabase(getContext()).drugDao().findByName("Isla Cassis");
+        final DrugList drug = AppDatabase.getAppDatabase(getContext()).drugListDao().findByName("Isla Cassis");
 
         cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmMain.cancelAlarm(getContext(), 0);
+                AlarmMain.cancelAlarm(getContext(), drug.getId());
             }
         });
 
