@@ -5,4 +5,9 @@
     android:orientation="vertical"
     tools:context="michaelbumes.therapysupportapp.fragments.TodayFragment">
 
+    <Button
+        android:id="@+id/cancleIntentButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cancleIntent" />
 </LinearLayout>

@@ -1,6 +1,7 @@
 package michaelbumes.therapysupportapp.fragments;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,15 +16,20 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.CustomListView;
+import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
 
 /**
@@ -36,11 +42,17 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
     private static final int DAY = 0;
     private static final int CYCLE = 1;
     private static final int NOTHING = -1;
+    private static final int DOSAGE = 1;
+    private static final int INTERVAL = 2;
+    private static final int NUMBER = 3;
+
+
+
     private int dayOrCycleFlag = NOTHING;
     private Drug drug;
     private DrugEvent mDrugEvent;
     private int mTakingPattern = 1;
-    CustomListView customListView1, customListView2;
+    CustomListView customListView1, customListView2, customListViewHours;
     private View view1;
     private boolean[] allFalse;
     private RadioButton radioButtonDaily;
@@ -48,11 +60,11 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
 
 
 
-    ListView lst1, lst2;
+    ListView lst1, lst2, lstHour;
     RadioGroup radioGroup;
     private CheckBox checkBoxMonday, checkBoxTuesday, checkBoxWednesday, checkBoxThursday, checkBoxFriday, checkBoxSaturday, checkBoxSunday;
-    String[] stringAll, stringDuration, stringListCycle1, stringListCycle2;
-    CardView cardView1, cardView2, cardView3;
+    String[] stringAll, stringDuration, stringListCycle1, stringListCycle2, stringListHour1, stringListHour2;
+    CardView cardView1, cardView2, cardView3 , cardViewHour;
     boolean[] weekDays;
 
 
@@ -114,22 +126,30 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
 
         lst1 = view.findViewById(R.id.list_view_taking_pattern_daily);
         lst2 = view.findViewById(R.id.list_view_taking_pattern_cycle);
+        lstHour = view.findViewById(R.id.list_view_taking_pattern_daily_hour);
+
+
 
         cardView1 = view.findViewById(R.id.card_view_taking_pattern_list_daily);
         cardView2 = view.findViewById(R.id.card_view_taking_pattern_list_cycle);
         cardView3 = view.findViewById(R.id.card_view_taking_pattern_check_days);
+        cardViewHour = view.findViewById(R.id.card_view_taking_pattern_daily_hour);
 
         stringAll = new String[]{"Alle"};
         stringDuration = new String[]{"2 Tage"};
         stringListCycle1 = new String[]{"Tage mit Einnahme", "Tage ohne Einnahme", "Start des Zyklus an Tag"};
         stringListCycle2 = new String[]{"14", "7", "1"};
+        stringListHour1 = new String[]{"Intervall", "Start", "Anzahl Intervalle", "Dosierung"};
+        stringListHour2 = new String[]{"4 Stunden", "08:00", "2",  "1 " + AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId())};
 
         customListView1 = new CustomListView(getActivity(), stringAll, stringDuration);
         customListView2 = new CustomListView(getActivity(), stringListCycle1, stringListCycle2);
+        customListViewHours = new CustomListView(getActivity(), stringListHour1, stringListHour2);
 
 
         lst1.setAdapter(customListView1);
         lst2.setAdapter(customListView2);
+        lstHour.setAdapter(customListViewHours);
 
         lst1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -155,6 +175,28 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
             }
         });
 
+        lstHour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0:
+                        pickDosage(INTERVAL);
+                        break;
+                    case 1:
+                        pickTime();
+                        break;
+                    case 2:
+                        pickDosage(NUMBER);
+
+                        break;
+                    case 3:
+                        pickDosage(DOSAGE);
+                        break;
+
+                }
+            }
+        });
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -162,22 +204,31 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     cardView1.setVisibility(View.GONE);
                     cardView2.setVisibility(View.GONE);
                     cardView3.setVisibility(View.GONE);
+                    cardViewHour.setVisibility(View.GONE);
 
                     mDrugEvent.setTakingPatternDaysWithIntake(-1);
                     mDrugEvent.setTakingPatternDaysWithOutIntake(-1);
                     mDrugEvent.setTakingPatternEveryOtherDay(-1);
                     mDrugEvent.setTakingPatternStart(1);
+                    mDrugEvent.setTakingPatternHourNumber(-1);
+                    mDrugEvent.setTakingPatternHourStart("-1");
+                    mDrugEvent.setTakingPatternHourInterval(-1);
 
                     mTakingPattern = 1;
                 } else if (i == R.id.radio_button_daily_hour) {
                     cardView1.setVisibility(View.GONE);
                     cardView2.setVisibility(View.GONE);
                     cardView3.setVisibility(View.GONE);
+                    cardViewHour.setVisibility(View.VISIBLE);
+
 
 
                     mDrugEvent.setTakingPatternDaysWithIntake(-1);
                     mDrugEvent.setTakingPatternDaysWithOutIntake(-1);
                     mDrugEvent.setTakingPatternEveryOtherDay(-1);
+                    mDrugEvent.setTakingPatternHourNumber(2);
+                    mDrugEvent.setTakingPatternHourStart("08:00");
+                    mDrugEvent.setTakingPatternHourInterval(4);
                     mDrugEvent.setTakingPatternStart(1);
 
                     mTakingPattern = 2;
@@ -187,12 +238,18 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     cardView2.setVisibility(View.GONE);
                     cardView1.setVisibility(View.VISIBLE);
                     cardView3.setVisibility(View.GONE);
+                    cardViewHour.setVisibility(View.GONE);
+
 
 
                     mDrugEvent.setTakingPatternDaysWithIntake(-1);
                     mDrugEvent.setTakingPatternDaysWithOutIntake(-1);
                     mDrugEvent.setTakingPatternEveryOtherDay(2);
                     mDrugEvent.setTakingPatternStart(1);
+                    mDrugEvent.setTakingPatternHourNumber(-1);
+                    mDrugEvent.setTakingPatternHourStart("-1");
+                    mDrugEvent.setTakingPatternHourInterval(-1);
+
 
                     mTakingPattern = 3;
 
@@ -201,12 +258,18 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     cardView1.setVisibility(View.GONE);
                     cardView2.setVisibility(View.GONE);
                     cardView3.setVisibility(View.VISIBLE);
+                    cardViewHour.setVisibility(View.GONE);
+
 
 
                     mDrugEvent.setTakingPatternDaysWithIntake(-1);
                     mDrugEvent.setTakingPatternDaysWithOutIntake(-1);
                     mDrugEvent.setTakingPatternEveryOtherDay(-1);
                     mDrugEvent.setTakingPatternStart(1);
+                    mDrugEvent.setTakingPatternHourNumber(-1);
+                    mDrugEvent.setTakingPatternHourStart("-1");
+                    mDrugEvent.setTakingPatternHourInterval(-1);
+
 
 
 
@@ -217,12 +280,18 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     cardView1.setVisibility(View.GONE);
                     cardView2.setVisibility(View.VISIBLE);
                     cardView3.setVisibility(View.GONE);
+                    cardViewHour.setVisibility(View.GONE);
+
 
 
                     mDrugEvent.setTakingPatternDaysWithIntake(14);
                     mDrugEvent.setTakingPatternDaysWithOutIntake(7);
                     mDrugEvent.setTakingPatternEveryOtherDay(-1);
                     mDrugEvent.setTakingPatternStart(1);
+                    mDrugEvent.setTakingPatternHourNumber(-1);
+                    mDrugEvent.setTakingPatternHourStart("-1");
+                    mDrugEvent.setTakingPatternHourInterval(-1);
+
 
                     mTakingPattern = 5;
 
@@ -391,6 +460,76 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     customListView2.notifyDataSetChanged();
                 }
                 EventBus.getDefault().postSticky(mDrugEvent);
+            }
+        });
+        d.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        AlertDialog alertDialog = d.create();
+        alertDialog.show();
+
+    }
+    private void pickTime(){
+        final Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                String curTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+                mDrugEvent.setTakingPatternHourStart(curTime);
+                stringListHour2[1] = curTime;
+                customListViewHours.notifyDataSetChanged();
+                lstHour.setAdapter(customListViewHours);
+                EventBus.getDefault().postSticky(mDrugEvent);
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Zeit wählen");
+        mTimePicker.show();
+
+    }
+
+    public void pickDosage(final int mode) {
+        final AlertDialog.Builder d = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.number_picker_dialog, null);
+        d.setTitle("Wähle Anzahl");
+        d.setMessage("");
+        d.setView(dialogView);
+        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        numberPicker.setMaxValue(50);
+        numberPicker.setMinValue(1);
+        numberPicker.setWrapSelectorWheel(false);
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+            }
+
+        });
+        d.setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (mode == DOSAGE){
+                    List<Integer> mDosage = new ArrayList<>();
+                    mDosage.add(numberPicker.getValue());
+                    mDrugEvent.setDosage(mDosage);
+                    stringListHour2[3] = String.valueOf(numberPicker.getValue()) + " " + AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId());
+                }else if(mode == INTERVAL) {
+                    mDrugEvent.setTakingPatternHourInterval(numberPicker.getValue());
+                    stringListHour2[0] = String.valueOf(numberPicker.getValue()) + " Stunden";
+
+                }else if (mode == NUMBER){
+                    mDrugEvent.setTakingPatternHourNumber(numberPicker.getValue());
+                    stringListHour2[2] = String.valueOf(numberPicker.getValue());
+                }
+
+                customListViewHours.notifyDataSetChanged();
+                lstHour.setAdapter(customListViewHours);
+                EventBus.getDefault().postSticky(mDrugEvent);
+
             }
         });
         d.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {

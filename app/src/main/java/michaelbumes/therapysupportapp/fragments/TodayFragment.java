@@ -8,8 +8,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.alarms.AlarmMain;
+import michaelbumes.therapysupportapp.database.AppDatabase;
+import michaelbumes.therapysupportapp.entity.Drug;
 
 
 /**
@@ -30,6 +34,16 @@ public class TodayFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.title_today);
+
+        Button cancleButton = view.findViewById(R.id.cancleIntentButton);
+        final Drug drug = AppDatabase.getAppDatabase(getContext()).drugDao().findByName("Isla Cassis");
+
+        cancleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlarmMain.cancelAlarm(getContext(), 0);
+            }
+        });
 
     }
     @Override

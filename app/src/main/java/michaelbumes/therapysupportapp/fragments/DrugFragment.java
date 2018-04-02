@@ -183,6 +183,17 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         lst4.setAdapter(customListView4);
         lstDrugTime.setAdapter(customListViewDrugTime);
 
+        if (mDrugEvent.getTakingPattern() == 2){
+            cardViewDrugTime.setVisibility(View.GONE);
+            addTimeButton.setVisibility(View.GONE);
+        }else {
+            addTimeButton.setVisibility(View.VISIBLE);
+            if (timeButtonClicked ==true) {
+                cardViewDrugTime.setVisibility(View.VISIBLE);
+
+            }
+        }
+
 
 
 
@@ -392,9 +403,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             Bundle bundle = new Bundle();
             bundle.putString("drugName", drug.getDrugName());
             bundle.putInt("alarmType", mDrugEvent.getAlarmType());
+            bundle.putInt("takingPattern", mDrugEvent.getTakingPattern());
             bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
             if (mDrugEvent.getAlarmType() != 3){
-                AlarmMain alarm = new AlarmMain(getContext(), bundle, 5, mDrugEvent);
+                AlarmMain alarm = new AlarmMain(getContext(), bundle, mDrugEvent);
             }
             AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
             Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
@@ -537,7 +549,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 stringList4[1] = "Täglich";
                 break;
             case 2:
-                stringList4[1] = "Täglich, alle N Stunden";
+                stringList4[1] = "Täglich, alle " + mDrugEvent.getTakingPatternHourInterval()+ " Stunden";
                 break;
 
             case 3:
