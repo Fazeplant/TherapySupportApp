@@ -19,7 +19,6 @@
             <RadioButton
                 android:id="@+id/radio_button_daily_day"
                 android:layout_width="match_parent"
-                android:checked="true"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_margin="12dp"

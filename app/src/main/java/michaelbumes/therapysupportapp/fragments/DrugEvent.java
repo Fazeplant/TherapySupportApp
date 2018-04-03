@@ -1,6 +1,7 @@
 package michaelbumes.therapysupportapp.fragments;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,10 +19,19 @@ public class DrugEvent {
     private Drug drug;
     private String startingDate = sdf.format(currentDate);
     private String endDate = "-1";
+
+    public int getRunningTime() {
+        return runningTime;
+    }
+
+    public void setRunningTime(int runningTime) {
+        this.runningTime = runningTime;
+    }
+
+    private int runningTime = 1;
     private int takingPattern = 1;
-    private int takingPatternStart = 1;
     private int takingPatternDaysWithIntake = -1;
-    private int takingPatternDaysWithOutIntake = -1;
+    private int takingPatternDaysWithoutIntake = -1;
     private int takingPatternEveryOtherDay = -1;
     private String takingPatternHourStart = "-1";
     private int takingPatternHourNumber = -1;
@@ -31,8 +41,8 @@ public class DrugEvent {
     private boolean[] takingPatternWeekdays = new boolean[7];
     private boolean isRecurringReminder = false;
     private int alarmType = 2;
-    private List<String> alarmTime;
-    private List<Integer> dosage;
+    private List<String> alarmTime = new ArrayList<>();
+    private List<Integer> dosage = new ArrayList<>();
 
 
     public int getTakingPatternHourInterval() {
@@ -98,14 +108,6 @@ public class DrugEvent {
     }
 
 
-    public int getTakingPatternStart() {
-        return takingPatternStart;
-    }
-
-    public void setTakingPatternStart(int takingPatternStart) {
-        this.takingPatternStart = takingPatternStart;
-    }
-
     public int getTakingPatternDaysWithIntake() {
         return takingPatternDaysWithIntake;
     }
@@ -114,12 +116,12 @@ public class DrugEvent {
         this.takingPatternDaysWithIntake = takingPatternDaysWithIntake;
     }
 
-    public int getTakingPatternDaysWithOutIntake() {
-        return takingPatternDaysWithOutIntake;
+    public int getTakingPatternDaysWithoutIntake() {
+        return takingPatternDaysWithoutIntake;
     }
 
-    public void setTakingPatternDaysWithOutIntake(int takingPatternDaysWithOutIntake) {
-        this.takingPatternDaysWithOutIntake = takingPatternDaysWithOutIntake;
+    public void setTakingPatternDaysWithoutIntake(int takingPatternDaysWithoutIntake) {
+        this.takingPatternDaysWithoutIntake = takingPatternDaysWithoutIntake;
     }
 
 

@@ -110,7 +110,7 @@ public class AddMedicineFragment extends BaseFragment {
                     }else {
                         pzn = drugList.getPzn();
                     }
-                }if (pzn == "-1"){
+                }if (pzn.equals("-1")){
                     Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
                     return;
                 }else {

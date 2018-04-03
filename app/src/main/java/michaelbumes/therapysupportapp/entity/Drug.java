@@ -20,6 +20,18 @@ public class Drug implements Serializable {
     @ColumnInfo(name = "drug_manufacturer")
     private String manufacturer;
 
+    public long getDrugEventDbId() {
+        return drugEventDbId;
+    }
+
+    public void setDrugEventDbId(long drugEventDbId) {
+        this.drugEventDbId = drugEventDbId;
+    }
+
+    @ColumnInfo(name = "drug_event_db_id")
+    private long drugEventDbId;
+
+
     public String getManufacturer() {
         return manufacturer;
     }

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class DrugPlanFragment extends BaseFragment {
     FloatingActionButton fab;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
+    List<Drug> drugs;
 
 
     public static DrugPlanFragment  newInstance(int instance) {
@@ -52,7 +54,7 @@ public class DrugPlanFragment extends BaseFragment {
 
         recyclerView = view.findViewById(R.id.recyler_view);
 
-        List<Drug> drugs = AppDatabase.getAppDatabase(getContext()).drugDao().getAll();
+        drugs = AppDatabase.getAppDatabase(getContext()).drugDao().getAll();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new DrugAdapter(drugs);
@@ -71,5 +73,6 @@ public class DrugPlanFragment extends BaseFragment {
 
         return view;
     }
+
 
 }

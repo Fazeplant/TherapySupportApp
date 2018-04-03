@@ -42,7 +42,7 @@ import michaelbumes.therapysupportapp.adapter.CustomListViewDrugTime;
 import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.entity.DrugList;
+import michaelbumes.therapysupportapp.entity.DrugEventDb;
 
 
 public class DrugFragment extends BaseFragment implements NumberPicker.OnValueChangeListener {
@@ -67,10 +67,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
     private CustomListViewDrugTime customListViewDrugTime;
 
-
-
-    boolean timeButtonClicked = false;
-    boolean isEmptyList = true;
 
 
     private ListView lst ,lst2, lst3, lst4, lstDrugTime;
@@ -105,7 +101,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
     private    CardView cardView1, cardView2, cardView3, cardViewDrugTime;
     private static int mCurCheckPosition;
-    private boolean isSaved = false;
 
     public static DrugFragment newInstance(int instance) {
         Bundle args = new Bundle();
@@ -126,6 +121,19 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
         mDrugEvent = EventBus.getDefault().getStickyEvent(DrugEvent.class);
         drug = mDrugEvent.getDrug();
+
+        if (mDrugEvent.getDosage().isEmpty()){
+            mDosage = new ArrayList<Integer>();
+            mDosage.add(1);
+            mDrugEvent.setDosage(mDosage);
+
+            mAlarmTime = new ArrayList<String>();
+            mAlarmTime.add("08:00");
+            mDrugEvent.setAlarmTime(mAlarmTime);
+
+            EventBus.getDefault().postSticky(mDrugEvent);
+        }
+
 
         setStrings();
 
@@ -183,16 +191,19 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         lst4.setAdapter(customListView4);
         lstDrugTime.setAdapter(customListViewDrugTime);
 
+
+
+
+
+
+
         if (mDrugEvent.getTakingPattern() == 2){
             cardViewDrugTime.setVisibility(View.GONE);
             addTimeButton.setVisibility(View.GONE);
         }else {
             addTimeButton.setVisibility(View.VISIBLE);
-            if (timeButtonClicked ==true) {
-                cardViewDrugTime.setVisibility(View.VISIBLE);
-
+            cardViewDrugTime.setVisibility(View.VISIBLE);
             }
-        }
 
 
 
@@ -212,27 +223,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         addTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeButtonClicked ==false) {
-                    isEmptyList = false;
-                    cardViewDrugTime.setVisibility(View.VISIBLE);
-                    timeButtonClicked = true;
-
-                    mDosage = new ArrayList<Integer>();
-                    mDosage.add(1);
-                    mDrugEvent.setDosage(mDosage);
-
-                    mAlarmTime = new ArrayList<String>();
-                    mAlarmTime.add("08:00");
-                    mDrugEvent.setAlarmTime(mAlarmTime);
-
-                    EventBus.getDefault().postSticky(mDrugEvent);
-                    customListViewDrugTime.notifyDataSetChanged();
-                    justifyListViewHeightBasedOnChildren(lstDrugTime);
-
-
-                }else {
                     //TODO zwei mal selbe Zeit machte keinen sinn
-                    isEmptyList = false;
                     mDosage = new ArrayList<Integer>(mDrugEvent.getDosage());
                     mDosage.add(1);
                     mDrugEvent.setDosage(mDosage);
@@ -253,15 +244,13 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                     justifyListViewHeightBasedOnChildren(lstDrugTime);
                     customListViewDrugTime.notifyDataSetChanged();
                 }
-            }
+
         });
+
         customListViewDrugTime.setImageButtonOnclickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = lstDrugTime.getPositionForView(view);
-                if (stringTime.size() == 1){
-                    isEmptyList = true;
-                }
                 stringTime.remove(position);
                 stringDosageForm.remove(position);
                 stringDosage.remove(position);
@@ -328,10 +317,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                             customListView2.notifyDataSetChanged();
                             break;
                         } else {
-                            if (timeButtonClicked ==true) {
-                                cardViewDrugTime.setVisibility(View.VISIBLE);
-
-                            }
+                            cardViewDrugTime.setVisibility(View.VISIBLE);
                             kindOfTakingFlag = REGULARLY;
                             stringList2[1] = "Regelmäßig";
                             cardView2.setVisibility(View.VISIBLE);
@@ -405,7 +391,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     public boolean onOptionsItemSelected(MenuItem item) {
         int resID = item.getItemId();
         if (resID == R.id.save_drug) {
-            if (isEmptyList ==true){
+            if (mDrugEvent.getAlarmTime().isEmpty()) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                 builder1.setMessage("Bitte fügen sie mindestens eine Zeit hinzu.");
                 builder1.setCancelable(true);
@@ -421,25 +407,70 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 alert11.show();
                 return true;
 
-            }
-            Bundle bundle = new Bundle();
-            bundle.putString("drugName", drug.getDrugName());
-            bundle.putInt("alarmType", mDrugEvent.getAlarmType());
-            bundle.putInt("takingPattern", mDrugEvent.getTakingPattern());
-            bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
-            bundle.putString("endDay", mDrugEvent.getEndDate());
-            AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs();
-            bundle.putInt("id", AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs() + 1);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("drugName", drug.getDrugName());
+                bundle.putInt("alarmType", mDrugEvent.getAlarmType());
+                bundle.putInt("takingPattern", mDrugEvent.getTakingPattern());
+                bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+                bundle.putString("endDay", mDrugEvent.getEndDate());
+                AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs();
+                bundle.putInt("id", AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs() + 1);
 
-            if (mDrugEvent.getAlarmType() != 3){
-                AlarmMain alarm = new AlarmMain(getContext(), bundle, mDrugEvent);
+                if (mDrugEvent.getAlarmType() != 3) {
+                    AlarmMain alarm = new AlarmMain(getContext(), bundle, mDrugEvent);
+                }
+
+                long drugEventDbId = saveDrugEventDb();
+                drug.setDrugEventDbId(drugEventDbId);
+                int result = AppDatabase.getAppDatabase(getContext()).drugDao().update(drug);
+                if (result <= 0){
+                    AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
+                }
+                Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
+                mFragmentNavigation.clearStack();
+                return true;
             }
-            AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
-            Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
-            mFragmentNavigation.clearStack();
-            return true;
         }
         return false;
+    }
+
+    private long saveDrugEventDb() {
+
+        boolean[] weekdays = mDrugEvent.getTakingPatternWeekdays();
+        DrugEventDb drugEventDb = new DrugEventDb();
+
+        drugEventDb.setRecurringReminder(mDrugEvent.isRecurringReminder());
+        drugEventDb.setAlarmType(mDrugEvent.getAlarmType());
+        drugEventDb.setRecurringReminder(mDrugEvent.isRecurringReminder());
+        drugEventDb.setAlarmTime(mDrugEvent.getAlarmTime().toString());
+        drugEventDb.setMondaySelected(weekdays[0]);
+        drugEventDb.setTuesdaySelected(weekdays[1]);
+        drugEventDb.setWednesdaySelected(weekdays[2]);
+        drugEventDb.setThursdaySelected(weekdays[3]);
+        drugEventDb.setFridaySelected(weekdays[4]);
+        drugEventDb.setSaturdaySelected(weekdays[5]);
+        drugEventDb.setSundaySelected(weekdays[6]);
+
+        drugEventDb.setDosage(mDrugEvent.getDosage().toString());
+        drugEventDb.setRunningTime(mDrugEvent.getRunningTime());
+
+
+
+        drugEventDb.setEndDate(mDrugEvent.getEndDate());
+        drugEventDb.setStartingDate(mDrugEvent.getStartingDate());
+
+        drugEventDb.setTakingPattern(mDrugEvent.getTakingPattern());
+        drugEventDb.setTakingPatternDaysWithIntake(mDrugEvent.getTakingPatternDaysWithIntake());
+        drugEventDb.setTakingPatternDaysWithOutIntake(mDrugEvent.getTakingPatternDaysWithoutIntake());
+        drugEventDb.setTakingPatternHourInterval(mDrugEvent.getTakingPatternHourInterval());
+        drugEventDb.setTakingPatternEveryOtherDay(mDrugEvent.getTakingPatternEveryOtherDay());
+        drugEventDb.setTakingPatternHourNumber(mDrugEvent.getTakingPatternHourNumber());
+        drugEventDb.setTakingPatternHourStart(mDrugEvent.getTakingPatternHourStart());
+
+        return AppDatabase.getAppDatabase(getContext()).drugEventDbDao().insert(drugEventDb);
+
+
     }
 
     public void justifyListViewHeightBasedOnChildren (ListView listView) {
@@ -544,7 +575,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
         }
 
-        if (timeButtonClicked) {
             mTimeList = mDrugEvent.getAlarmTime();
             List<String> mDosageList = new ArrayList<String>(mDrugEvent.getDosage().size());
             for (Integer myInt : mDrugEvent.getDosage()) {
@@ -556,19 +586,14 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 stringDosageForm.add(AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
             }
 
-        }
-        else{
-
-            stringTime.add("08:00");
-            stringDosage.add("1");
-            stringDosageForm.add(AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
-
-        }
 
 
-        if (mDrugEvent.getEndDate() != "-1"){
+
+        if (!mDrugEvent.getEndDate().equals("-1")){
             stringList4[0] = "bis " + mDrugEvent.getEndDate();
 
+        }else {
+            stringList4[0] = "Unbegrentze Laufzeit";
         }
         switch (mDrugEvent.getTakingPattern()){
             case 1:
@@ -655,7 +680,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 }
 
             case 5:
-                stringList4[1] = String.valueOf(mDrugEvent.getTakingPatternDaysWithIntake()) + " mit Einnahme, " + String.valueOf(mDrugEvent.getTakingPatternDaysWithOutIntake()) + " ohne Einnahme";
+                stringList4[1] = String.valueOf(mDrugEvent.getTakingPatternDaysWithIntake()) + " mit Einnahme, " + String.valueOf(mDrugEvent.getTakingPatternDaysWithoutIntake()) + " ohne Einnahme";
                 break;
         }
 

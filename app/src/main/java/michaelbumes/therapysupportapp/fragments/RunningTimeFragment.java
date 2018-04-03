@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,7 +56,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
     private SimpleDateFormat sdf;
     private Date tempDate;
     private DrugEvent myDrugEvent;
-    private boolean mIsRunningTimeDefined;
+    private RadioButton radioButtonUnlimitedTerm, radioButtonDefined, radioButtonDays;
 
 
 
@@ -92,6 +93,9 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
                 getContext(), this, startYear, startMonth, startDay);
 
         radioGroup = view.findViewById(R.id.radio_group_running_time);
+        radioButtonUnlimitedTerm = view.findViewById(R.id.radio_button_unlimited_term);
+        radioButtonDefined = view.findViewById(R.id.radio_button_defined_end_date);
+        radioButtonDays= view.findViewById(R.id.radio_button_term_in_days);
 
         lst1 = view.findViewById(R.id.list_view_running_time_1);
         lst2 = view.findViewById(R.id.list_view_running_time_2);
@@ -100,9 +104,10 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
         cardView2 = view.findViewById(R.id.card_view_running_time_2);
 
         stringFirstNotification = new String[]{"Erste Erinnerung"};
-        stringStartDate = new String[]{"Heute"};
+        stringStartDate = new String[]{myDrugEvent.getStartingDate()};
 
-        if (mIsRunningTimeDefined){
+
+        if (myDrugEvent.getRunningTime() == 2){
             stringMain2 = new String[]{"Letzte Erinnerung"};
 
         }else {
@@ -110,10 +115,10 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
         }
 
-        if (myDrugEvent.getEndDate() == "-1"){
+        if (myDrugEvent.getEndDate().equals("-1")){
             stringSecond2 = new String[]{sdf.format(cAddTime.getTime())};
         }else {
-            if (mIsRunningTimeDefined){
+            if (myDrugEvent.getRunningTime() == 2){
                 stringSecond2 = new String[]{myDrugEvent.getEndDate()};
             }else {
                 try {
@@ -123,7 +128,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
                 }
                 long msDiff = tempDate.getTime() - Calendar.getInstance().getTimeInMillis();
                 long daysDiff = TimeUnit.MILLISECONDS.toDays(msDiff) + 1;
-                stringSecond2[0] = String.valueOf(daysDiff);
+                stringSecond2 = new String[]{String.valueOf(daysDiff)};
             }
         }
 
@@ -133,6 +138,8 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
         lst1.setAdapter(customListView1);
         lst2.setAdapter(customListView2);
+
+
 
         lst1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -164,17 +171,17 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.radio_button_unlimited_term) {
-                    runningTimeFlag = -1;
+                    myDrugEvent.setRunningTime(1);
                     cardView2.setVisibility(View.GONE);
                     myDrugEvent.setEndDate("-1");
                     EventBus.getDefault().postSticky(myDrugEvent);
 
                 } else if (i == R.id.radio_button_defined_end_date) {
                     runningTimeFlag = DEFINED;
-                    mIsRunningTimeDefined = true;
+                    myDrugEvent.setRunningTime(2);
                     cardView2.setVisibility(View.VISIBLE);
                     stringMain2[0] = "Letzte Erinnerung";
-                    if (myDrugEvent.getEndDate() == "-1"){
+                    if (myDrugEvent.getEndDate().equals("-1")){
                         myDrugEvent.setEndDate(sdf.format(cAddTime.getTime()));
                         EventBus.getDefault().postSticky(myDrugEvent);
                         stringSecond2[0] = sdf.format(cAddTime.getTime());
@@ -186,11 +193,13 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
                 } else {
                     runningTimeFlag = DAYS;
-                    mIsRunningTimeDefined = false;
+                    myDrugEvent.setRunningTime(3);
                     cardView2.setVisibility(View.VISIBLE);
                     stringMain2[0] = "Laufzeit";
+                    EventBus.getDefault().postSticky(myDrugEvent);
 
-                    if (myDrugEvent.getEndDate() == "-1"){
+
+                    if (myDrugEvent.getEndDate().equals("-1")){
                         myDrugEvent.setEndDate(sdf.format(cAddTime.getTime()));
                         EventBus.getDefault().postSticky(myDrugEvent);
                         stringSecond2[0] = "10";
@@ -208,7 +217,23 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
                 }
             }
+
         });
+
+        switch (myDrugEvent.getRunningTime()){
+            case 1:
+                radioGroup.check(R.id.radio_button_unlimited_term);
+                break;
+
+            case 2:
+                radioGroup.check(R.id.radio_button_defined_end_date);
+                break;
+
+            case 3:
+
+                radioGroup.check(R.id.radio_button_term_in_days);
+                break;
+        }
 
     }
 

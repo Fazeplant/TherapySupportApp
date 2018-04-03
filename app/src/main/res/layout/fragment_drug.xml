@@ -31,7 +31,6 @@
 
 
     <android.support.v7.widget.CardView
-        android:visibility="gone"
         android:id="@+id/card_view_drug_time"
         android:layout_marginTop="4dp"
         android:layout_width="match_parent"

@@ -1,14 +1,20 @@
 package michaelbumes.therapysupportapp.fragments;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.alarms.AlarmMain;
@@ -36,13 +42,21 @@ public class TodayFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.title_today);
 
-        Button cancleButton = view.findViewById(R.id.cancleIntentButton);
+        Button cancelButton = view.findViewById(R.id.cancleIntentButton);
         final DrugList drug = AppDatabase.getAppDatabase(getContext()).drugListDao().findByName("Isla Cassis");
 
-        cancleButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlarmMain.cancelAlarm(getContext(), drug.getId());
+                //AlarmMain.cancelAlarm(getContext(), drug.getId());
+                AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                Intent updateServiceIntent = new Intent(getContext(), AlarmMain.class);
+                PendingIntent pendingUpdateIntent = PendingIntent.getService(getContext(), drug.getId(), updateServiceIntent, 0);
+
+
+
+                Toast.makeText(getContext(), "lol", Toast.LENGTH_SHORT).show();
+
             }
         });
 

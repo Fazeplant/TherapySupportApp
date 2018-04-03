@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import michaelbumes.therapysupportapp.entity.Drug;
 
@@ -30,6 +31,9 @@ public interface DrugDao {
     @Query("SELECT * FROM drug where pzn=:pzn")
     Drug findByPzn(String pzn);
 
+    @Query("SELECT * FROM drug where id=:id")
+    Drug findById(int id);
+
     @Query("SELECT * FROM drug where drug_manufacturer LIKE :manufacturer")
     Drug findByManufacturer(String manufacturer);
 
@@ -41,6 +45,9 @@ public interface DrugDao {
 
     @Delete
     void delete(Drug drug);
+
+    @Update
+    int update(Drug drug);
 
 
 

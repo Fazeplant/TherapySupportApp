@@ -6,12 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ncapdevi.fragnav.FragNavController;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.activities.MainActivity;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
+import michaelbumes.therapysupportapp.entity.DrugEventDb;
+import michaelbumes.therapysupportapp.fragments.DrugEvent;
+import michaelbumes.therapysupportapp.fragments.DrugFragment;
 
 /**
  * Created by Michi on 31.01.2018.
@@ -20,6 +31,8 @@ import michaelbumes.therapysupportapp.entity.Drug;
 public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
     List<Drug> drugs;
     private Context context;
+    int instanceInt = 0;
+
 
 
     public DrugAdapter(List<Drug> drugs) {
@@ -47,14 +60,88 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
         return drugs.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView drugName;
         public TextView drugManufacturer;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             drugName = itemView.findViewById(R.id.drug_name);
             drugManufacturer = itemView.findViewById(R.id.drug_manufacturer);
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Drug drug = drugs.get(position);
+            Toast.makeText(context, drug.getDrugName(), Toast.LENGTH_LONG).show();
+            FragNavController mFragmentNavigation = ((MainActivity) context).getmNavController();
+
+            DrugEvent drugEvent = new DrugEvent();
+            DrugEventDb drugEventDb = AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drug.getDrugEventDbId());
+
+            String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
+            String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
+            String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
+
+            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+
+            String replaceDosage1 = drugEventDb.getDosage().replace("[", "");
+            String replaceDosage2 = replaceDosage1.replace("]", "");
+            String replaceDosage3 = replaceDosage2.replace(" ", "");
+            List<String> arrayList = new ArrayList<String>(Arrays.asList(replaceDosage3.split(",")));
+            List<Integer> dosage = new ArrayList<Integer>();
+            for(String i:arrayList){
+                dosage.add(Integer.parseInt(i.trim()));
+            }
+
+
+
+
+            boolean[] weekdays = new boolean[7];
+            weekdays[0] = drugEventDb.isMondaySelected();
+            weekdays[1] = drugEventDb.isTuesdaySelected();
+            weekdays[2] = drugEventDb.isWednesdaySelected();
+            weekdays[3] = drugEventDb.isTuesdaySelected();
+            weekdays[4] = drugEventDb.isFridaySelected();
+            weekdays[5] = drugEventDb.isSaturdaySelected();
+            weekdays[6] = drugEventDb.isSundaySelected();
+
+            drugEvent.setDrug(drug);
+
+            drugEvent.setAlarmType(drugEventDb.getAlarmType());
+            drugEvent.setRecurringReminder(drugEventDb.isRecurringReminder());
+            drugEvent.setAlarmTime(alarmTime);
+            drugEvent.setTakingPatternWeekdays(weekdays);
+
+            drugEvent.setDosage(dosage);
+            drugEvent.setRunningTime(drugEventDb.getRunningTime());
+
+
+
+            drugEvent.setEndDate(drugEventDb.getEndDate());
+            drugEvent.setStartingDate(drugEventDb.getStartingDate());
+
+            drugEvent.setTakingPattern(drugEventDb.getTakingPattern());
+            drugEvent.setTakingPatternDaysWithIntake(drugEventDb.getTakingPatternDaysWithIntake());
+            drugEvent.setTakingPatternDaysWithoutIntake(drugEventDb.getTakingPatternDaysWithOutIntake());
+            drugEvent.setTakingPatternHourInterval(drugEventDb.getTakingPatternHourInterval());
+            drugEvent.setTakingPatternEveryOtherDay(drugEventDb.getTakingPatternEveryOtherDay());
+            drugEvent.setTakingPatternHourNumber(drugEventDb.getTakingPatternHourNumber());
+            drugEvent.setTakingPatternHourStart(drugEventDb.getTakingPatternHourStart());
+
+
+
+            EventBus.getDefault().removeAllStickyEvents();
+            EventBus.getDefault().postSticky(drugEvent);
+            mFragmentNavigation.pushFragment(DrugFragment.newInstance(instanceInt + 1));
+
+
+
+        }
     }
+
+
 }

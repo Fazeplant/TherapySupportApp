@@ -8,16 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import michaelbumes.therapysupportapp.fragments.DrugEvent;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -42,7 +41,6 @@ public class AlarmMain extends BroadcastReceiver {
     private int id;
 
 
-
     public AlarmMain() {
 
     }
@@ -57,9 +55,6 @@ public class AlarmMain extends BroadcastReceiver {
         id = extras.getInt("id");
 
 
-
-
-
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
         try {
             startingDay = sdfDate.parse(mDrugEvent.getStartingDate());
@@ -72,13 +67,12 @@ public class AlarmMain extends BroadcastReceiver {
         startYear = Integer.parseInt(df.format("yyyy", startingDay).toString());
 
 
-
-
         alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         intent = new Intent(context, AlarmMain.class);
+        extras.putLong("startDay", startingDay.getTime());
         intent.putExtra(REMINDER_BUNDLE, extras);
 
-        switch (drugEvent.getTakingPattern()){
+        switch (drugEvent.getTakingPattern()) {
             case 1:
                 createAlarmDaily();
                 break;
@@ -98,23 +92,17 @@ public class AlarmMain extends BroadcastReceiver {
         }
 
 
-;
-
-
-
-
-
-
-
+        ;
 
 
     }
 
     private void createAlarmCycle() {
         mExtras.putInt("daysWithIntake" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithIntake());
-        mExtras.putInt("daysWithoutIntake" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithOutIntake());
+        mExtras.putInt("daysWithoutIntake" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithoutIntake());
         mExtras.putInt("daysWithIntakeStatic" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithIntake());
-        mExtras.putInt("daysWithoutIntakeStatic" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithOutIntake());
+        mExtras.putInt("daysWithoutIntakeStatic" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithoutIntake());
+
         ArrayList<String> alarmTimeArray = new ArrayList<>(alarmTime);
         mExtras.putStringArrayList("alarmTime", alarmTimeArray);
 
@@ -133,8 +121,6 @@ public class AlarmMain extends BroadcastReceiver {
         }
 
 
-
-
     }
 
     private void createAlarmWeekdays() {
@@ -144,7 +130,7 @@ public class AlarmMain extends BroadcastReceiver {
     }
 
     private void createAlarmEveryHour() {
-        
+
         String s = mDrugEvent.getTakingPatternHourStart();
         int hr = Integer.parseInt(s.substring(0, 2));
         int min = Integer.parseInt(s.substring(3, 5));
@@ -155,7 +141,7 @@ public class AlarmMain extends BroadcastReceiver {
         calendar.set(Calendar.MONTH, startMonth - 1);
         calendar.set(Calendar.YEAR, startYear);
         PendingIntent pendingIntentStart = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntentStart);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntentStart);
 
 
         for (int i = 0; i < mDrugEvent.getTakingPatternHourNumber(); i++) {
@@ -166,8 +152,8 @@ public class AlarmMain extends BroadcastReceiver {
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
-            
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
         }
     }
 
@@ -183,7 +169,7 @@ public class AlarmMain extends BroadcastReceiver {
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
     }
 
@@ -214,36 +200,45 @@ public class AlarmMain extends BroadcastReceiver {
         String dosageForm = bundle.getString("dosageForm");
         int takingPattern = bundle.getInt("takingPattern");
         String endDayString = bundle.getString("endDay");
+        Long startDayLong = bundle.getLong("startDay");
         int id = bundle.getInt("id");
         int daysWithIntake = 0;
-        int daysWithoutIntake =0;
+        int daysWithoutIntake = 0;
 
 
         Calendar c = Calendar.getInstance();
         Date currentDayDate = c.getTime();
+
+
         int currentDay = c.get(Calendar.DAY_OF_WEEK);
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
 
+        if (currentDayDate.getTime() > startDayLong) {
+            return;
+        }
+
         Date endDayDate = null;
 
-        if (!endDayString.equals("-1")){
+        if (!endDayString.equals("-1")) {
             try {
                 endDayDate = sdfDate.parse(endDayString);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (currentDayDate.getTime() > endDayDate.getTime()){
+            if (currentDayDate.getTime() > endDayDate.getTime()) {
                 cancelAlarm(context, id);
                 return;
             }
         }
-        if (takingPattern == 5){
+        if (takingPattern == 5) {
+            AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             daysWithIntake = bundle.getInt("daysWithIntake" + String.valueOf(id));
-            daysWithoutIntake = bundle.getInt("daysWithOutIntake" + String.valueOf(id));
+            daysWithoutIntake = bundle.getInt("daysWithoutIntake" + String.valueOf(id));
+
 
             ArrayList<String> alarmTimeArray = bundle.getStringArrayList("alarmTime");
-            if (daysWithIntake > 0){
+            if (daysWithIntake > 0) {
                 daysWithIntake = daysWithIntake - 1;
                 bundle.putInt("daysWithIntake" + String.valueOf(id), daysWithIntake);
                 intent.putExtra(REMINDER_BUNDLE, bundle);
@@ -255,80 +250,69 @@ public class AlarmMain extends BroadcastReceiver {
                     c.set(Calendar.HOUR_OF_DAY, hr);
                     c.set(Calendar.MINUTE, min);
                     c.set(Calendar.SECOND, 0);
-                    c.set(Calendar.DAY_OF_WEEK, startDay);
-                    c.set(Calendar.MONTH, startMonth - 1);
-                    c.set(Calendar.YEAR, startYear);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    alarmMgr.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                    //plus einen Tag = + 86400000L
+                    alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis()+ 86400000L, pendingIntent);
                 }
 
 
+            } else if (daysWithoutIntake < 1) {
+                int daysWithIntakeStatic = bundle.getInt("daysWithIntakeStatic" + String.valueOf(id));
+                int daysWithoutIntakeStatic = bundle.getInt("daysWithoutIntakeStatic" + String.valueOf(id));
 
-            }
-            else {
-                daysWithoutIntake = daysWithoutIntake -1;
+                bundle.putInt("daysWithIntake" + String.valueOf(id), daysWithIntakeStatic);
+                bundle.putInt("daysWithoutIntake" + String.valueOf(id), daysWithoutIntakeStatic);
+                intent.putExtra(REMINDER_BUNDLE, bundle);
+
+                for (int i = 0; i < alarmTimeArray.size(); i++) {
+                    String s = alarmTimeArray.get(i);
+                    int hr = Integer.parseInt(s.substring(0, 2));
+                    int min = Integer.parseInt(s.substring(3, 5));
+                    //Kein Tag, Monat oder Jahr, weil Alarm auf morgen gesetzt werden soll
+                    c.set(Calendar.HOUR_OF_DAY, hr);
+                    c.set(Calendar.MINUTE, min);
+                    c.set(Calendar.SECOND, 0);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + 86400000L, pendingIntent);
                 }
-                if (daysWithoutIntake < 1 ){
-                    int daysWithIntakeStatic = bundle.getInt("daysWithIntakeStatic" + String.valueOf(id));
-                    int daysWithoutIntakeStatic = bundle.getInt("daysWithOutIntakeStatic" + String.valueOf(id));
-
-                    bundle.putInt("daysWithIntake" + String.valueOf(id), daysWithIntakeStatic);
-                    bundle.putInt("daysWithOutIntake" + String.valueOf(id), daysWithoutIntakeStatic);
-                    intent.putExtra(REMINDER_BUNDLE, bundle);
-
-                    for (int i = 0; i < alarmTimeArray.size(); i++) {
-                        String s = alarmTimeArray.get(i);
-                        int hr = Integer.parseInt(s.substring(0, 2));
-                        int min = Integer.parseInt(s.substring(3, 5));
-                        c.set(Calendar.HOUR_OF_DAY, hr);
-                        c.set(Calendar.MINUTE, min);
-                        c.set(Calendar.SECOND, 0);
-                        c.set(Calendar.DAY_OF_WEEK, startDay);
-                        c.set(Calendar.MONTH, startMonth - 1);
-                        c.set(Calendar.YEAR, startYear);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        alarmMgr.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-                    }
-                }else {
-                    bundle.putInt("daysWithOutIntake" + String.valueOf(id), daysWithoutIntake);
-                    intent.putExtra(REMINDER_BUNDLE, bundle);
-                    for (int i = 0; i < alarmTimeArray.size(); i++) {
-                        String s = alarmTimeArray.get(i);
-                        int hr = Integer.parseInt(s.substring(0, 2));
-                        int min = Integer.parseInt(s.substring(3, 5));
-                        c.set(Calendar.HOUR_OF_DAY, hr);
-                        c.set(Calendar.MINUTE, min);
-                        c.set(Calendar.SECOND, 0);
-                        c.set(Calendar.DAY_OF_WEEK, startDay);
-                        c.set(Calendar.MONTH, startMonth - 1);
-                        c.set(Calendar.YEAR, startYear);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        alarmMgr.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-                        return;
+            } else {
+                daysWithoutIntake = daysWithoutIntake - 1;
+                bundle.putInt("daysWithoutIntake" + String.valueOf(id), daysWithoutIntake);
+                intent.putExtra(REMINDER_BUNDLE, bundle);
+                for (int i = 0; i < alarmTimeArray.size(); i++) {
+                    String s = alarmTimeArray.get(i);
+                    int hr = Integer.parseInt(s.substring(0, 2));
+                    int min = Integer.parseInt(s.substring(3, 5));
+                    c.set(Calendar.HOUR_OF_DAY, hr);
+                    c.set(Calendar.MINUTE, min);
+                    c.set(Calendar.SECOND, 0);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + 86400000L, pendingIntent);
+                    return;
                 }
 
             }
         }
 
-            if (takingPattern == 4) {
-                boolean[] takingPatternWeekdays = bundle.getBooleanArray("daysToAlarm");
-                if (currentDay == Calendar.SUNDAY && takingPatternWeekdays[6] == false) {
-                    return;
-                } else if (currentDay == Calendar.MONDAY && takingPatternWeekdays[0] == false) {
-                    return;
+        if (takingPattern == 4) {
+            boolean[] takingPatternWeekdays = bundle.getBooleanArray("daysToAlarm");
+            if (currentDay == Calendar.SUNDAY && takingPatternWeekdays[6] == false) {
+                return;
+            } else if (currentDay == Calendar.MONDAY && takingPatternWeekdays[0] == false) {
+                return;
 
-                } else if (currentDay == Calendar.TUESDAY && takingPatternWeekdays[1] == false) {
-                    return;
-                } else if (currentDay == Calendar.WEDNESDAY && takingPatternWeekdays[2] == false) {
-                    return;
-                } else if (currentDay == Calendar.THURSDAY && takingPatternWeekdays[3] == false) {
-                    return;
-                } else if (currentDay == Calendar.FRIDAY && takingPatternWeekdays[4] == false) {
-                    return;
-                } else if (currentDay == Calendar.SATURDAY && takingPatternWeekdays[5] == false) {
-                    return;
-                }
+            } else if (currentDay == Calendar.TUESDAY && takingPatternWeekdays[1] == false) {
+                return;
+            } else if (currentDay == Calendar.WEDNESDAY && takingPatternWeekdays[2] == false) {
+                return;
+            } else if (currentDay == Calendar.THURSDAY && takingPatternWeekdays[3] == false) {
+                return;
+            } else if (currentDay == Calendar.FRIDAY && takingPatternWeekdays[4] == false) {
+                return;
+            } else if (currentDay == Calendar.SATURDAY && takingPatternWeekdays[5] == false) {
+                return;
             }
+        }
 
 
         helper = new NotificationHelper(context);
@@ -340,11 +324,12 @@ public class AlarmMain extends BroadcastReceiver {
         return str.length() < 2 ? str : str.substring(0, 2);
     }
 
-    public static void cancelAlarm(Context context, int id){
+    public static void cancelAlarm(Context context, int id) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmMain.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        alarmManager.cancel(pendingIntent);    }
+        alarmManager.cancel(pendingIntent);
+    }
 
 }
