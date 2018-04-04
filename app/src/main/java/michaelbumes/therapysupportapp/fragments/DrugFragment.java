@@ -307,25 +307,43 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                         customListView2.notifyDataSetChanged();
                         break;
                     case 1:
-                        if (kindOfTakingFlag == REGULARLY) {
+                        if (mDrugEvent.isRegularly()) {
                             kindOfTakingFlag = ONLY_WHEN_REQUIRED;
                             cardViewDrugTime.setVisibility(View.GONE);
+                            addTimeButton.setVisibility(View.GONE);
                             stringList2[1] = "Nur bei Bedarf";
+                            List<String> alarmTimeList = new ArrayList<String>(mDrugEvent.getAlarmTime());
+                            List<Integer> dosageList = new ArrayList<Integer>(mDrugEvent.getDosage());
+                            alarmTimeList.clear();
+                            dosageList.clear();
+                            mDrugEvent.setAlarmTime(alarmTimeList);
+                            mDrugEvent.setDosage(dosageList);
+                            stringTime.clear();
+                            stringDosageForm.clear();
+                            stringDosage.clear();
+
+                            mDrugEvent.setRegularly(false);
                             cardView2.setVisibility(View.GONE);
                             cardView3.setVisibility(View.GONE);
-                            customListView1.notifyDataSetChanged();
-                            customListView2.notifyDataSetChanged();
+
                             break;
                         } else {
                             cardViewDrugTime.setVisibility(View.VISIBLE);
+                            addTimeButton.setVisibility(View.VISIBLE);
                             kindOfTakingFlag = REGULARLY;
                             stringList2[1] = "Regelmäßig";
+                            mDrugEvent.setRegularly(true);
                             cardView2.setVisibility(View.VISIBLE);
                             cardView3.setVisibility(View.VISIBLE);
-                            customListView1.notifyDataSetChanged();
-                            customListView2.notifyDataSetChanged();
+                            addTimeButton.performClick();
+
                         }
                 }
+                customListView1.notifyDataSetChanged();
+                customListView2.notifyDataSetChanged();
+                customListViewDrugTime.notifyDataSetChanged();
+                lstDrugTime.setAdapter(customListViewDrugTime);
+                EventBus.getDefault().postSticky(mDrugEvent);
             }
         });
 
@@ -365,7 +383,25 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
             }
         });
-
+        if (!mDrugEvent.isRegularly()){
+            kindOfTakingFlag = ONLY_WHEN_REQUIRED;
+            cardViewDrugTime.setVisibility(View.GONE);
+            addTimeButton.setVisibility(View.GONE);
+            stringList2[1] = "Nur bei Bedarf";
+            cardView2.setVisibility(View.GONE);
+            cardView3.setVisibility(View.GONE);
+            customListView1.notifyDataSetChanged();
+            customListView2.notifyDataSetChanged();
+        }else {
+            cardViewDrugTime.setVisibility(View.VISIBLE);
+            addTimeButton.setVisibility(View.VISIBLE);
+            kindOfTakingFlag = REGULARLY;
+            stringList2[1] = "Regelmäßig";
+            cardView2.setVisibility(View.VISIBLE);
+            cardView3.setVisibility(View.VISIBLE);
+            customListView1.notifyDataSetChanged();
+            customListView2.notifyDataSetChanged();
+        }
 
     }
 
@@ -455,7 +491,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         drugEventDb.setDosage(mDrugEvent.getDosage().toString());
         drugEventDb.setRunningTime(mDrugEvent.getRunningTime());
 
-
+        drugEventDb.setRegularly(mDrugEvent.isRegularly());
 
         drugEventDb.setEndDate(mDrugEvent.getEndDate());
         drugEventDb.setStartingDate(mDrugEvent.getStartingDate());
@@ -540,7 +576,15 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
 
         stringList1 = new String[]{drug.getDrugName(), "Art der Einnahme"};
-        stringList2 =  new String[]{drug.getManufacturer(), "Regelmäßig"};
+        String kindOfTaking;
+
+        if (mDrugEvent.isRegularly()){
+            kindOfTaking = "Regelmäßig";
+        }else {
+            kindOfTaking = "Nur bei Bedarf";
+
+        }
+        stringList2 =  new String[]{drug.getManufacturer(), kindOfTaking};
         stringList3 =  new String[]{"Laufzeit", "Einnahmemuster"};
         stringList4 = new String[]{"Unbegrenzte Laufzeit", "Täglich"};
         stringList5 =  new String[]{"Alarm"};

@@ -34,6 +34,7 @@ public class AlarmMain extends BroadcastReceiver {
     private Intent intent;
     private Context mContext;
     private List<String> alarmTime;
+    private List<Integer> dosage;
     private DrugEvent mDrugEvent;
     private Bundle mExtras;
     private int startDay, startMonth, startYear;
@@ -51,6 +52,7 @@ public class AlarmMain extends BroadcastReceiver {
         mContext = context;
         calendar = Calendar.getInstance();
         alarmTime = drugEvent.getAlarmTime();
+        dosage = drugEvent.getDosage();
         mExtras = extras;
         id = extras.getInt("id");
 
@@ -110,6 +112,8 @@ public class AlarmMain extends BroadcastReceiver {
             String s = alarmTime.get(i);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
+            mExtras.putInt("dosage", dosage.get(i));
+            intent.putExtra("REMINDER_BUNDLE",mExtras);
             calendar.set(Calendar.HOUR_OF_DAY, hr);
             calendar.set(Calendar.MINUTE, min);
             calendar.set(Calendar.SECOND, 0);
@@ -134,6 +138,8 @@ public class AlarmMain extends BroadcastReceiver {
         String s = mDrugEvent.getTakingPatternHourStart();
         int hr = Integer.parseInt(s.substring(0, 2));
         int min = Integer.parseInt(s.substring(3, 5));
+        mExtras.putInt("dosage", dosage.get(0));
+        intent.putExtra("REMINDER_BUNDLE",mExtras);
         calendar.set(Calendar.HOUR_OF_DAY, hr);
         calendar.set(Calendar.MINUTE, min);
         calendar.set(Calendar.SECOND, 0);
@@ -145,6 +151,8 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         for (int i = 0; i < mDrugEvent.getTakingPatternHourNumber(); i++) {
+            mExtras.putInt("dosage", dosage.get(i));
+            intent.putExtra("REMINDER_BUNDLE",mExtras);
             calendar.set(Calendar.HOUR_OF_DAY, hr + mDrugEvent.getTakingPatternHourInterval());
             calendar.set(Calendar.MINUTE, min);
             calendar.set(Calendar.SECOND, 0);
@@ -160,6 +168,8 @@ public class AlarmMain extends BroadcastReceiver {
     private void createAlarmDaily() {
         for (int i = 0; i < alarmTime.size(); i++) {
             String s = alarmTime.get(i);
+            mExtras.putInt("dosage", dosage.get(i));
+            intent.putExtra("REMINDER_BUNDLE",mExtras);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
             calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -177,6 +187,8 @@ public class AlarmMain extends BroadcastReceiver {
         long interval = mDrugEvent.getTakingPatternEveryOtherDay() * AlarmManager.INTERVAL_DAY;
         for (int i = 0; i < alarmTime.size(); i++) {
             String s = alarmTime.get(i);
+            mExtras.putInt("dosage", dosage.get(i));
+            intent.putExtra("REMINDER_BUNDLE",mExtras);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
             calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -198,6 +210,7 @@ public class AlarmMain extends BroadcastReceiver {
         String drugName = bundle.getString("drugName");
         int alarmType = bundle.getInt("alarmType");
         String dosageForm = bundle.getString("dosageForm");
+        int dosage = bundle.getInt("dosage");
         int takingPattern = bundle.getInt("takingPattern");
         String endDayString = bundle.getString("endDay");
         Long startDayLong = bundle.getLong("startDay");
@@ -316,7 +329,7 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         helper = new NotificationHelper(context);
-        builder = helper.getChannelNotification("Medizin einehmen!", drugName + " 1 " + dosageForm, alarmType, id);
+        builder = helper.getChannelNotification("Medizin einehmen!", drugName + dosage + dosageForm, alarmType, id);
         helper.getManger().notify(id, builder.build());
     }
 

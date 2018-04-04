@@ -119,7 +119,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
             drugEvent.setDosage(dosage);
             drugEvent.setRunningTime(drugEventDb.getRunningTime());
 
-
+            drugEvent.setRegularly(drugEventDb.isRegularly());
 
             drugEvent.setEndDate(drugEventDb.getEndDate());
             drugEvent.setStartingDate(drugEventDb.getStartingDate());

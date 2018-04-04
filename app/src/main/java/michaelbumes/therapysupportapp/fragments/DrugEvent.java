@@ -36,7 +36,15 @@ public class DrugEvent {
     private String takingPatternHourStart = "-1";
     private int takingPatternHourNumber = -1;
     private int takingPatternHourInterval = -1;
+    private boolean isRegularly = true;
 
+    public boolean isRegularly() {
+        return isRegularly;
+    }
+
+    public void setRegularly(boolean regularly) {
+        isRegularly = regularly;
+    }
 
     private boolean[] takingPatternWeekdays = new boolean[7];
     private boolean isRecurringReminder = false;

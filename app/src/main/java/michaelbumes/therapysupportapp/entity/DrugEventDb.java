@@ -83,6 +83,17 @@ public class DrugEventDb implements Serializable {
     @ColumnInfo(name = "sunday_selected")
     private boolean  sundaySelected = false;
 
+    public boolean isRegularly() {
+        return isRegularly;
+    }
+
+    public void setRegularly(boolean regularly) {
+        isRegularly = regularly;
+    }
+
+    @ColumnInfo(name = "is_regularly")
+    private boolean  isRegularly = true;
+
     public boolean isTuesdaySelected() {
         return tuesdaySelected;
     }
