@@ -27,8 +27,11 @@ public interface DrugEventDbDao {
 
 
 
-    @Query("DELETE FROM drug")
+    @Query("DELETE FROM drug_event")
     public void nukeTable();
+
+    @Query("DELETE FROM drug_event WHERE id = :id")
+    abstract void deleteById(long id);
 
     @Insert
     long insert(DrugEventDb drugEventDb);

@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,8 +72,8 @@ public class AlarmMain extends BroadcastReceiver {
 
         alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         intent = new Intent(context, AlarmMain.class);
-        extras.putLong("startDay", startingDay.getTime());
-        intent.putExtra(REMINDER_BUNDLE, extras);
+        mExtras.putLong("startDay", startingDay.getTime());
+        intent.putExtra(REMINDER_BUNDLE, mExtras);
 
         switch (drugEvent.getTakingPattern()) {
             case 1:
@@ -112,15 +113,17 @@ public class AlarmMain extends BroadcastReceiver {
             String s = alarmTime.get(i);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
+            int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
-            intent.putExtra("REMINDER_BUNDLE",mExtras);
+            mExtras.putInt("idGenerated" ,idGenerated);
+            intent.putExtra(REMINDER_BUNDLE,mExtras);
             calendar.set(Calendar.HOUR_OF_DAY, hr);
             calendar.set(Calendar.MINUTE, min);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
 
@@ -139,27 +142,30 @@ public class AlarmMain extends BroadcastReceiver {
         int hr = Integer.parseInt(s.substring(0, 2));
         int min = Integer.parseInt(s.substring(3, 5));
         mExtras.putInt("dosage", dosage.get(0));
-        intent.putExtra("REMINDER_BUNDLE",mExtras);
+        mExtras.putInt("idGenerated" ,Integer.parseInt(id + "" +String.valueOf(0)));
+        intent.putExtra(REMINDER_BUNDLE,mExtras);
         calendar.set(Calendar.HOUR_OF_DAY, hr);
         calendar.set(Calendar.MINUTE, min);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.DAY_OF_WEEK, startDay);
         calendar.set(Calendar.MONTH, startMonth - 1);
         calendar.set(Calendar.YEAR, startYear);
-        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(mContext,Integer.parseInt(id + "" +String.valueOf(0)), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntentStart);
 
 
         for (int i = 0; i < mDrugEvent.getTakingPatternHourNumber(); i++) {
+            int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
-            intent.putExtra("REMINDER_BUNDLE",mExtras);
+            intent.putExtra(REMINDER_BUNDLE,mExtras);
+            mExtras.putInt("idGenerated" ,idGenerated);
             calendar.set(Calendar.HOUR_OF_DAY, hr + mDrugEvent.getTakingPatternHourInterval());
             calendar.set(Calendar.MINUTE, min);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         }
@@ -169,7 +175,11 @@ public class AlarmMain extends BroadcastReceiver {
         for (int i = 0; i < alarmTime.size(); i++) {
             String s = alarmTime.get(i);
             mExtras.putInt("dosage", dosage.get(i));
-            intent.putExtra("REMINDER_BUNDLE",mExtras);
+            int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
+
+            mExtras.putInt("idGenerated" ,idGenerated);
+
+            intent.putExtra(REMINDER_BUNDLE,mExtras);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
             calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -178,7 +188,7 @@ public class AlarmMain extends BroadcastReceiver {
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
     }
@@ -187,8 +197,10 @@ public class AlarmMain extends BroadcastReceiver {
         long interval = mDrugEvent.getTakingPatternEveryOtherDay() * AlarmManager.INTERVAL_DAY;
         for (int i = 0; i < alarmTime.size(); i++) {
             String s = alarmTime.get(i);
+            int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
-            intent.putExtra("REMINDER_BUNDLE",mExtras);
+            mExtras.putInt("idGenerated" ,idGenerated);
+            intent.putExtra(REMINDER_BUNDLE,mExtras);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
             calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -197,7 +209,7 @@ public class AlarmMain extends BroadcastReceiver {
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pendingIntent);
         }
 
@@ -212,6 +224,7 @@ public class AlarmMain extends BroadcastReceiver {
         String dosageForm = bundle.getString("dosageForm");
         int dosage = bundle.getInt("dosage");
         int takingPattern = bundle.getInt("takingPattern");
+        int mIdGenerated = bundle.getInt("idGenerated");
         String endDayString = bundle.getString("endDay");
         Long startDayLong = bundle.getLong("startDay");
         int id = bundle.getInt("id");
@@ -220,14 +233,26 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         Calendar c = Calendar.getInstance();
-        Date currentDayDate = c.getTime();
-
 
         int currentDay = c.get(Calendar.DAY_OF_WEEK);
 
+
+
+
+        Calendar cal = Calendar.getInstance();
+        int year  = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int date  = cal.get(Calendar.DATE);
+        cal.clear();
+        cal.set(year, month, date);
+        long todayMillis2 = cal.getTimeInMillis();
+
+
+
+
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
 
-        if (currentDayDate.getTime() > startDayLong) {
+        if (todayMillis2 <= startDayLong) {
             return;
         }
 
@@ -239,7 +264,7 @@ public class AlarmMain extends BroadcastReceiver {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (currentDayDate.getTime() > endDayDate.getTime()) {
+            if (todayMillis2 > endDayDate.getTime()) {
                 cancelAlarm(context, id);
                 return;
             }
@@ -258,12 +283,15 @@ public class AlarmMain extends BroadcastReceiver {
 
                 for (int i = 0; i < alarmTimeArray.size(); i++) {
                     String s = alarmTimeArray.get(i);
+                    int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
+                    mExtras.putInt("idGenerated" ,idGenerated);
+                    intent.putExtra(REMINDER_BUNDLE,mExtras);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
                     c.set(Calendar.HOUR_OF_DAY, hr);
                     c.set(Calendar.MINUTE, min);
                     c.set(Calendar.SECOND, 0);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     //plus einen Tag = + 86400000L
                     alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis()+ 86400000L, pendingIntent);
                 }
@@ -281,11 +309,14 @@ public class AlarmMain extends BroadcastReceiver {
                     String s = alarmTimeArray.get(i);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
+                    int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
+                    mExtras.putInt("idGenerated" ,idGenerated);
+                    intent.putExtra(REMINDER_BUNDLE,mExtras);
                     //Kein Tag, Monat oder Jahr, weil Alarm auf morgen gesetzt werden soll
                     c.set(Calendar.HOUR_OF_DAY, hr);
                     c.set(Calendar.MINUTE, min);
                     c.set(Calendar.SECOND, 0);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + 86400000L, pendingIntent);
                 }
             } else {
@@ -294,12 +325,15 @@ public class AlarmMain extends BroadcastReceiver {
                 intent.putExtra(REMINDER_BUNDLE, bundle);
                 for (int i = 0; i < alarmTimeArray.size(); i++) {
                     String s = alarmTimeArray.get(i);
+                    int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
+                    mExtras.putInt("idGenerated" ,idGenerated);
+                    intent.putExtra(REMINDER_BUNDLE,mExtras);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
                     c.set(Calendar.HOUR_OF_DAY, hr);
                     c.set(Calendar.MINUTE, min);
                     c.set(Calendar.SECOND, 0);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + 86400000L, pendingIntent);
                     return;
                 }
@@ -329,8 +363,8 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         helper = new NotificationHelper(context);
-        builder = helper.getChannelNotification("Medizin einehmen!", drugName + dosage + dosageForm, alarmType, id);
-        helper.getManger().notify(id, builder.build());
+        builder = helper.getChannelNotification("Medizin einehmen! ", drugName + " "+ dosage +" " + dosageForm, alarmType, mIdGenerated);
+        helper.getManger().notify(mIdGenerated, builder.build());
     }
 
     public String firstTwo(String str) {
