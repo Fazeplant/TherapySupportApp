@@ -72,7 +72,6 @@ public class AlarmMain extends BroadcastReceiver {
 
         alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         intent = new Intent(context, AlarmMain.class);
-        mExtras.putLong("startDay", startingDay.getTime());
         intent.putExtra(REMINDER_BUNDLE, mExtras);
 
         switch (drugEvent.getTakingPattern()) {
@@ -115,6 +114,7 @@ public class AlarmMain extends BroadcastReceiver {
             int min = Integer.parseInt(s.substring(3, 5));
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
+            mExtras.putString("alarmTimeI" , alarmTime.get(i));
             mExtras.putInt("idGenerated" ,idGenerated);
             intent.putExtra(REMINDER_BUNDLE,mExtras);
             calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -142,6 +142,7 @@ public class AlarmMain extends BroadcastReceiver {
         int hr = Integer.parseInt(s.substring(0, 2));
         int min = Integer.parseInt(s.substring(3, 5));
         mExtras.putInt("dosage", dosage.get(0));
+        mExtras.putString("alarmTimeI" , alarmTime.get(0));
         mExtras.putInt("idGenerated" ,Integer.parseInt(id + "" +String.valueOf(0)));
         intent.putExtra(REMINDER_BUNDLE,mExtras);
         calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -157,8 +158,9 @@ public class AlarmMain extends BroadcastReceiver {
         for (int i = 0; i < mDrugEvent.getTakingPatternHourNumber(); i++) {
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
-            intent.putExtra(REMINDER_BUNDLE,mExtras);
             mExtras.putInt("idGenerated" ,idGenerated);
+            mExtras.putString("alarmTimeI" , alarmTime.get(i));
+            intent.putExtra(REMINDER_BUNDLE,mExtras);
             calendar.set(Calendar.HOUR_OF_DAY, hr + mDrugEvent.getTakingPatternHourInterval());
             calendar.set(Calendar.MINUTE, min);
             calendar.set(Calendar.SECOND, 0);
@@ -177,6 +179,7 @@ public class AlarmMain extends BroadcastReceiver {
             mExtras.putInt("dosage", dosage.get(i));
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
 
+            mExtras.putString("alarmTimeI" , alarmTime.get(i));
             mExtras.putInt("idGenerated" ,idGenerated);
 
             intent.putExtra(REMINDER_BUNDLE,mExtras);
@@ -200,6 +203,7 @@ public class AlarmMain extends BroadcastReceiver {
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
             mExtras.putInt("idGenerated" ,idGenerated);
+            mExtras.putString("alarmTimeI" , alarmTime.get(i));
             intent.putExtra(REMINDER_BUNDLE,mExtras);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
@@ -221,12 +225,14 @@ public class AlarmMain extends BroadcastReceiver {
         Bundle bundle = intent.getBundleExtra(REMINDER_BUNDLE);
         String drugName = bundle.getString("drugName");
         int alarmType = bundle.getInt("alarmType");
+        String alarmTimeI = bundle.getString("alarmTimeI");
         String dosageForm = bundle.getString("dosageForm");
         int dosage = bundle.getInt("dosage");
         int takingPattern = bundle.getInt("takingPattern");
         int mIdGenerated = bundle.getInt("idGenerated");
         String endDayString = bundle.getString("endDay");
-        Long startDayLong = bundle.getLong("startDay");
+        Date startDayDate = null;
+        String startDayString = bundle.getString("startDay");
         int id = bundle.getInt("id");
         int daysWithIntake = 0;
         int daysWithoutIntake = 0;
@@ -239,20 +245,35 @@ public class AlarmMain extends BroadcastReceiver {
 
 
 
+
+
         Calendar cal = Calendar.getInstance();
-        int year  = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int date  = cal.get(Calendar.DATE);
-        cal.clear();
-        cal.set(year, month, date);
+        Date startDate1 = cal.getTime();
+        cal.setTime(startDate1);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        //int year  = cal.get(Calendar.HOUR_OF_DAY);
+        //int month = cal.get(Calendar.MONTH);
+        //int date  = cal.get(Calendar.DATE);
+        //cal.clear();
+        //cal.set(year, month, date);
         long todayMillis2 = cal.getTimeInMillis();
 
 
 
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
 
-        if (todayMillis2 <= startDayLong) {
+        try {
+            startDayDate = sdfDate.parse(startDayString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
+        if (todayMillis2 < startDayDate.getTime()) {
             return;
         }
 
@@ -285,6 +306,7 @@ public class AlarmMain extends BroadcastReceiver {
                     String s = alarmTimeArray.get(i);
                     int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
                     mExtras.putInt("idGenerated" ,idGenerated);
+                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
                     intent.putExtra(REMINDER_BUNDLE,mExtras);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
@@ -309,7 +331,9 @@ public class AlarmMain extends BroadcastReceiver {
                     String s = alarmTimeArray.get(i);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
+                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
                     int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
+                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
                     mExtras.putInt("idGenerated" ,idGenerated);
                     intent.putExtra(REMINDER_BUNDLE,mExtras);
                     //Kein Tag, Monat oder Jahr, weil Alarm auf morgen gesetzt werden soll
@@ -327,6 +351,7 @@ public class AlarmMain extends BroadcastReceiver {
                     String s = alarmTimeArray.get(i);
                     int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
                     mExtras.putInt("idGenerated" ,idGenerated);
+                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
                     intent.putExtra(REMINDER_BUNDLE,mExtras);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));

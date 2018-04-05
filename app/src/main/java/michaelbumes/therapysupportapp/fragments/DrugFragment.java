@@ -450,6 +450,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 bundle.putInt("takingPattern", mDrugEvent.getTakingPattern());
                 bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
                 bundle.putString("endDay", mDrugEvent.getEndDate());
+                bundle.putString("startDay", mDrugEvent.getStartingDate());
+
                 AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs();
 
 
