@@ -18,6 +18,8 @@ import michaelbumes.therapysupportapp.fragments.DrugEvent;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -231,6 +233,11 @@ public class AlarmMain extends BroadcastReceiver {
         int takingPattern = bundle.getInt("takingPattern");
         int mIdGenerated = bundle.getInt("idGenerated");
         String endDayString = bundle.getString("endDay");
+        boolean[] discretePattern = bundle.getBooleanArray("discretePattern");
+
+        String discreteTitle = bundle.getString("discreteTitle");
+        String discreteBody = bundle.getString("discreteBody");
+
         Date startDayDate = null;
         String startDayString = bundle.getString("startDay");
         int id = bundle.getInt("id");
@@ -245,9 +252,7 @@ public class AlarmMain extends BroadcastReceiver {
 
 
 
-
-
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         Date startDate1 = cal.getTime();
         cal.setTime(startDate1);
         cal.set(Calendar.SECOND, 0);
@@ -258,12 +263,19 @@ public class AlarmMain extends BroadcastReceiver {
         //cal.clear();
         //cal.set(year, month, date);
         long todayMillis2 = cal.getTimeInMillis();
-
+        long millis = System.currentTimeMillis();
 
 
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
+
+
+        Long hrLong = TimeUnit.HOURS.toMillis(Integer.parseInt(alarmTimeI.substring(0, 2)));
+        Long minLong = TimeUnit.MINUTES.toMillis(Integer.parseInt(alarmTimeI.substring(3, 5)));
+
+
+
 
         try {
             startDayDate = sdfDate.parse(startDayString);
@@ -273,7 +285,7 @@ public class AlarmMain extends BroadcastReceiver {
 
 
 
-        if (todayMillis2 < startDayDate.getTime()) {
+        if (todayMillis2 > startDayDate.getTime() + hrLong +minLong) {
             return;
         }
 
@@ -388,7 +400,7 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         helper = new NotificationHelper(context);
-        builder = helper.getChannelNotification("Medizin einehmen! ", drugName + " "+ dosage +" " + dosageForm, alarmType, mIdGenerated);
+        builder = helper.getChannelNotification("Medizin einehmen! ", drugName + " "+ dosage +" " + dosageForm, alarmType, mIdGenerated,discreteTitle,discreteBody,discretePattern);
         helper.getManger().notify(mIdGenerated, builder.build());
     }
 

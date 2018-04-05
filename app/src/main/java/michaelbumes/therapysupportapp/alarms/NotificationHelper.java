@@ -17,6 +17,8 @@ import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Calendar;
+
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
 
@@ -107,13 +109,14 @@ public class NotificationHelper extends ContextWrapper {
     //notiUri zeigt auf die Standart Notifikation
     //notiUri wird auf null gesetzt um die Nachricht ohne Ton abzuspielen
 
-    public NotificationCompat.Builder getChannelNotification(String title, String body, int alarmtype, int id){
+    public NotificationCompat.Builder getChannelNotification(String title, String body, int alarmtype, int id, String discreteTitle, String discreteBody, boolean[] discretePattern){
         Intent okIntent = getNotificationIntent();
         Bundle bundle = new Bundle();
         bundle.putInt("id", id);
         okIntent.putExtra("notiBundle",bundle);
         int resId = getResources().getIdentifier("ic_medical_pills_couple", "drawable", getPackageName());
         okIntent.setAction(OK_ACTION);
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         switch(alarmtype){
             case 1:
                 notiUri = null;
@@ -149,21 +152,66 @@ public class NotificationHelper extends ContextWrapper {
             case 5:
                 notificationChannel = NOTIFICATION_ID_SILENT;
                 notiUri = null;
-                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(500);
                 notificationMode = Notification.DEFAULT_VIBRATE;
                 break;
             case 6:
-                notificationChannel = NOTIFICATION_ID_SILENT;
-                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                vibrator.vibrate(500);
-                notiUri = null;
-                notificationMode = Notification.DEFAULT_ALL;
-                //TODO Diskrete Notifikation
-                title = "Custom Message";
-                body = "Custom Message";
-                resId = getResources().getIdentifier("ic_check_black_24dp", "drawable", getPackageName());
-                break;
+                int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+                if (currentDay == Calendar.SUNDAY && discretePattern[6] == false) {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    notiUri = null;
+                    v.vibrate(500);
+                    notificationMode = Notification.DEFAULT_VIBRATE;
+                    break;
+                } else if (currentDay == Calendar.MONDAY && discretePattern[0] == false) {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    notiUri = null;
+                    v.vibrate(500);
+                    notificationMode = Notification.DEFAULT_VIBRATE;
+                    break;
+
+                } else if (currentDay == Calendar.TUESDAY && discretePattern[1] == false) {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    notiUri = null;
+                    v.vibrate(500);
+                    notificationMode = Notification.DEFAULT_VIBRATE;
+                    break;
+                } else if (currentDay == Calendar.WEDNESDAY && discretePattern[2] == false) {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    notiUri = null;
+                    v.vibrate(500);
+                    notificationMode = Notification.DEFAULT_VIBRATE;
+                    break;
+                } else if (currentDay == Calendar.THURSDAY && discretePattern[3] == false) {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    notiUri = null;
+                    v.vibrate(500);
+                    notificationMode = Notification.DEFAULT_VIBRATE;
+                    break;
+                } else if (currentDay == Calendar.FRIDAY && discretePattern[4] == false) {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    notiUri = null;
+                    v.vibrate(500);
+                    notificationMode = Notification.DEFAULT_VIBRATE;
+                    break;
+                } else if (currentDay == Calendar.SATURDAY && discretePattern[5] == false) {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    notiUri = null;
+                    v.vibrate(500);
+                    notificationMode = Notification.DEFAULT_VIBRATE;
+                    break;
+                }else {
+                    notificationChannel = NOTIFICATION_ID_SILENT;
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(500);
+                    notiUri = null;
+                    notificationMode = Notification.DEFAULT_ALL;
+                    title = discreteTitle;
+                    body = discreteBody;
+                    resId = getResources().getIdentifier("ic_check_black_24dp", "drawable", getPackageName());
+                    break;
+                }
+
 
         }
 

@@ -296,6 +296,16 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     cardView3.setVisibility(View.VISIBLE);
                     cardViewHour.setVisibility(View.GONE);
 
+                    boolean[] eventDays = mDrugEvent.getTakingPatternWeekdays();
+                    checkBoxMonday.setChecked(eventDays[0]);
+                    checkBoxTuesday.setChecked(eventDays[1]);
+                    checkBoxWednesday.setChecked(eventDays[2]);
+                    checkBoxThursday.setChecked(eventDays[3]);
+                    checkBoxFriday.setChecked(eventDays[4]);
+                    checkBoxSaturday.setChecked(eventDays[5]);
+                    checkBoxSunday.setChecked(eventDays[6]);
+
+
 
 
                     mDrugEvent.setTakingPatternDaysWithIntake(-1);
@@ -362,14 +372,14 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     break;
                 case 4:
                     radioButtonWeekdays.performClick();
-                    boolean[] eventDays = mDrugEvent.getTakingPatternWeekdays();
+/*                    boolean[] eventDays = mDrugEvent.getTakingPatternWeekdays();
                     checkBoxMonday.setChecked(eventDays[0]);
                     checkBoxTuesday.setChecked(eventDays[1]);
                     checkBoxWednesday.setChecked(eventDays[2]);
                     checkBoxThursday.setChecked(eventDays[3]);
                     checkBoxFriday.setChecked(eventDays[4]);
                     checkBoxSaturday.setChecked(eventDays[5]);
-                    checkBoxSunday.setChecked(eventDays[6]);
+                    checkBoxSunday.setChecked(eventDays[6]);*/
 
                     break;
                 case 5:

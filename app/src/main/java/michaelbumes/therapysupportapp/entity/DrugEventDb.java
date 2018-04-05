@@ -22,6 +22,28 @@ public class DrugEventDb implements Serializable {
     @ColumnInfo(name = "end_date")
     private String endDate = "-1";
 
+    @ColumnInfo(name = "discrete_title")
+    private String discreteTitle = "Benachrichtigung";
+
+    public String getDiscreteTitle() {
+        return discreteTitle;
+    }
+
+    public void setDiscreteTitle(String discreteTitle) {
+        this.discreteTitle = discreteTitle;
+    }
+
+    public String getDiscreteBody() {
+        return discreteBody;
+    }
+
+    public void setDiscreteBody(String discreteBody) {
+        this.discreteBody = discreteBody;
+    }
+
+    @ColumnInfo(name = "discrete_body")
+    private String discreteBody = "Alarm";
+
     @ColumnInfo(name = "taking_pattern")
     private int takingPattern = -1;
 
@@ -83,6 +105,27 @@ public class DrugEventDb implements Serializable {
     @ColumnInfo(name = "sunday_selected")
     private boolean  sundaySelected = false;
 
+    @ColumnInfo(name = "monday_selected_discrete")
+    private boolean  mondaySelectedDiscrete = true;
+
+    @ColumnInfo(name = "tuesday_selected_discrete")
+    private boolean  tuesdaySelectedDiscrete = true;
+
+    @ColumnInfo(name = "wednesday_selected_discrete")
+    private boolean  wednesdaySelectedDiscrete = true;
+
+    @ColumnInfo(name = "thursday_selected_discrete")
+    private boolean  thursdaySelectedDiscrete = true;
+
+    @ColumnInfo(name = "friday_selected_discrete")
+    private boolean  fridaySelectedDiscrete = true;
+
+    @ColumnInfo(name = "saturday_selected_discrete")
+    private boolean  saturdaySelectedDiscrete = false;
+
+    @ColumnInfo(name = "sunday_selected_discrete")
+    private boolean  sundaySelectedDiscrete = false;
+
     public boolean isRegularly() {
         return isRegularly;
     }
@@ -93,6 +136,62 @@ public class DrugEventDb implements Serializable {
 
     @ColumnInfo(name = "is_regularly")
     private boolean  isRegularly = true;
+
+    public boolean isMondaySelectedDiscrete() {
+        return mondaySelectedDiscrete;
+    }
+
+    public void setMondaySelectedDiscrete(boolean mondaySelectedDiscrete) {
+        this.mondaySelectedDiscrete = mondaySelectedDiscrete;
+    }
+
+    public boolean isTuesdaySelectedDiscrete() {
+        return tuesdaySelectedDiscrete;
+    }
+
+    public void setTuesdaySelectedDiscrete(boolean tuesdaySelectedDiscrete) {
+        this.tuesdaySelectedDiscrete = tuesdaySelectedDiscrete;
+    }
+
+    public boolean isWednesdaySelectedDiscrete() {
+        return wednesdaySelectedDiscrete;
+    }
+
+    public void setWednesdaySelectedDiscrete(boolean wednesdaySelectedDiscrete) {
+        this.wednesdaySelectedDiscrete = wednesdaySelectedDiscrete;
+    }
+
+    public boolean isThursdaySelectedDiscrete() {
+        return thursdaySelectedDiscrete;
+    }
+
+    public void setThursdaySelectedDiscrete(boolean thursdaySelectedDiscrete) {
+        this.thursdaySelectedDiscrete = thursdaySelectedDiscrete;
+    }
+
+    public boolean isFridaySelectedDiscrete() {
+        return fridaySelectedDiscrete;
+    }
+
+    public void setFridaySelectedDiscrete(boolean fridaySelectedDiscrete) {
+        this.fridaySelectedDiscrete = fridaySelectedDiscrete;
+    }
+
+    public boolean isSaturdaySelectedDiscrete() {
+        return saturdaySelectedDiscrete;
+    }
+
+    public void setSaturdaySelectedDiscrete(boolean saturdaySelectedDiscrete) {
+        this.saturdaySelectedDiscrete = saturdaySelectedDiscrete;
+    }
+
+    public boolean isSundaySelectedDiscrete() {
+        return sundaySelectedDiscrete;
+    }
+
+    public void setSundaySelectedDiscrete(boolean sundaySelectedDiscrete) {
+        this.sundaySelectedDiscrete = sundaySelectedDiscrete;
+    }
 
     public boolean isTuesdaySelected() {
         return tuesdaySelected;

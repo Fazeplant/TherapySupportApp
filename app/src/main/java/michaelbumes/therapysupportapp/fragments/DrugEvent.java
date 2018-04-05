@@ -38,6 +38,26 @@ public class DrugEvent {
     private int takingPatternHourInterval = -1;
     private boolean isRegularly = true;
 
+    private String discreteTitle = "Benachrichtigung";
+
+    public String getDiscreteTitle() {
+        return discreteTitle;
+    }
+
+    public void setDiscreteTitle(String discreteTitle) {
+        this.discreteTitle = discreteTitle;
+    }
+
+    public String getDiscreteBody() {
+        return discreteBody;
+    }
+
+    public void setDiscreteBody(String discreteBody) {
+        this.discreteBody = discreteBody;
+    }
+
+    private String discreteBody = "Alarm";
+
     public boolean isRegularly() {
         return isRegularly;
     }
@@ -47,6 +67,17 @@ public class DrugEvent {
     }
 
     private boolean[] takingPatternWeekdays = new boolean[7];
+
+    public boolean[] getAlarmDiscretePatternWeekdays() {
+        return alarmDiscretePatternWeekdays;
+    }
+
+    public void setAlarmDiscretePatternWeekdays(boolean[] alarmDiscretePatternWeekdays) {
+        this.alarmDiscretePatternWeekdays = alarmDiscretePatternWeekdays;
+    }
+
+    private boolean[] alarmDiscretePatternWeekdays = new boolean[7];
+
     private boolean isRecurringReminder = false;
     private int alarmType = 2;
     private List<String> alarmTime = new ArrayList<>();

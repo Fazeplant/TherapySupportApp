@@ -103,19 +103,24 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
 
     }
     public DrugEvent convertDrugEventDbToDrugEvent(DrugEvent drugEvent, DrugEventDb drugEventDb, Drug drug){
-        String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
-        String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
-        String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-        List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+        if (drugEventDb.isRegularly()){
+            String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
+            String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
+            String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-        String replaceDosage1 = drugEventDb.getDosage().replace("[", "");
-        String replaceDosage2 = replaceDosage1.replace("]", "");
-        String replaceDosage3 = replaceDosage2.replace(" ", "");
-        List<String> arrayList = new ArrayList<String>(Arrays.asList(replaceDosage3.split(",")));
-        List<Integer> dosage = new ArrayList<Integer>();
-        for(String i:arrayList){
-            dosage.add(Integer.parseInt(i.trim()));
+            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+
+            String replaceDosage1 = drugEventDb.getDosage().replace("[", "");
+            String replaceDosage2 = replaceDosage1.replace("]", "");
+            String replaceDosage3 = replaceDosage2.replace(" ", "");
+            List<String> arrayList = new ArrayList<String>(Arrays.asList(replaceDosage3.split(",")));
+            List<Integer> dosage = new ArrayList<Integer>();
+            for(String i:arrayList){
+                dosage.add(Integer.parseInt(i.trim()));
+            }
+            drugEvent.setAlarmTime(alarmTime);
+            drugEvent.setDosage(dosage);
         }
 
 
@@ -125,22 +130,36 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
         weekdays[0] = drugEventDb.isMondaySelected();
         weekdays[1] = drugEventDb.isTuesdaySelected();
         weekdays[2] = drugEventDb.isWednesdaySelected();
-        weekdays[3] = drugEventDb.isTuesdaySelected();
+        weekdays[3] = drugEventDb.isThursdaySelected();
         weekdays[4] = drugEventDb.isFridaySelected();
         weekdays[5] = drugEventDb.isSaturdaySelected();
         weekdays[6] = drugEventDb.isSundaySelected();
+
+        boolean[] weekdaysDiscrete = new boolean[7];
+
+        weekdaysDiscrete[0] = drugEventDb.isMondaySelectedDiscrete();
+        weekdaysDiscrete[1] = drugEventDb.isTuesdaySelectedDiscrete();
+        weekdaysDiscrete[2] = drugEventDb.isWednesdaySelectedDiscrete();
+        weekdaysDiscrete[3] = drugEventDb.isThursdaySelectedDiscrete();
+        weekdaysDiscrete[4] = drugEventDb.isFridaySelectedDiscrete();
+        weekdaysDiscrete[5] = drugEventDb.isSaturdaySelectedDiscrete();
+        weekdaysDiscrete[6] = drugEventDb.isSundaySelectedDiscrete();
+
+
 
         drugEvent.setDrug(drug);
 
         drugEvent.setAlarmType(drugEventDb.getAlarmType());
         drugEvent.setRecurringReminder(drugEventDb.isRecurringReminder());
-        drugEvent.setAlarmTime(alarmTime);
         drugEvent.setTakingPatternWeekdays(weekdays);
+        drugEvent.setAlarmDiscretePatternWeekdays(weekdaysDiscrete);
 
-        drugEvent.setDosage(dosage);
         drugEvent.setRunningTime(drugEventDb.getRunningTime());
 
         drugEvent.setRegularly(drugEventDb.isRegularly());
+
+        drugEvent.setDiscreteTitle(drugEventDb.getDiscreteTitle());
+        drugEvent.setDiscreteBody(drugEventDb.getDiscreteBody());
 
         drugEvent.setEndDate(drugEventDb.getEndDate());
         drugEvent.setStartingDate(drugEventDb.getStartingDate());

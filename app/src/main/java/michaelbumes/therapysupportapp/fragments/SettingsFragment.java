@@ -40,9 +40,11 @@ public class SettingsFragment extends BaseFragment {
         nukeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppDatabase.destroyInstance();
+                AppDatabase.getAppDatabase(getContext()).drugEventDbDao().nukeTable();
                 AppDatabase.getAppDatabase(getContext()).drugDao().nukeTable();
                 AppDatabase.getAppDatabase(getContext()).drugListDao().nukeTable();
+                AppDatabase.destroyInstance();
+
             }
         });
         createButton.setOnClickListener(new View.OnClickListener() {

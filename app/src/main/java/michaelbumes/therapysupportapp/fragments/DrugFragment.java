@@ -427,7 +427,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     public boolean onOptionsItemSelected(MenuItem item) {
         int resID = item.getItemId();
         if (resID == R.id.save_drug) {
-            if (mDrugEvent.getAlarmTime().isEmpty()) {
+            if (mDrugEvent.getAlarmTime().isEmpty()&& mDrugEvent.isRegularly()) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                 builder1.setMessage("Bitte fügen sie mindestens eine Zeit hinzu.");
                 builder1.setCancelable(true);
@@ -451,6 +451,11 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
                 bundle.putString("endDay", mDrugEvent.getEndDate());
                 bundle.putString("startDay", mDrugEvent.getStartingDate());
+                bundle.putString("discreteTitle", mDrugEvent.getDiscreteTitle());
+                bundle.putString("discreteBody", mDrugEvent.getDiscreteBody());
+                bundle.putBooleanArray("discretePattern", mDrugEvent.getAlarmDiscretePatternWeekdays());
+
+
 
                 AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs();
 
@@ -460,7 +465,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 bundle.putInt("id", (int) drugEventDbId);
 
                 drug.setDrugEventDbId(drugEventDbId);
-                if (mDrugEvent.getAlarmType() != 3) {
+                if (mDrugEvent.getAlarmType() != 3 && mDrugEvent.isRegularly()) {
                     AlarmMain alarm = new AlarmMain(getContext(), bundle, mDrugEvent);
                 }
                 int result = AppDatabase.getAppDatabase(getContext()).drugDao().update(drug);
@@ -478,12 +483,18 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private long saveDrugEventDb() {
 
         boolean[] weekdays = mDrugEvent.getTakingPatternWeekdays();
+        boolean[] weekdaysAlarmDiscrete = mDrugEvent.getAlarmDiscretePatternWeekdays();
+
         DrugEventDb drugEventDb = new DrugEventDb();
+        if (mDrugEvent.isRegularly()){
+            drugEventDb.setDosage(mDrugEvent.getDosage().toString());
+            drugEventDb.setAlarmTime(mDrugEvent.getAlarmTime().toString());
+
+        }
 
         drugEventDb.setRecurringReminder(mDrugEvent.isRecurringReminder());
         drugEventDb.setAlarmType(mDrugEvent.getAlarmType());
         drugEventDb.setRecurringReminder(mDrugEvent.isRecurringReminder());
-        drugEventDb.setAlarmTime(mDrugEvent.getAlarmTime().toString());
         drugEventDb.setMondaySelected(weekdays[0]);
         drugEventDb.setTuesdaySelected(weekdays[1]);
         drugEventDb.setWednesdaySelected(weekdays[2]);
@@ -492,7 +503,17 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         drugEventDb.setSaturdaySelected(weekdays[5]);
         drugEventDb.setSundaySelected(weekdays[6]);
 
-        drugEventDb.setDosage(mDrugEvent.getDosage().toString());
+        drugEventDb.setMondaySelectedDiscrete(weekdaysAlarmDiscrete[0]);
+        drugEventDb.setTuesdaySelectedDiscrete(weekdaysAlarmDiscrete[1]);
+        drugEventDb.setWednesdaySelectedDiscrete(weekdaysAlarmDiscrete[2]);
+        drugEventDb.setThursdaySelectedDiscrete(weekdaysAlarmDiscrete[3]);
+        drugEventDb.setFridaySelectedDiscrete(weekdaysAlarmDiscrete[4]);
+        drugEventDb.setSaturdaySelectedDiscrete(weekdaysAlarmDiscrete[5]);
+        drugEventDb.setSundaySelectedDiscrete(weekdaysAlarmDiscrete[6]);
+
+        drugEventDb.setDiscreteTitle(mDrugEvent.getDiscreteTitle());
+        drugEventDb.setDiscreteBody(mDrugEvent.getDiscreteBody());
+
         drugEventDb.setRunningTime(mDrugEvent.getRunningTime());
 
         drugEventDb.setRegularly(mDrugEvent.isRegularly());
