@@ -34,6 +34,10 @@ public interface DrugDao {
     @Query("SELECT * FROM drug where id=:id")
     Drug findById(int id);
 
+    @Query("SELECT * FROM drug where drug_event_db_id=:drugEventDbId")
+    Drug findByDrugEventDbId(long drugEventDbId);
+
+
     @Query("SELECT * FROM drug where drug_manufacturer LIKE :manufacturer")
     Drug findByManufacturer(String manufacturer);
 
@@ -41,7 +45,7 @@ public interface DrugDao {
     public void nukeTable();
 
     @Insert
-    void insertAll(Drug... drugs);
+    long insert(Drug drug);
 
     @Delete
     void delete(Drug drug);

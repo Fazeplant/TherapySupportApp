@@ -28,7 +28,7 @@ public class DatabaseInitializer {
     }
 
     private static Drug addDrug(final AppDatabase db, Drug drug) {
-        db.drugDao().insertAll(drug);
+        db.drugDao().insert(drug);
         return drug;
     }
 

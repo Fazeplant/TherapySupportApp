@@ -79,6 +79,23 @@ public class SettingsFragment extends BaseFragment {
                 dosageForm12.setDosageFormName("Tropfen");
                 dosageForm13.setDosageFormName("Zäpfchen");
 
+/*                dosageForm1.setDosageFormName("Tablette(n)");
+                dosageForm2.setDosageFormName("Kapsel(n)");
+                dosageForm3.setDosageFormName("Stück");
+                dosageForm4.setDosageFormName("Milliliter");
+                dosageForm5.setDosageFormName("Milligramm");
+                dosageForm6.setDosageFormName("Gramm");
+                dosageForm7.setDosageFormName("Tropfen");
+
+                dosageForm8.setDosageFormName("Injektion(en)");
+                dosageForm9.setDosageFormName("Ampulle(n)");
+
+                dosageForm10.setDosageFormName("Zäpfchen");
+                dosageForm11.setDosageFormName("Hub/Hübe");
+
+                dosageForm12.setDosageFormName("Anwendung(en)");
+                dosageForm13.setDosageFormName("Einheit(en)");*/
+
 
                 DrugList drug1 = new DrugList();
                 DrugList drug2 = new DrugList();

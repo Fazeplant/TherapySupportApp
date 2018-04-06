@@ -50,7 +50,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textViewAlarm"
+                android:id="@+id/drug_plan_alarm_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"

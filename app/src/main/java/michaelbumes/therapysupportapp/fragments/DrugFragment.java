@@ -456,22 +456,22 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 bundle.putBooleanArray("discretePattern", mDrugEvent.getAlarmDiscretePatternWeekdays());
 
 
-
-                AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs();
-
-
-
                 long drugEventDbId = saveDrugEventDb();
                 bundle.putInt("id", (int) drugEventDbId);
 
                 drug.setDrugEventDbId(drugEventDbId);
+
+
+                int result = AppDatabase.getAppDatabase(getContext()).drugDao().update(drug);
+                if (result <= 0){
+                    AppDatabase.getAppDatabase(getContext()).drugDao().insert(drug);
+                }
+
+
                 if (mDrugEvent.getAlarmType() != 3 && mDrugEvent.isRegularly()) {
                     AlarmMain alarm = new AlarmMain(getContext(), bundle, mDrugEvent);
                 }
-                int result = AppDatabase.getAppDatabase(getContext()).drugDao().update(drug);
-                if (result <= 0){
-                    AppDatabase.getAppDatabase(getContext()).drugDao().insertAll(drug);
-                }
+
                 Toast.makeText(getContext(), "Medizin gespeichert", Toast.LENGTH_SHORT).show();
                 mFragmentNavigation.clearStack();
                 return true;
@@ -502,6 +502,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         drugEventDb.setFridaySelected(weekdays[4]);
         drugEventDb.setSaturdaySelected(weekdays[5]);
         drugEventDb.setSundaySelected(weekdays[6]);
+
 
         drugEventDb.setMondaySelectedDiscrete(weekdaysAlarmDiscrete[0]);
         drugEventDb.setTuesdaySelectedDiscrete(weekdaysAlarmDiscrete[1]);

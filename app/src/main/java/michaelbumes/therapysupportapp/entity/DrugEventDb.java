@@ -22,6 +22,7 @@ public class DrugEventDb implements Serializable {
     @ColumnInfo(name = "end_date")
     private String endDate = "-1";
 
+
     @ColumnInfo(name = "discrete_title")
     private String discreteTitle = "Benachrichtigung";
 

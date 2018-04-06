@@ -8,12 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
@@ -60,6 +60,10 @@ public class DrugPlanFragment extends BaseFragment {
         adapter = new DrugAdapter(drugs);
         recyclerView.setAdapter(adapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
 
 
 
@@ -73,6 +77,21 @@ public class DrugPlanFragment extends BaseFragment {
 
         return view;
     }
+
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            ((DrugAdapter)recyclerView.getAdapter()).deleteItem(viewHolder.getAdapterPosition());
+        }
+    };
+
+
 
 
 }

@@ -43,6 +43,7 @@
     <color name="cardview_custom_color">#eaeaea</color>
     <color name="black_150_transparent">#96000000</color>
     <color name="grey">#757575</color>
+    <color name="item_delete_background">#ff0000</color>
 
 
 </resources>
