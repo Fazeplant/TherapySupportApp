@@ -132,7 +132,8 @@ public class FoodActivity extends AppCompatActivity {
             RadioButton radioButton = findViewById(radioId);
             Calendar calendar = Calendar.getInstance();
             MoodDiary moodDiary = new MoodDiary();
-            moodDiary.setDate(((int) calendar.getTimeInMillis()));
+            Date currentDate = Calendar.getInstance().getTime();
+            moodDiary.setDate(currentDate);
             moodDiary.setArtID(2);
             if (radioId == -1){
                 moodDiary.setInfo1(foodText);

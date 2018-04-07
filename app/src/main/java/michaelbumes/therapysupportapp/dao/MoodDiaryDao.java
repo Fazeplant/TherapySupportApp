@@ -4,9 +4,12 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.TypeConverters;
 
+import java.util.Date;
 import java.util.List;
 
+import michaelbumes.therapysupportapp.TimestampConverter;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
 
 /**
@@ -29,6 +32,9 @@ public interface MoodDiaryDao {
 
     @Query("DELETE FROM drug")
     public void nukeTable();
+
+    @Query("SELECT * FROM moodDiary WHERE date BETWEEN :dayst AND :dayet")
+    List<MoodDiary> getFromTable(Date dayst, Date dayet);
 
     @Insert
     void insertAll(MoodDiary... moodDiaries);

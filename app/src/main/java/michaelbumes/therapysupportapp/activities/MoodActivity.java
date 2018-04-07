@@ -16,11 +16,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
@@ -42,7 +44,7 @@ public class MoodActivity extends AppCompatActivity {
 
 
     Button moodButton0, moodButton1, moodButton2, moodButton3, moodButtonNormal, moodButton4, moodButton5 ,addMoodButton, expandMoodButton;
-    ScrollView cardViewMoodExpand;
+    LinearLayout cardViewMoodExpand;
 
     SeekBar seekBar1, seekBar2, seekBar3, seekBar4, seekBar5, seekBar6, seekBar7, seekBar8;
 
@@ -190,7 +192,8 @@ public class MoodActivity extends AppCompatActivity {
                 }else  if (isExpanded){
                     Calendar calendar = Calendar.getInstance();
                     MoodDiary moodDiary = new MoodDiary();
-                    moodDiary.setDate(((int) calendar.getTimeInMillis()));
+                    Date currentDate = Calendar.getInstance().getTime();
+                    moodDiary.setDate(currentDate);
                     moodDiary.setInfo1(String.valueOf(moodFlag));
                     moodDiary.setArtID(1);
                     String arrayMood[] = {String.valueOf(seekBar1.getProgress()),String.valueOf(seekBar2.getProgress()),String.valueOf(seekBar3.getProgress()),String.valueOf(seekBar4.getProgress()),String.valueOf(seekBar5.getProgress()),String.valueOf(seekBar6.getProgress()),String.valueOf(seekBar7.getProgress()),String.valueOf(seekBar8.getProgress())};
@@ -208,7 +211,8 @@ public class MoodActivity extends AppCompatActivity {
                 }else{
                     Calendar calendar = Calendar.getInstance();
                     MoodDiary moodDiary = new MoodDiary();
-                    moodDiary.setDate(((int) calendar.getTimeInMillis()));
+                    Date currentDate = Calendar.getInstance().getTime();
+                    moodDiary.setDate(currentDate);
                     moodDiary.setInfo1(String.valueOf(moodFlag));
                     moodDiary.setArtID(1);
                     AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);

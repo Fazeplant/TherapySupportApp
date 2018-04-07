@@ -5,11 +5,19 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,26 +25,37 @@ import com.ncapdevi.fragnav.FragNavController;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
 import michaelbumes.therapysupportapp.adapter.DrugAdapter;
+import michaelbumes.therapysupportapp.adapter.MoodAdapter;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugEventDb;
+import michaelbumes.therapysupportapp.entity.MoodDiary;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TodayFragment extends BaseFragment {
-    TextView textViewDrugName, textViewDosage, textViewTime, textViewEmpty;
-    Drug drug;
-    DrugEventDb drugEventDb;
+    private TextView textViewDrugName, textViewDosage, textViewTime, textViewEmpty;
+    private Drug drug;
+    private DrugEventDb drugEventDb;
+    private Calendar calStartOfDay, calEndOfDay;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private List<MoodDiary> moodDiaries;
+
 
     public static TodayFragment newInstance(int instance) {
         Bundle args = new Bundle();
@@ -58,11 +77,35 @@ public class TodayFragment extends BaseFragment {
         textViewEmpty = view.findViewById(R.id.text_view_alarm_empty);
         RelativeLayout relativeLayout = view.findViewById(R.id.drug_event_alarm);
 
-        if (AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs() != 0){
+        calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
+        calStartOfDay.setTime(calStartOfDay.getTime()); // compute start of the day for the timestamp
+        calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
+        calStartOfDay.set(Calendar.MINUTE, 0);
+        calStartOfDay.set(Calendar.SECOND, 0);
+        calStartOfDay.set(Calendar.MILLISECOND, 0);
+
+        calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
+        calEndOfDay.setTime(calEndOfDay.getTime()); // compute start of the day for the timestamp
+        calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
+        calEndOfDay.set(Calendar.MINUTE, 59);
+        calEndOfDay.set(Calendar.SECOND, 59);
+        calEndOfDay.set(Calendar.MILLISECOND, 999);
+
+        moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
+
+
+        recyclerView = view.findViewById(R.id.mood_recyler_view);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new MoodAdapter(moodDiaries);
+        recyclerView.setAdapter(adapter);
+
+
+        if (AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs() != 0) {
             textViewEmpty.setVisibility(View.GONE);
             drugEventDb = getLatestDrugEventDb();
             String latestAlarmStringPlusId = getLatestAlarmString(drugEventDb);
-            String latestAlarmString = latestAlarmStringPlusId.substring(0,5);
+            String latestAlarmString = latestAlarmStringPlusId.substring(0, 5);
             int latestId = Integer.parseInt(latestAlarmStringPlusId.substring(5));
             String dosageString = drugEventDb.getDosage();
 
@@ -71,7 +114,7 @@ public class TodayFragment extends BaseFragment {
             String replaceDosage3 = replaceDosage2.replace(" ", "");
             List<String> arrayList = new ArrayList<String>(Arrays.asList(replaceDosage3.split(",")));
             List<Integer> dosage = new ArrayList<Integer>();
-            for(String i:arrayList){
+            for (String i : arrayList) {
                 dosage.add(Integer.parseInt(i.trim()));
             }
 
@@ -79,21 +122,41 @@ public class TodayFragment extends BaseFragment {
 
 
             textViewDrugName.setText(drug.getDrugName());
-            textViewDosage.setText( dosage.get(latestId)+" "+ AppDatabase.getAppDatabase(getContext()).dosageFormDao().findById(drug.getDosageFormId()).getDosageFormName());
+            textViewDosage.setText(dosage.get(latestId) + " " + AppDatabase.getAppDatabase(getContext()).dosageFormDao().findById(drug.getDosageFormId()).getDosageFormName());
             textViewTime.setText(latestAlarmString);
 
-        }else {
+        } else {
             relativeLayout.setVisibility(View.GONE);
             textViewEmpty.setVisibility(View.VISIBLE);
         }
+        if (AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getFromTable(calStartOfDay.getTime(), calEndOfDay.getTime()).size() != 0) {
+            List<MoodDiary> moodDiaryToday = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getFromTable(calStartOfDay.getTime(), calEndOfDay.getTime());
+            for (int i = 0; i < moodDiaryToday.size(); i++) {
+                if (moodDiaryToday.get(i).getArtID() == 1) {
 
 
+                }
+            }
 
+
+        }
 
 
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                try {
+                    List<MoodDiary> moodDiaryToday = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getFromTable(calStartOfDay.getTime(), calEndOfDay.getTime());
+                    List<MoodDiary> moodDiary2 = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
+
+                    Toast.makeText(getContext(), "dfr", Toast.LENGTH_SHORT).show();
+
+
+                } catch (Exception e) {
+
+                }
+
 
             }
         });
@@ -105,7 +168,7 @@ public class TodayFragment extends BaseFragment {
 
                 DrugEvent drugEvent = new DrugEvent();
 
-                drugEvent = DrugAdapter.convertDrugEventDbToDrugEvent(drugEvent, drugEventDb,drug);
+                drugEvent = DrugAdapter.convertDrugEventDbToDrugEvent(drugEvent, drugEventDb, drug);
 
                 EventBus.getDefault().removeAllStickyEvents();
                 EventBus.getDefault().postSticky(drugEvent);
@@ -113,8 +176,6 @@ public class TodayFragment extends BaseFragment {
 
             }
         });
-
-
 
 
     }
@@ -160,7 +221,7 @@ public class TodayFragment extends BaseFragment {
         }
         if (latestDrugEventDb == null) {
             return getFirstDrugEventDb();
-        }else {
+        } else {
             return latestDrugEventDb;
         }
 
@@ -178,10 +239,9 @@ public class TodayFragment extends BaseFragment {
         String mostRecentAlarmString = null;
 
 
-
         int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int minOfDay = Calendar.getInstance().get(Calendar.MINUTE);
-        int currentTimeInMinutes = hourOfDay*60 + minOfDay;
+        int currentTimeInMinutes = hourOfDay * 60 + minOfDay;
         int mostRecentAlarmInt = 99999999;
 
         for (int i = 0; i < alarmTime.size(); i++) {
@@ -190,8 +250,8 @@ public class TodayFragment extends BaseFragment {
 
             String hrString = String.valueOf(hr);
             String minString = String.valueOf(min);
-            int alarmTimeInMinutes = hr*60 + min;
-            if (currentTimeInMinutes < alarmTimeInMinutes){
+            int alarmTimeInMinutes = hr * 60 + min;
+            if (currentTimeInMinutes < alarmTimeInMinutes) {
                 if (alarmTimeInMinutes < mostRecentAlarmInt) {
                     mostRecentAlarmInt = alarmTimeInMinutes;
                     if (hr < 10) {
@@ -201,11 +261,11 @@ public class TodayFragment extends BaseFragment {
                     if (min < 10) {
                         minString = "0" + String.valueOf(min);
                     }
-                    mostRecentAlarmString = hrString + ":" + minString+ "" + String.valueOf(i);
+                    mostRecentAlarmString = hrString + ":" + minString + "" + String.valueOf(i);
                 }
             }
         }
-        if (mostRecentAlarmString == null){
+        if (mostRecentAlarmString == null) {
             return getFirstAlarmString(drugEventDb);
         }
         return mostRecentAlarmString;
@@ -287,6 +347,27 @@ public class TodayFragment extends BaseFragment {
             }
         }
         return mostRecentAlarmString;
+    }
+
+    public void justifyListViewHeightBasedOnChildren (ListView listView) {
+
+        ListAdapter adapter = listView.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+        ViewGroup vg = listView;
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, vg);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams par = listView.getLayoutParams();
+        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(par);
+        listView.requestLayout();
     }
 
 

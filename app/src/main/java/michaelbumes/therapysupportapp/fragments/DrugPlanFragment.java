@@ -26,7 +26,7 @@ import michaelbumes.therapysupportapp.entity.Drug;
  */
 public class DrugPlanFragment extends BaseFragment {
     FloatingActionButton fab;
-    RecyclerView recyclerView;
+   private RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     List<Drug> drugs;
 
@@ -43,14 +43,6 @@ public class DrugPlanFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.title_drug_plan);
-
-
-
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_drug_plan, container, false);
 
         recyclerView = view.findViewById(R.id.recyler_view);
 
@@ -74,6 +66,15 @@ public class DrugPlanFragment extends BaseFragment {
                 fragmentNavigation.pushFragment(AddMedicineFragment.newInstance(instanceInt+1));
             }
         });
+
+
+
+
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_drug_plan, container, false);
 
         return view;
     }

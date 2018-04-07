@@ -251,7 +251,8 @@ public class NoteActivity extends AppCompatActivity {
         }else {
             Calendar calendar =  Calendar.getInstance();
             MoodDiary moodDiary = new MoodDiary();
-            moodDiary.setDate(((int) calendar.getTimeInMillis()));
+            Date currentDate = Calendar.getInstance().getTime();
+            moodDiary.setDate(currentDate);
             moodDiary.setInfo1(noteText.toString());
             moodDiary.setArtID(3);
             switch (flag) {
