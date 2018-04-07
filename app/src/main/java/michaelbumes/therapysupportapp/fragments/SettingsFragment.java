@@ -43,6 +43,7 @@ public class SettingsFragment extends BaseFragment {
                 AppDatabase.getAppDatabase(getContext()).drugEventDbDao().nukeTable();
                 AppDatabase.getAppDatabase(getContext()).drugDao().nukeTable();
                 AppDatabase.getAppDatabase(getContext()).drugListDao().nukeTable();
+                AppDatabase.getAppDatabase(getContext()).moodDiaryDao().nukeTable();
                 AppDatabase.destroyInstance();
 
             }

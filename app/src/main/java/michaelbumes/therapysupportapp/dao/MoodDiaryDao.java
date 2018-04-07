@@ -5,6 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.Update;
 
 import java.util.Date;
 import java.util.List;
@@ -30,14 +31,18 @@ public interface MoodDiaryDao {
     @Query("SELECT COUNT(*) from moodDiary")
     int countMoodDiary();
 
-    @Query("DELETE FROM drug")
+    @Query("DELETE FROM moodDiary")
     public void nukeTable();
 
     @Query("SELECT * FROM moodDiary WHERE date BETWEEN :dayst AND :dayet")
     List<MoodDiary> getFromTable(Date dayst, Date dayet);
 
     @Insert
-    void insertAll(MoodDiary... moodDiaries);
+    long insert(MoodDiary moodDiary);
+
+    @Update
+    int update(MoodDiary moodDiary);
+
 
     @Delete
     void delete(MoodDiary moodDiary);

@@ -143,7 +143,7 @@ public class FoodActivity extends AppCompatActivity {
             if (photoTaken) {
                 moodDiary.setInfo2(mCurrentPhotoPath);
             }
-            AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);
+            AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
             Toast.makeText(this, "Mahlzeit hinzugefügt", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }

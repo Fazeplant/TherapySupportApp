@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +23,7 @@ import com.ncapdevi.fragnav.FragNavController;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -41,14 +45,14 @@ import michaelbumes.therapysupportapp.fragments.DrugFragment;
  * Created by Michi on 07.04.2018.
  */
 
-public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
-    List<MoodDiary> moodDiaries;
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
+    List<MoodDiary> notes;
     private Context context;
     int instanceInt = 0;
 
 
 
-    public MoodAdapter(List<MoodDiary> moodDiaries) {
+    public NoteAdapter(List<MoodDiary> notes) {
         Calendar calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
         calStartOfDay.setTime(calStartOfDay.getTime()); // compute start of the day for the timestamp
         calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
@@ -63,74 +67,57 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
         calEndOfDay.set(Calendar.SECOND, 59);
         calEndOfDay.set(Calendar.MILLISECOND, 999);
         List<MoodDiary> returnList = new ArrayList<>();
-        for (int i = 0; i < moodDiaries.size(); i++) {
-            if (moodDiaries.get(i).getArtID() == 1 && moodDiaries.get(i).getDate().getTime() > calStartOfDay.getTime().getTime() && moodDiaries.get(i).getDate().getTime() < calEndOfDay.getTime().getTime() ){
-                returnList.add(moodDiaries.get(i));
+        for (int i = 0; i < notes.size(); i++) {
+            if (notes.get(i).getArtID() == 3 && notes.get(i).getDate().getTime() > calStartOfDay.getTime().getTime() && notes.get(i).getDate().getTime() < calEndOfDay.getTime().getTime() ){
+                returnList.add(notes.get(i));
 
             }
         }
-        this.moodDiaries = returnList;
+        this.notes = returnList;
     }
 
+
     @Override
-    public MoodAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.today_cardview_mood, parent,false );
+    public NoteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.today_cardview_notes, parent,false );
         context = parent.getContext();
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MoodAdapter.ViewHolder holder, final int position) {
-        switch (Integer.valueOf(moodDiaries.get(position).getInfo1())){
-            case -3:
-                holder.moodButton0.setPaintFlags(holder.moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                break;
-            case -2:
-                holder.moodButton1.setPaintFlags(holder.moodButton1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                break;
-            case -1:
-                holder.moodButton2.setPaintFlags(holder.moodButton2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                break;
-            case 0:
-                holder.moodButtonNormal.setPaintFlags(holder.moodButtonNormal.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                break;
-            case 1:
-                holder.moodButton3.setPaintFlags(holder.moodButton3.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                break;
-            case 2:
-                holder.moodButton4.setPaintFlags(holder.moodButton4.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                break;
-            case 3:
-                holder.moodButton5.setPaintFlags(holder.moodButton5.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                break;
+    public void onBindViewHolder(NoteAdapter.ViewHolder holder, final int position) {
 
+        holder.textView.setText(notes.get(position).getInfo1());
+        if (notes.get(position).getInfo2() != null){
+            File imgFile = new  File(notes.get(position).getInfo2());
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                holder.imageView.setImageBitmap(myBitmap);
+
+            }
         }
-
-
-
-
     }
 
     @Override
     public int getItemCount() {
-        return moodDiaries.size();
+        return notes.size();
     }
 
     public void deleteItem(int adapterPosition) {
-        AppDatabase.getAppDatabase(context).moodDiaryDao().delete(moodDiaries.get(adapterPosition));
+        AppDatabase.getAppDatabase(context).moodDiaryDao().delete(notes.get(adapterPosition));
 
-        moodDiaries.remove(adapterPosition);
+        notes.remove(adapterPosition);
         notifyItemRemoved(adapterPosition);
-        notifyItemRangeChanged(adapterPosition,moodDiaries.size());
+        notifyItemRangeChanged(adapterPosition,notes.size());
         Toast.makeText(context, "Stimmungtagebuch Eintrag wurde gelöscht" , Toast.LENGTH_SHORT).show();
 
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public Button moodButton0, moodButton1, moodButton2, moodButton3, moodButtonNormal, moodButton4, moodButton5 ,addMoodButton, expandMoodButton;
-        public SeekBar seekBar1, seekBar2, seekBar3, seekBar4, seekBar5, seekBar6, seekBar7, seekBar8;
-        CardView cardViewMoodExpand,cardViewMood;
+        public TextView textView;
+        public ImageView imageView;
+
 
 
 
@@ -140,13 +127,10 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
             super(itemView);
             itemView.setOnClickListener(this);
 
-            moodButton0 = itemView.findViewById(R.id.today_mood_button_0);
-            moodButton1 = itemView.findViewById(R.id.today_mood_button_1);
-            moodButton2 = itemView.findViewById(R.id.today_mood_button_2);
-            moodButton3 = itemView.findViewById(R.id.today_mood_button_3);
-            moodButton4 = itemView.findViewById(R.id.today_mood_button_4);
-            moodButton5 = itemView.findViewById(R.id.today_mood_button_5);
-            moodButtonNormal = itemView.findViewById(R.id.today_mood_button_nomal);
+            textView = itemView.findViewById(R.id.text_view_food_today);
+            imageView = itemView.findViewById(R.id.image_view_food_today);
+
+
 
 
 
@@ -158,7 +142,7 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
             int position = getAdapterPosition();
 
             Intent myIntent = new Intent(context, michaelbumes.therapysupportapp.activities.MoodActivity.class);
-            myIntent.putExtra("moodId", moodDiaries.get(position).getId());
+            myIntent.putExtra("moodId", notes.get(position).getId());
             context.startActivity(myIntent);
 
 

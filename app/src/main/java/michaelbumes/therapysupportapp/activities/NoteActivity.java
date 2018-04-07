@@ -272,7 +272,7 @@ public class NoteActivity extends AppCompatActivity {
                     break;
 
             }
-            AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);
+            AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
             Toast.makeText(this, "Notiz hinzugefügt", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }

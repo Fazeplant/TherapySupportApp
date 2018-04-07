@@ -1,6 +1,8 @@
 package michaelbumes.therapysupportapp.activities;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -21,12 +23,18 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.ncapdevi.fragnav.FragNavController;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
+import michaelbumes.therapysupportapp.fragments.TodayFragment;
 
 
 public class MoodActivity extends AppCompatActivity {
@@ -41,6 +49,7 @@ public class MoodActivity extends AppCompatActivity {
     private final int MOOD_4 = 2;
     private final int MOOD_5 = 3;
     private final int MOOD_NORMAL = 0;
+    private MoodDiary moodDiaryToday;
 
 
     Button moodButton0, moodButton1, moodButton2, moodButton3, moodButtonNormal, moodButton4, moodButton5 ,addMoodButton, expandMoodButton;
@@ -54,6 +63,8 @@ public class MoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mood);
         this.setTitle(R.string.title_mood);
+
+
         addMoodButton = findViewById(R.id.add_mood_button);
         moodButton0 = findViewById(R.id.mood_button_0);
         moodButton1 = findViewById(R.id.mood_button_1);
@@ -82,6 +93,15 @@ public class MoodActivity extends AppCompatActivity {
         seekBar6.setMax(8);
         seekBar7.setMax(8);
         seekBar8.setMax(8);
+
+
+
+
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("moodId", -1);
+
+
+
 
 
 
@@ -190,12 +210,20 @@ public class MoodActivity extends AppCompatActivity {
                     Toast.makeText(MoodActivity.this, "Bitte wählen Sie eine Stimmung", Toast.LENGTH_SHORT).show();
                     return;
                 }else  if (isExpanded){
-                    Calendar calendar = Calendar.getInstance();
-                    MoodDiary moodDiary = new MoodDiary();
                     Date currentDate = Calendar.getInstance().getTime();
-                    moodDiary.setDate(currentDate);
+                    MoodDiary moodDiary;
+
+                    if (moodDiaryToday == null){
+                        moodDiary = new MoodDiary();
+                        moodDiary.setDate(currentDate);
+                        moodDiary.setArtID(1);
+
+
+
+                    }else {
+                        moodDiary = moodDiaryToday;
+                    }
                     moodDiary.setInfo1(String.valueOf(moodFlag));
-                    moodDiary.setArtID(1);
                     String arrayMood[] = {String.valueOf(seekBar1.getProgress()),String.valueOf(seekBar2.getProgress()),String.valueOf(seekBar3.getProgress()),String.valueOf(seekBar4.getProgress()),String.valueOf(seekBar5.getProgress()),String.valueOf(seekBar6.getProgress()),String.valueOf(seekBar7.getProgress()),String.valueOf(seekBar8.getProgress())};
 
                     StringBuilder buffer = new StringBuilder();
@@ -204,20 +232,39 @@ public class MoodActivity extends AppCompatActivity {
                     String joined = buffer.deleteCharAt(0).toString();
 
                     moodDiary.setInfo2(joined);
-                    AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);
+
+                    int result = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().update(moodDiary);
+                    if (result <= 0){
+                        AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
+                    }
+
                     Toast.makeText(getApplicationContext(), "Stimmung hinzugefügt", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+
+                    finish();
 
                 }else{
-                    Calendar calendar = Calendar.getInstance();
-                    MoodDiary moodDiary = new MoodDiary();
                     Date currentDate = Calendar.getInstance().getTime();
-                    moodDiary.setDate(currentDate);
+                    MoodDiary moodDiary;
+
+                    if (moodDiaryToday == null){
+                        moodDiary = new MoodDiary();
+                        moodDiary.setDate(currentDate);
+                        moodDiary.setArtID(1);
+
+
+
+                    }else {
+                        moodDiary = moodDiaryToday;
+                    }
                     moodDiary.setInfo1(String.valueOf(moodFlag));
                     moodDiary.setArtID(1);
-                    AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insertAll(moodDiary);
+                    int result = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().update(moodDiary);
+                    if (result <= 0){
+                        AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
+                    }
                     Toast.makeText(getApplicationContext(), "Stimmung hinzugefügt", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+
+                    finish();
                 }
             }
         });
@@ -239,6 +286,49 @@ public class MoodActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (id != -1){
+            moodDiaryToday = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().findById(id);
+            switch (Integer.valueOf(moodDiaryToday.getInfo1())){
+                case -3:
+                    moodButton0.performClick();
+                    break;
+                case -2:
+                    moodButton1.performClick();
+                    break;
+                case -1:
+                    moodButton2.performClick();
+                    break;
+                case 0:
+                    moodButtonNormal.performClick();
+                    break;
+                case 1:
+                    moodButton3.performClick();
+                    break;
+                case 2:
+                    moodButton4.performClick();
+                    break;
+                case 3:
+                    moodButton5.performClick();
+                    break;
+
+            }
+            if(moodDiaryToday.getInfo2()!= null){
+                List<String> seekBarList = new ArrayList<String>(Arrays.asList(moodDiaryToday.getInfo2().split(",")));
+                seekBar1.setProgress(Integer.valueOf(seekBarList.get(0)));
+                seekBar2.setProgress(Integer.valueOf(seekBarList.get(1)));
+                seekBar3.setProgress(Integer.valueOf(seekBarList.get(2)));
+                seekBar4.setProgress(Integer.valueOf(seekBarList.get(3)));
+                seekBar5.setProgress(Integer.valueOf(seekBarList.get(4)));
+                seekBar6.setProgress(Integer.valueOf(seekBarList.get(5)));
+                seekBar7.setProgress(Integer.valueOf(seekBarList.get(6)));
+                seekBar8.setProgress(Integer.valueOf(seekBarList.get(7)));
+
+
+
+            }
+
+        }
         
 
 
