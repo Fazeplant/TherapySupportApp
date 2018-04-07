@@ -97,7 +97,8 @@
             <TextView
                 android:id="@+id/text_view_alarm_empty"
                 android:layout_width="match_parent"
-                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_marginTop="46dp"
+                android:layout_marginBottom="46dp"
                 android:layout_height="wrap_content"
                 android:text="- Bitte fügen Sie zuerst ein Medikament hinzu -"
                 android:textAlignment="center"

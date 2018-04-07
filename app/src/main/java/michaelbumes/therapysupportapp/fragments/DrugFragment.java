@@ -197,15 +197,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
 
 
-        if (mDrugEvent.getTakingPattern() == 2){
-            cardViewDrugTime.setVisibility(View.GONE);
-            addTimeButton.setVisibility(View.GONE);
-        }else {
-            addTimeButton.setVisibility(View.VISIBLE);
-            cardViewDrugTime.setVisibility(View.VISIBLE);
-            }
-
-
 
 
         justifyListViewHeightBasedOnChildren(lst);
@@ -308,6 +299,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                         break;
                     case 1:
                         if (mDrugEvent.isRegularly()) {
+
                             kindOfTakingFlag = ONLY_WHEN_REQUIRED;
                             cardViewDrugTime.setVisibility(View.GONE);
                             addTimeButton.setVisibility(View.GONE);
@@ -328,14 +320,20 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
                             break;
                         } else {
-                            cardViewDrugTime.setVisibility(View.VISIBLE);
-                            addTimeButton.setVisibility(View.VISIBLE);
+                            if (mDrugEvent.getTakingPattern() == 2){
+                                cardViewDrugTime.setVisibility(View.GONE);
+                                addTimeButton.setVisibility(View.GONE);
+                            }else {
+                                cardViewDrugTime.setVisibility(View.VISIBLE);
+                                addTimeButton.setVisibility(View.VISIBLE);
+                                addTimeButton.performClick();
+                            }
+
                             kindOfTakingFlag = REGULARLY;
                             stringList2[1] = "Regelmäßig";
                             mDrugEvent.setRegularly(true);
                             cardView2.setVisibility(View.VISIBLE);
                             cardView3.setVisibility(View.VISIBLE);
-                            addTimeButton.performClick();
 
                         }
                 }
@@ -402,6 +400,16 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             customListView1.notifyDataSetChanged();
             customListView2.notifyDataSetChanged();
         }
+
+
+        if (mDrugEvent.getTakingPattern() == 2){
+            cardViewDrugTime.setVisibility(View.GONE);
+            addTimeButton.setVisibility(View.GONE);
+        }else {
+            addTimeButton.setVisibility(View.VISIBLE);
+            cardViewDrugTime.setVisibility(View.VISIBLE);
+        }
+
 
     }
 
