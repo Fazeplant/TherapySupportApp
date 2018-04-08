@@ -1,54 +1,58 @@
 package michaelbumes.therapysupportapp.activities;
 
 
-        import android.content.Intent;
-        import android.content.res.AssetFileDescriptor;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.graphics.Matrix;
-        import android.media.ExifInterface;
-        import android.net.Uri;
-        import android.os.Bundle;
-        import android.app.Fragment;
-        import android.os.Environment;
-        import android.provider.MediaStore;
-        import android.support.annotation.NonNull;
-        import android.support.annotation.Nullable;
-        import android.support.v4.content.FileProvider;
-        import android.support.v7.app.AppCompatActivity;
-        import android.text.TextUtils;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.view.Window;
-        import android.view.WindowManager;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.ImageButton;
-        import android.widget.ImageView;
-        import android.widget.MediaController;
-        import android.widget.RelativeLayout;
-        import android.widget.Toast;
-        import android.widget.VideoView;
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.Bundle;
+import android.app.Fragment;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 
-        import java.io.File;
-        import java.io.FileInputStream;
-        import java.io.FileNotFoundException;
-        import java.io.FileOutputStream;
-        import java.io.IOException;
-        import java.text.SimpleDateFormat;
-        import java.util.Calendar;
-        import java.util.Date;
-        import java.util.concurrent.ExecutionException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
-        import michaelbumes.therapysupportapp.R;
-        import michaelbumes.therapysupportapp.database.AppDatabase;
-        import michaelbumes.therapysupportapp.entity.MoodDiary;
+import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.adapter.NoteAdapter;
+import michaelbumes.therapysupportapp.database.AppDatabase;
+import michaelbumes.therapysupportapp.entity.MoodDiary;
+import michaelbumes.therapysupportapp.utils.MyVideoView;
 
-        import static android.app.Activity.RESULT_CANCELED;
-        import static android.app.Activity.RESULT_OK;
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static android.provider.MediaStore.Video.Thumbnails.MINI_KIND;
 
 
 public class NoteActivity extends AppCompatActivity {
@@ -67,11 +71,12 @@ public class NoteActivity extends AppCompatActivity {
     RelativeLayout relativeLayout;
     Button addButton;
     ImageView noteImage;
-    VideoView noteVideo;
+    MyVideoView noteVideo;
     String mCurrentPhotoPath;
     String mCurrentVideoPath;
     File image;
     File video;
+    private MoodDiary moodDiaryToday;
 
     ExifInterface exif;
 
@@ -80,14 +85,17 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
         this.setTitle(R.string.add_note);
-        noteEdit =  findViewById(R.id.note_text);
+        noteEdit = findViewById(R.id.note_text);
         photoButton = findViewById(R.id.photo_button);
         videoButton = findViewById(R.id.video_button);
         addButton = findViewById(R.id.ad_note);
         noteImage = findViewById(R.id.note_image);
         noteVideo = findViewById(R.id.note_video);
         relativeLayout = findViewById(R.id.relative_layout);
+        moodDiaryToday =null;
 
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("noteId", -1);
 
 
         photoButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +114,7 @@ public class NoteActivity extends AppCompatActivity {
                         image);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
-                startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
             }
         });
 
@@ -127,16 +135,63 @@ public class NoteActivity extends AppCompatActivity {
                 startActivityForResult(callVideoIntent, ACTIVITY_START_CAMERA_APP);
             }
         });
+        if (id != -1) {
+            moodDiaryToday = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().findById(id);
+            noteEdit.setText(moodDiaryToday.getInfo1());
+            if (moodDiaryToday.getInfo2() != null && NoteAdapter.isImageFile(moodDiaryToday.getInfo2())) {
+                mCurrentPhotoPath = moodDiaryToday.getInfo2();
+                File imgFile = new File(moodDiaryToday.getInfo2());
+                if (imgFile.exists()) {
+                    try {
+                        exif = new ExifInterface(moodDiaryToday.getInfo2());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    int rotationInDegrees = exifToDegrees(rotation);
+                    Matrix matrix = new Matrix();
+                    if (rotation != 0f) {
+                        matrix.preRotate(rotationInDegrees);
+                    }
+
+                    Bitmap myBitmap = BitmapFactory.decodeFile(moodDiaryToday.getInfo2());
+
+                    Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+                    noteImage.setImageBitmap(adjustedBitmap);
+                    relativeLayout.setVisibility(View.VISIBLE);
+                    photoButton.setVisibility(View.GONE);
+                    videoButton.setVisibility(View.GONE);
+                    flag = PHOTO_FLAG;
+
+                }
+
+            }else if (moodDiaryToday.getInfo2() != null && NoteAdapter.isVideoFile(moodDiaryToday.getInfo2())){
+                mCurrentVideoPath = moodDiaryToday.getInfo2();
+                MediaController mediaController = new MediaController(this);
+                mediaController.setAnchorView(noteVideo);
+                noteVideo.setMediaController(mediaController);
+
+                Uri videoUri = Uri.parse(moodDiaryToday.getInfo2());
+                relativeLayout.setVisibility(View.VISIBLE);
+                photoButton.setVisibility(View.GONE);
+                videoButton.setVisibility(View.GONE);
+                Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(moodDiaryToday.getInfo2(),MINI_KIND);
+                noteVideo.setVideoSize(thumbnail.getWidth() *4, thumbnail.getHeight()*4);
+                noteVideo.setVideoURI(videoUri);
+                noteVideo.seekTo(1);
+            }
+        }
+
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_CANCELED){
+        if (resultCode == RESULT_CANCELED) {
             try {
                 File deleteFile = new File(mCurrentPhotoPath);
                 boolean deleted = deleteFile.delete();
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Error " + e.getMessage());
             }
         }
@@ -150,7 +205,9 @@ public class NoteActivity extends AppCompatActivity {
             int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             int rotationInDegrees = exifToDegrees(rotation);
             Matrix matrix = new Matrix();
-            if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
+            if (rotation != 0f) {
+                matrix.preRotate(rotationInDegrees);
+            }
 
             Bitmap myBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
 
@@ -158,11 +215,10 @@ public class NoteActivity extends AppCompatActivity {
             noteImage.setImageBitmap(adjustedBitmap);
 
             relativeLayout.setVisibility(View.VISIBLE);
-            noteImage.setImageBitmap(myBitmap);
             photoButton.setVisibility(View.GONE);
             videoButton.setVisibility(View.GONE);
             flag = PHOTO_FLAG;
-        }else if(requestCode == ACTIVITY_START_CAMERA_APP && resultCode == RESULT_OK){
+        } else if (requestCode == ACTIVITY_START_CAMERA_APP && resultCode == RESULT_OK) {
             flag = VIDEO_FLAG;
             MediaController mediaController = new MediaController(this);
             mediaController.setAnchorView(noteVideo);
@@ -171,8 +227,7 @@ public class NoteActivity extends AppCompatActivity {
             relativeLayout.setVisibility(View.VISIBLE);
             photoButton.setVisibility(View.GONE);
             videoButton.setVisibility(View.GONE);
-            noteVideo.setVideoURI(videoUri);
-            noteVideo.seekTo(1);
+
 
             try {
                 String videoFileName = getVideoName();
@@ -180,11 +235,13 @@ public class NoteActivity extends AppCompatActivity {
                 AssetFileDescriptor videoAsset = getContentResolver().openAssetFileDescriptor(data.getData(), "r");
                 FileInputStream fis = videoAsset.createInputStream();
 
+
                 video = new File(storageDir, videoFileName);
                 mCurrentVideoPath = video.getAbsolutePath();
 
 
-                Log.d(TAG, "createt File:"+videoFileName+ " to:" + storageDir );
+
+                Log.d(TAG, "createt File:" + videoFileName + " to:" + storageDir);
 
                 FileOutputStream fos = new FileOutputStream(video);
                 byte[] buf = new byte[1024];
@@ -195,6 +252,10 @@ public class NoteActivity extends AppCompatActivity {
                 fis.close();
                 fos.close();
 
+                Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(mCurrentVideoPath,MINI_KIND);
+                noteVideo.setVideoSize(thumbnail.getWidth() *4, thumbnail.getHeight()*4);
+                noteVideo.setVideoURI(videoUri);
+                noteVideo.seekTo(1);
 
 
             } catch (FileNotFoundException e) {
@@ -228,7 +289,7 @@ public class NoteActivity extends AppCompatActivity {
         return "Note_Image_" + timestamp;
     }
 
-    private String getVideoName(){
+    private String getVideoName() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss");
         String timestamp = simpleDateFormat.format(new Date());
         return "Note_Video_" + timestamp + ".mp4";
@@ -245,16 +306,21 @@ public class NoteActivity extends AppCompatActivity {
 
     private void addNote() {
         noteText = noteEdit.getText().toString();
-        if(TextUtils.isEmpty(noteText)){
+        if (TextUtils.isEmpty(noteText)) {
             noteEdit.setError("Sie müssen eine Notiz hinzufügen");
             return;
-        }else {
-            Calendar calendar =  Calendar.getInstance();
+        } else {
             MoodDiary moodDiary = new MoodDiary();
-            Date currentDate = Calendar.getInstance().getTime();
-            moodDiary.setDate(currentDate);
+            if (moodDiaryToday == null){
+                Date currentDate = Calendar.getInstance().getTime();
+                moodDiary.setDate(currentDate);
+                moodDiary.setArtID(3);
+
+            }else {
+                moodDiary = moodDiaryToday;
+            }
+
             moodDiary.setInfo1(noteText.toString());
-            moodDiary.setArtID(3);
             switch (flag) {
                 case 1:
                     //ToDo: Notiz hinzufügen
@@ -272,7 +338,10 @@ public class NoteActivity extends AppCompatActivity {
                     break;
 
             }
-            AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
+            int result = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().update(moodDiary);
+            if (result <= 0){
+                AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
+            }
             Toast.makeText(this, "Notiz hinzugefügt", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
@@ -293,14 +362,18 @@ public class NoteActivity extends AppCompatActivity {
                 image);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
-        startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+        startActivityForResult(intent, REQUEST_TAKE_PHOTO);
 
     }
 
-    private static int exifToDegrees(int exifOrientation) {
-        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+    public static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
         return 0;
     }
 

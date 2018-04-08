@@ -4,6 +4,8 @@ package michaelbumes.therapysupportapp.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -28,12 +30,17 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
+
+import static michaelbumes.therapysupportapp.activities.NoteActivity.exifToDegrees;
 
 public class FoodActivity extends AppCompatActivity {
     EditText textEditFood;
@@ -41,9 +48,16 @@ public class FoodActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     ImageView imageViewFood;
     String mCurrentPhotoPath;
+    private RadioButton radioButtonBreakfast, radioButtonSnack1, radioButtonLunch, radioButtonSnack2, radioButtonDinner, radioButtonSnack3;
     File image;
     boolean photoTaken = false;
     private static final int REQUEST_TAKE_PHOTO = 0;
+    ExifInterface exif;
+    private int foodTypeId = -1;
+    private MoodDiary moodDiaryToday;
+
+
+
 
 
 
@@ -59,6 +73,16 @@ public class FoodActivity extends AppCompatActivity {
         radioGroup = findViewById(R.id.radio_group_food);
         imageViewFood = findViewById(R.id.image_view_food);
 
+        radioButtonBreakfast = findViewById(R.id.radio_button_food_breakfast);
+        radioButtonSnack1 = findViewById(R.id.radio_button_food_snack1);
+        radioButtonLunch = findViewById(R.id.radio_button_food_lunch);
+        radioButtonSnack2 = findViewById(R.id.radio_button_food_snack2);
+        radioButtonDinner = findViewById(R.id.radio_button_food_dinner);
+        radioButtonSnack3 = findViewById(R.id.radio_button_food_snack3);
+        moodDiaryToday = null;
+
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("foodId", -1);
 
 
         photoButtonFood.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +101,7 @@ public class FoodActivity extends AppCompatActivity {
                         image);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
-                startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
             }
         });
         adFood.setOnClickListener(new View.OnClickListener() {
@@ -86,8 +110,87 @@ public class FoodActivity extends AppCompatActivity {
                 addFood();
             }
         });
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i) {
+                    case R.id.radio_button_food_breakfast:
+                        foodTypeId = 1;
+                        break;
+                    case R.id.radio_button_food_snack1:
+                        foodTypeId = 2;
+                        break;
+                    case R.id.radio_button_food_lunch:
+                        foodTypeId = 3;
+                        break;
+                    case R.id.radio_button_food_snack2:
+                        foodTypeId = 4;
+                        break;
+                    case R.id.radio_button_food_dinner:
+                        foodTypeId = 5;
+                        break;
+                    case R.id.radio_button_food_snack3:
+                        foodTypeId = 6;
+                        break;
+                }
+            }
+        });
+
+        if (id != -1) {
+            moodDiaryToday = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().findById(id);
+            List<String> arrayList = new ArrayList<String>(Arrays.asList(moodDiaryToday.getInfo1().split(",")));
+            if (arrayList.size() > 1) {
+                textEditFood.setText(arrayList.get(0));
+                switch (Integer.valueOf(arrayList.get(1))) {
+                    case 1:
+                        radioGroup.check(R.id.radio_button_food_breakfast);
+                        break;
+                    case 2:
+                        radioGroup.check(R.id.radio_button_food_snack1);
+                        break;
+                    case 3:
+                        radioGroup.check(R.id.radio_button_food_lunch);
+                        break;
+                    case 4:
+                        radioGroup.check(R.id.radio_button_food_snack2);
+                        break;
+                    case 5:
+                        radioGroup.check(R.id.radio_button_food_dinner);
+                        break;
+                    case 6:
+                        radioGroup.check(R.id.radio_button_food_snack3);
+                        break;
+                }
+            } else {
+                textEditFood.setText(moodDiaryToday.getInfo1());
+            }
+            if (moodDiaryToday.getInfo2() != null) {
+                mCurrentPhotoPath = moodDiaryToday.getInfo2();
+                File imgFile = new File(moodDiaryToday.getInfo2());
+                if (imgFile.exists()) {
+                    try {
+                        exif = new ExifInterface(moodDiaryToday.getInfo2());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    int rotationInDegrees = exifToDegrees(rotation);
+                    Matrix matrix = new Matrix();
+                    if (rotation != 0f) {
+                        matrix.preRotate(rotationInDegrees);
+                    }
+
+                    Bitmap myBitmap = BitmapFactory.decodeFile(moodDiaryToday.getInfo2());
+
+                    Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+                    imageViewFood.setImageBitmap(adjustedBitmap);
+                }
 
 
+            }
+
+
+        }
     }
     private File createImageFile() throws IOException {
         String imageFileName = getImageName();
@@ -114,8 +217,24 @@ public class FoodActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             photoTaken = true;
+
+            try {
+                exif = new ExifInterface(mCurrentPhotoPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int rotationInDegrees = exifToDegrees(rotation);
+            Matrix matrix = new Matrix();
+            if (rotation != 0f) {
+                matrix.preRotate(rotationInDegrees);
+            }
+
             Bitmap myBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            imageViewFood.setImageBitmap(myBitmap);
+
+            Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+
+            imageViewFood.setImageBitmap(adjustedBitmap);
         }else {
             Toast.makeText(this, "Fehler", Toast.LENGTH_SHORT).show();
             return;
@@ -128,22 +247,28 @@ public class FoodActivity extends AppCompatActivity {
             textEditFood.setError("Sie müssen eine Mahlzeit hinzufügen");
             return;
         } else {
-            int radioId = radioGroup.getCheckedRadioButtonId();
-            RadioButton radioButton = findViewById(radioId);
-            Calendar calendar = Calendar.getInstance();
             MoodDiary moodDiary = new MoodDiary();
             Date currentDate = Calendar.getInstance().getTime();
-            moodDiary.setDate(currentDate);
-            moodDiary.setArtID(2);
-            if (radioId == -1){
+            if (moodDiaryToday == null){
+                moodDiary.setDate(currentDate);
+                moodDiary.setArtID(2);
+
+            }else {
+                moodDiary = moodDiaryToday;
+            }
+
+            if (foodTypeId == -1){
                 moodDiary.setInfo1(foodText);
             }else {
-                moodDiary.setInfo1(foodText + "," + radioButton.getText());
+                moodDiary.setInfo1(foodText + "," + String.valueOf(foodTypeId));
             }
             if (photoTaken) {
                 moodDiary.setInfo2(mCurrentPhotoPath);
             }
-            AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
+            int result = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().update(moodDiary);
+            if (result <= 0){
+                AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
+            }
             Toast.makeText(this, "Mahlzeit hinzugefügt", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }

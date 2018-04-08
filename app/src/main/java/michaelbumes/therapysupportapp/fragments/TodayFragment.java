@@ -30,6 +30,7 @@ import java.util.TimeZone;
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
 import michaelbumes.therapysupportapp.adapter.DrugAdapter;
+import michaelbumes.therapysupportapp.adapter.FoodAdapter;
 import michaelbumes.therapysupportapp.adapter.MoodAdapter;
 import michaelbumes.therapysupportapp.adapter.NoteAdapter;
 import michaelbumes.therapysupportapp.database.AppDatabase;
@@ -46,11 +47,12 @@ public class TodayFragment extends BaseFragment {
     private Drug drug;
     private DrugEventDb drugEventDb;
     private Calendar calStartOfDay, calEndOfDay;
-    private RecyclerView recyclerViewMood,recyclerViewNote;
-    private RecyclerView.Adapter adapterMood, adapterNote;
+    private RecyclerView recyclerViewMood, recyclerViewNote, recyclerViewFood;
+    private RecyclerView.Adapter adapterMood, adapterNote, adapterFood;
     private List<MoodDiary> moodDiaries;
     private View mView;
     private Bundle mBundle;
+    private TextView textViewMood, textViewNote, textViewFood;
 
 
     public static TodayFragment newInstance(int instance) {
@@ -69,10 +71,8 @@ public class TodayFragment extends BaseFragment {
         mView = view;
         mBundle = savedInstanceState;
 
-        LinearLayout rootLayout= view.findViewById(R.id.today_root_layout);
-        rootLayout.setNestedScrollingEnabled(false);
 
-        Button testButton = view.findViewById(R.id.today_test_button);
+
         textViewDrugName = view.findViewById(R.id.drug_name_alarm);
         textViewDosage = view.findViewById(R.id.drug_dosage_alarm);
         textViewTime = view.findViewById(R.id.alarm_time_alarm);
@@ -93,28 +93,10 @@ public class TodayFragment extends BaseFragment {
         calEndOfDay.set(Calendar.SECOND, 59);
         calEndOfDay.set(Calendar.MILLISECOND, 999);
 
-        moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
 
-
-        recyclerViewMood = view.findViewById(R.id.mood_recyler_view);
-
-        recyclerViewMood.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterMood = new MoodAdapter(moodDiaries);
-        recyclerViewMood.setAdapter(adapterMood);
-
-        ItemTouchHelper itemTouchHelperMood = new ItemTouchHelper(simpleItemTouchCallbackMood);
-        itemTouchHelperMood.attachToRecyclerView(recyclerViewMood);
-
-
-        recyclerViewNote = view.findViewById(R.id.note_recyler_view);
-
-        recyclerViewNote.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterNote = new NoteAdapter(moodDiaries);
-        recyclerViewNote.setAdapter(adapterNote);
-
-        ItemTouchHelper itemTouchHelperNote = new ItemTouchHelper(simpleItemTouchCallbackNote);
-        itemTouchHelperNote.attachToRecyclerView(recyclerViewNote);
-
+        textViewMood = view.findViewById(R.id.text_view_mood_today);
+        textViewNote = view.findViewById(R.id.text_view_note_today);
+        textViewFood = view.findViewById(R.id.text_view_food_today);
 
 
 
@@ -147,25 +129,6 @@ public class TodayFragment extends BaseFragment {
             textViewEmpty.setVisibility(View.VISIBLE);
         }
 
-
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                try {
-                    List<MoodDiary> moodDiaryToday = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getFromTable(calStartOfDay.getTime(), calEndOfDay.getTime());
-                    List<MoodDiary> moodDiary2 = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
-
-                    Toast.makeText(getContext(), "dfr", Toast.LENGTH_SHORT).show();
-
-
-                } catch (Exception e) {
-
-                }
-
-
-            }
-        });
 
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -359,14 +322,55 @@ public class TodayFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
 
+
+        moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
 
         recyclerViewMood = mView.findViewById(R.id.mood_recyler_view);
 
         recyclerViewMood.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterMood = new MoodAdapter(moodDiaries);
         recyclerViewMood.setAdapter(adapterMood);
+
+        recyclerViewNote = mView.findViewById(R.id.note_recyler_view);
+
+        recyclerViewNote.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterNote = new NoteAdapter(moodDiaries);
+        recyclerViewNote.setAdapter(adapterNote);
+
+        recyclerViewFood = mView.findViewById(R.id.food_recyler_view);
+
+        recyclerViewFood.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterFood = new FoodAdapter(moodDiaries);
+        recyclerViewFood.setAdapter(adapterFood);
+
+        if (adapterMood.getItemCount() != 0) {
+            textViewMood.setVisibility(View.VISIBLE);
+        } else {
+            textViewMood.setVisibility(View.GONE);
+
+        }
+        if (adapterFood.getItemCount() != 0) {
+            textViewFood.setVisibility(View.VISIBLE);
+        } else {
+            textViewFood.setVisibility(View.GONE);
+
+        }
+        if (adapterNote.getItemCount() != 0) {
+            textViewNote.setVisibility(View.VISIBLE);
+        } else {
+            textViewNote.setVisibility(View.GONE);
+
+        }
+
+        ItemTouchHelper itemTouchHelperMood = new ItemTouchHelper(simpleItemTouchCallbackMood);
+        itemTouchHelperMood.attachToRecyclerView(recyclerViewMood);
+
+        ItemTouchHelper itemTouchHelperNote = new ItemTouchHelper(simpleItemTouchCallbackNote);
+        itemTouchHelperNote.attachToRecyclerView(recyclerViewNote);
+
+        ItemTouchHelper itemTouchHelperNoteFood = new ItemTouchHelper(simpleItemTouchCallbackFood);
+        itemTouchHelperNoteFood.attachToRecyclerView(recyclerViewFood);
 
     }
 
@@ -395,6 +399,19 @@ public class TodayFragment extends BaseFragment {
             ((NoteAdapter) recyclerViewNote.getAdapter()).deleteItem(viewHolder.getAdapterPosition());
         }
     };
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallbackFood = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            ((FoodAdapter) recyclerViewFood.getAdapter()).deleteItem(viewHolder.getAdapterPosition());
+        }
+    };
+
 
 }
 

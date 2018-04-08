@@ -1,8 +1,8 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="michaelbumes.therapysupportapp.fragments.TodayFragment">
 
@@ -121,7 +121,10 @@
 
 
             <TextView
+                android:id="@+id/text_view_mood_today"
                 android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_marginBottom="6dp"
                 android:layout_height="wrap_content"
                 android:text="Stimmungstagebuch Einträge:"
                 android:layout_marginLeft="8dp"
@@ -133,14 +136,34 @@
 
 
         <include layout="@layout/mood_recycler_view" />
-        <include layout="@layout/note_recycler_view" />
+        <TextView
+            android:id="@+id/text_view_note_today"
+            android:layout_width="match_parent"
+            android:visibility="gone"
 
-
-        <Button
-            android:id="@+id/today_test_button"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Notizen:"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="6dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <include layout="@layout/note_recycler_view" />
+        <TextView
+            android:id="@+id/text_view_food_today"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="6dp"
+            android:text="Mahlzeiten:"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <include layout="@layout/food_recycler_view" />
+
 
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

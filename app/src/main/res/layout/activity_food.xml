@@ -49,31 +49,42 @@
                 android:orientation="vertical">
 
                 <RadioButton
+                    android:id="@+id/radio_button_food_breakfast"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/breakfast" />
 
                 <RadioButton
+                    android:id="@+id/radio_button_food_snack1"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/snack" />
 
                 <RadioButton
+                    android:id="@+id/radio_button_food_lunch"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lunch" />
 
                 <RadioButton
+                    android:id="@+id/radio_button_food_snack2"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/snack" />
 
                 <RadioButton
+                    android:id="@+id/radio_button_food_dinner"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dinner" />
 
                 <RadioButton
+                    android:id="@+id/radio_button_food_snack3"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/snack" />
