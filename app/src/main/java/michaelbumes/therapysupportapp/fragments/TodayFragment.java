@@ -79,19 +79,7 @@ public class TodayFragment extends BaseFragment {
         textViewEmpty = view.findViewById(R.id.text_view_alarm_empty);
         RelativeLayout relativeLayout = view.findViewById(R.id.drug_event_alarm);
 
-        calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calStartOfDay.setTime(calStartOfDay.getTime()); // compute start of the day for the timestamp
-        calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
-        calStartOfDay.set(Calendar.MINUTE, 0);
-        calStartOfDay.set(Calendar.SECOND, 0);
-        calStartOfDay.set(Calendar.MILLISECOND, 0);
 
-        calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calEndOfDay.setTime(calEndOfDay.getTime()); // compute start of the day for the timestamp
-        calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
-        calEndOfDay.set(Calendar.MINUTE, 59);
-        calEndOfDay.set(Calendar.SECOND, 59);
-        calEndOfDay.set(Calendar.MILLISECOND, 999);
 
 
         textViewMood = view.findViewById(R.id.text_view_mood_today);
@@ -323,25 +311,39 @@ public class TodayFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
+        calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
+        calStartOfDay.setTime(calStartOfDay.getTime()); // compute start of the day for the timestamp
+        calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
+        calStartOfDay.set(Calendar.MINUTE, 0);
+        calStartOfDay.set(Calendar.SECOND, 0);
+        calStartOfDay.set(Calendar.MILLISECOND, 0);
+
+        calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
+        calEndOfDay.setTime(calEndOfDay.getTime()); // compute start of the day for the timestamp
+        calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
+        calEndOfDay.set(Calendar.MINUTE, 59);
+        calEndOfDay.set(Calendar.SECOND, 59);
+        calEndOfDay.set(Calendar.MILLISECOND, 999);
+
 
         moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
 
         recyclerViewMood = mView.findViewById(R.id.mood_recyler_view);
 
         recyclerViewMood.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterMood = new MoodAdapter(moodDiaries);
+        adapterMood = new MoodAdapter(moodDiaries,calStartOfDay,calEndOfDay);
         recyclerViewMood.setAdapter(adapterMood);
 
         recyclerViewNote = mView.findViewById(R.id.note_recyler_view);
 
         recyclerViewNote.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterNote = new NoteAdapter(moodDiaries);
+        adapterNote = new NoteAdapter(moodDiaries,calStartOfDay,calEndOfDay);
         recyclerViewNote.setAdapter(adapterNote);
 
         recyclerViewFood = mView.findViewById(R.id.food_recyler_view);
 
         recyclerViewFood.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterFood = new FoodAdapter(moodDiaries);
+        adapterFood = new FoodAdapter(moodDiaries,calStartOfDay,calEndOfDay);
         recyclerViewFood.setAdapter(adapterFood);
 
         if (adapterMood.getItemCount() != 0) {

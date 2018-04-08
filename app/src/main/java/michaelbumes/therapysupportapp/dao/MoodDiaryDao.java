@@ -37,6 +37,9 @@ public interface MoodDiaryDao {
     @Query("SELECT * FROM moodDiary WHERE date BETWEEN :dayst AND :dayet")
     List<MoodDiary> getFromTable(Date dayst, Date dayet);
 
+    @Query("SELECT * FROM moodDiary WHERE artID=:artId")
+    List<MoodDiary> getAllByArtId(int artId);
+
     @Insert
     long insert(MoodDiary moodDiary);
 

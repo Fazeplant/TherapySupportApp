@@ -51,20 +51,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     int instanceInt = 0;
 
 
-    public NoteAdapter(List<MoodDiary> notes) {
-        Calendar calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calStartOfDay.setTime(calStartOfDay.getTime()); // compute start of the day for the timestamp
-        calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
-        calStartOfDay.set(Calendar.MINUTE, 0);
-        calStartOfDay.set(Calendar.SECOND, 0);
-        calStartOfDay.set(Calendar.MILLISECOND, 0);
-
-        Calendar calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calEndOfDay.setTime(calEndOfDay.getTime()); // compute start of the day for the timestamp
-        calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
-        calEndOfDay.set(Calendar.MINUTE, 59);
-        calEndOfDay.set(Calendar.SECOND, 59);
-        calEndOfDay.set(Calendar.MILLISECOND, 999);
+    public NoteAdapter(List<MoodDiary> notes, Calendar calStartOfDay, Calendar calEndOfDay ) {
         List<MoodDiary> returnList = new ArrayList<>();
         for (int i = 0; i < notes.size(); i++) {
             if (notes.get(i).getArtID() == 3 && notes.get(i).getDate().getTime() > calStartOfDay.getTime().getTime() && notes.get(i).getDate().getTime() < calEndOfDay.getTime().getTime()) {

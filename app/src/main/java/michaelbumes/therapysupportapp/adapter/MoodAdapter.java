@@ -48,20 +48,7 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
 
 
 
-    public MoodAdapter(List<MoodDiary> moodDiaries) {
-        Calendar calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calStartOfDay.setTime(calStartOfDay.getTime()); // compute start of the day for the timestamp
-        calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
-        calStartOfDay.set(Calendar.MINUTE, 0);
-        calStartOfDay.set(Calendar.SECOND, 0);
-        calStartOfDay.set(Calendar.MILLISECOND, 0);
-
-        Calendar calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calEndOfDay.setTime(calEndOfDay.getTime()); // compute start of the day for the timestamp
-        calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
-        calEndOfDay.set(Calendar.MINUTE, 59);
-        calEndOfDay.set(Calendar.SECOND, 59);
-        calEndOfDay.set(Calendar.MILLISECOND, 999);
+    public MoodAdapter(List<MoodDiary> moodDiaries, Calendar calStartOfDay, Calendar calEndOfDay) {
         List<MoodDiary> returnList = new ArrayList<>();
         for (int i = 0; i < moodDiaries.size(); i++) {
             if (moodDiaries.get(i).getArtID() == 1 && moodDiaries.get(i).getDate().getTime() > calStartOfDay.getTime().getTime() && moodDiaries.get(i).getDate().getTime() < calEndOfDay.getTime().getTime() ){
