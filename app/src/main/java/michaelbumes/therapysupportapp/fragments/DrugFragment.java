@@ -465,15 +465,18 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
 
                 long drugEventDbId = saveDrugEventDb();
-                bundle.putInt("id", (int) drugEventDbId);
 
                 drug.setDrugEventDbId(drugEventDbId);
 
 
                 int result = AppDatabase.getAppDatabase(getContext()).drugDao().update(drug);
                 if (result <= 0){
-                    AppDatabase.getAppDatabase(getContext()).drugDao().insert(drug);
+                    result = (int) AppDatabase.getAppDatabase(getContext()).drugDao().insert(drug);
+                }else {
+                    result = drug.getId();
                 }
+                bundle.putInt("id", result);
+
 
 
                 if (mDrugEvent.getAlarmType() != 3 && mDrugEvent.isRegularly()) {

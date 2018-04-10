@@ -40,7 +40,7 @@ public interface DrugEventDbDao {
     void delete(DrugEventDb drugEventDb);
 
     @Update
-    void update(DrugEventDb drugEventDb);
+    int update(DrugEventDb drugEventDb);
 
 
 

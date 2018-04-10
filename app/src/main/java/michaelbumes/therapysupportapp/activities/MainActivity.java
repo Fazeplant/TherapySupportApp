@@ -2,6 +2,7 @@ package michaelbumes.therapysupportapp.activities;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -33,10 +34,14 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.util.Calendar;
+
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.alarms.NotificationHelper;
 import michaelbumes.therapysupportapp.database.AppDatabase;
+import michaelbumes.therapysupportapp.entity.Drug;
+import michaelbumes.therapysupportapp.entity.TakenDrug;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
 import michaelbumes.therapysupportapp.fragments.DrugDetailFragment;
@@ -341,7 +346,13 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             switch (intent.getAction()) {
                 case OK_ACTION:
                     Toast.makeText(this, "Bestätigt", Toast.LENGTH_SHORT).show();
-                    NotificationManagerCompat.from(getApplicationContext()).cancel(intent.getBundleExtra("notiBundle").getInt("id"));
+                    int idGenerated = intent.getBundleExtra("notiBundle").getInt("id");
+                    int dosage = intent.getBundleExtra("notiBundle").getInt("dosage");
+                    int id = Integer.valueOf(String.valueOf(idGenerated).substring(0,1));
+                    Drug drug = AppDatabase.getAppDatabase(getApplicationContext()).drugDao().findById(id);
+                    TakenDrug takenDrug = drugToTakenDrug(getApplicationContext(), drug, dosage);
+                    AppDatabase.getAppDatabase(getApplicationContext()).takenDrugDao().insert(takenDrug);
+                    NotificationManagerCompat.from(getApplicationContext()).cancel(idGenerated);
                     try {
                         NotificationHelper.ringtone.stop();
                     }catch (Exception e){
@@ -366,6 +377,21 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     protected void onNewIntent(Intent intent) {
         processIntentAction(intent);
         super.onNewIntent(intent);
+    }
+
+    public static TakenDrug drugToTakenDrug(Context context, Drug drug , int dosage){
+        TakenDrug takenDrug = new TakenDrug();
+        takenDrug.setDosageForm(AppDatabase.getAppDatabase(context).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+        takenDrug.setDrugName(drug.getDrugName());
+        takenDrug.setManufacturer(drug.getManufacturer());
+        takenDrug.setSideEffects(drug.getSideEffects());
+        takenDrug.setTakingNote(drug.getTakingNote());
+        takenDrug.setPzn(drug.getPzn());
+
+        takenDrug.setDosage(dosage);
+        takenDrug.setDate(Calendar.getInstance().getTime());
+        return takenDrug;
+
     }
 
 

@@ -284,8 +284,8 @@ public class AlarmMain extends BroadcastReceiver {
         }
 
 
-
-        if (todayMillis2 > startDayDate.getTime() + hrLong +minLong) {
+        //600000 = 10 min Toleranz
+        if (todayMillis2 - 600000> startDayDate.getTime() + hrLong +minLong) {
             return;
         }
 
@@ -298,7 +298,7 @@ public class AlarmMain extends BroadcastReceiver {
                 e.printStackTrace();
             }
             if (todayMillis2 > endDayDate.getTime()) {
-                cancelAlarm(context, id);
+                cancelAlarm(context, mIdGenerated);
                 return;
             }
         }
@@ -400,7 +400,7 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         helper = new NotificationHelper(context);
-        builder = helper.getChannelNotification("Medizin einehmen! ", drugName + " "+ dosage +" " + dosageForm, alarmType, mIdGenerated,discreteTitle,discreteBody,discretePattern);
+        builder = helper.getChannelNotification("Medizin einehmen! ", drugName + " ", dosage ," " + dosageForm, alarmType, mIdGenerated,discreteTitle,discreteBody,discretePattern);
         helper.getManger().notify(mIdGenerated, builder.build());
     }
 

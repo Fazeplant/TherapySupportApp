@@ -342,7 +342,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                     R.id.video_view_note_today_expanded);
 
             Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFilePath, MINI_KIND);
-            expandedVideoView.setVideoSize(thumbnail.getWidth() * 4, thumbnail.getHeight() * 4);
+            expandedVideoView.setVideoSize(thumbnail.getWidth() * 10, thumbnail.getHeight() * 10);
             Uri videoUri = Uri.parse(videoFilePath);
             MediaController mediaController = new MediaController(context);
             mediaController.setAnchorView(expandedVideoView);

@@ -1,8 +1,11 @@
 package michaelbumes.therapysupportapp.activities;
 
 
+import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -223,7 +226,6 @@ public class NoteActivity extends AppCompatActivity {
             MediaController mediaController = new MediaController(this);
             mediaController.setAnchorView(noteVideo);
             noteVideo.setMediaController(mediaController);
-            Uri videoUri = data.getData();
             relativeLayout.setVisibility(View.VISIBLE);
             photoButton.setVisibility(View.GONE);
             videoButton.setVisibility(View.GONE);
@@ -254,8 +256,14 @@ public class NoteActivity extends AppCompatActivity {
 
                 Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(mCurrentVideoPath,MINI_KIND);
                 noteVideo.setVideoSize(thumbnail.getWidth() *4, thumbnail.getHeight()*4);
-                noteVideo.setVideoURI(videoUri);
+                noteVideo.setVideoURI(Uri.parse(video.getAbsolutePath()));
                 noteVideo.seekTo(1);
+                File tempVideo = new File(getRealPathFromURI(data.getData()));
+                if (tempVideo.exists()){
+                    tempVideo.delete();
+                    Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    scanIntent.setData(Uri.fromFile(tempVideo));
+                    sendBroadcast(scanIntent);                }
 
 
             } catch (FileNotFoundException e) {
@@ -375,6 +383,16 @@ public class NoteActivity extends AppCompatActivity {
             return 270;
         }
         return 0;
+    }
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
     }
 
 }

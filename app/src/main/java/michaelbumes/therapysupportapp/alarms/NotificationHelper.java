@@ -109,9 +109,11 @@ public class NotificationHelper extends ContextWrapper {
     //notiUri zeigt auf die Standart Notifikation
     //notiUri wird auf null gesetzt um die Nachricht ohne Ton abzuspielen
 
-    public NotificationCompat.Builder getChannelNotification(String title, String body, int alarmtype, int id, String discreteTitle, String discreteBody, boolean[] discretePattern){
+    public NotificationCompat.Builder getChannelNotification(String title,String body1, int dosage, String body2, int alarmtype, int id, String discreteTitle, String discreteBody, boolean[] discretePattern){
         Intent okIntent = getNotificationIntent();
         Bundle bundle = new Bundle();
+        String body = body1 + String.valueOf(dosage) + body2;
+        bundle.putInt("dosage", dosage);
         bundle.putInt("id", id);
         okIntent.putExtra("notiBundle",bundle);
         int resId = getResources().getIdentifier("ic_medical_pills_couple", "drawable", getPackageName());

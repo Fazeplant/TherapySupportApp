@@ -26,8 +26,10 @@ import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.FoodAdapter;
 import michaelbumes.therapysupportapp.adapter.MoodAdapter;
 import michaelbumes.therapysupportapp.adapter.NoteAdapter;
+import michaelbumes.therapysupportapp.adapter.TakenDrugAdapter;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
+import michaelbumes.therapysupportapp.entity.TakenDrug;
 
 
 /**
@@ -37,13 +39,14 @@ public class CalendarFragment extends BaseFragment {
     CalendarView cv;
 
     private Calendar calStartOfDay, calEndOfDay;
-    private RecyclerView recyclerViewMood, recyclerViewNote, recyclerViewFood;
-    private RecyclerView.Adapter adapterMood, adapterNote, adapterFood;
+    private RecyclerView recyclerViewMood, recyclerViewNote, recyclerViewFood , recyclerViewTakenDrug;
+    private RecyclerView.Adapter adapterMood, adapterNote, adapterFood, adapterTakenDrug;
     private List<MoodDiary> moodDiaries;
+    private List<TakenDrug> takenDrugs;
     private View mView;
     private Bundle mBundle;
     private SimpleDateFormat sdf;
-    private TextView textViewMood, textViewNote, textViewFood;
+    private TextView textViewMood, textViewNote, textViewFood, textViewTakenDrug;
     private Long selectedDateLong;
 
 
@@ -112,6 +115,7 @@ public class CalendarFragment extends BaseFragment {
         textViewMood = view.findViewById(R.id.text_view_mood_calendar);
         textViewNote = view.findViewById(R.id.text_view_note_calendar);
         textViewFood = view.findViewById(R.id.text_view_food_calendar);
+        textViewTakenDrug = view.findViewById(R.id.text_view_taken_drug_calendar);
 
         updateRecyclerViews();
 
@@ -126,6 +130,7 @@ public class CalendarFragment extends BaseFragment {
     private void updateRecyclerViews() {
 
         moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
+        takenDrugs = AppDatabase.getAppDatabase(getContext()).takenDrugDao().getAll();
 
         recyclerViewMood = mView.findViewById(R.id.mood_recyler_view);
 
@@ -145,6 +150,12 @@ public class CalendarFragment extends BaseFragment {
         adapterFood = new FoodAdapter(moodDiaries, calStartOfDay, calEndOfDay);
         recyclerViewFood.setAdapter(adapterFood);
 
+        recyclerViewTakenDrug = mView.findViewById(R.id.taken_drug_recyler_view);
+
+        recyclerViewTakenDrug.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterTakenDrug = new TakenDrugAdapter(takenDrugs, calStartOfDay, calEndOfDay);
+        recyclerViewTakenDrug.setAdapter(adapterTakenDrug);
+
         if (adapterMood.getItemCount() != 0) {
             textViewMood.setVisibility(View.VISIBLE);
         } else {
@@ -162,6 +173,11 @@ public class CalendarFragment extends BaseFragment {
         } else {
             textViewNote.setVisibility(View.GONE);
 
+        }
+        if (adapterTakenDrug.getItemCount() != 0){
+            textViewTakenDrug.setVisibility(View.VISIBLE);
+        }else {
+            textViewTakenDrug.setVisibility(View.GONE);
         }
 
         ItemTouchHelper itemTouchHelperMood = new ItemTouchHelper(simpleItemTouchCallbackMood);

@@ -53,6 +53,22 @@
 
         </android.support.v7.widget.CardView>
 
+        <TextView
+            android:id="@+id/text_view_taken_drug_calendar"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_marginBottom="6dp"
+            android:layout_height="wrap_content"
+            android:text="Eingenommene Medikamente:"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <include layout="@layout/taken_drug_recycler_view" />
+
+
 
         <TextView
             android:id="@+id/text_view_mood_calendar"
