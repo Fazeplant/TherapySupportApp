@@ -42,7 +42,7 @@ public class BootReceiver extends BroadcastReceiver {
                 bundle.putString("discreteTitle", drugEvent.getDiscreteTitle());
                 bundle.putString("discreteBody", drugEvent.getDiscreteBody());
                 bundle.putBooleanArray("discretePattern", drugEvent.getAlarmDiscretePatternWeekdays());
-                bundle.putInt("id", drugEventDb.getId());
+                bundle.putInt("id", drug.getId());
 
                 if (drugEvent.getAlarmType() != 3 && drugEvent.isRegularly()) {
                     AlarmMain alarm = new AlarmMain(context, bundle, drugEvent);
