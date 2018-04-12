@@ -1,29 +1,22 @@
 package michaelbumes.therapysupportapp.activities;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.AlarmManagerCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ncapdevi.fragnav.FragNavController;
@@ -37,14 +30,13 @@ import com.roughike.bottombar.OnTabSelectListener;
 import java.util.Calendar;
 
 import michaelbumes.therapysupportapp.R;
-import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.alarms.NotificationHelper;
 import michaelbumes.therapysupportapp.database.AppDatabase;
+import michaelbumes.therapysupportapp.database.DatabaseDrugList;
 import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.TakenDrug;
 import michaelbumes.therapysupportapp.fragments.BaseFragment;
 import michaelbumes.therapysupportapp.fragments.CalendarFragment;
-import michaelbumes.therapysupportapp.fragments.DrugDetailFragment;
 import michaelbumes.therapysupportapp.fragments.DrugPlanFragment;
 import michaelbumes.therapysupportapp.fragments.SettingsFragment;
 import michaelbumes.therapysupportapp.fragments.TodayFragment;
@@ -56,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     private final int INDEX_BLANK = FragNavController.TAB3;
     private final int INDEX_CALENDAR = FragNavController.TAB4;
     private final int INDEX_SETTINGS = FragNavController.TAB5;
+    public static DatabaseDrugList databaseDrugList;
+
 
     private static final String OK_ACTION ="michaelbumes.therapysupportapp.OK_ACTION" ;
     private static final String CANCLE_ACTION ="michaelbumes.therapysupportapp.CANCLE_ACTION" ;
@@ -86,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
 
         verifyPermissions();
+
+        databaseDrugList = DatabaseDrugList.getAppDatabase(getApplicationContext());
 
 
         dim_layout  =findViewById(R.id.dim_layout);
@@ -381,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
     public static TakenDrug drugToTakenDrug(Context context, Drug drug , int dosage){
         TakenDrug takenDrug = new TakenDrug();
-        takenDrug.setDosageForm(AppDatabase.getAppDatabase(context).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+        takenDrug.setDosageForm(databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
         takenDrug.setDrugName(drug.getDrugName());
         takenDrug.setManufacturer(drug.getManufacturer());
         takenDrug.setSideEffects(drug.getSideEffects());

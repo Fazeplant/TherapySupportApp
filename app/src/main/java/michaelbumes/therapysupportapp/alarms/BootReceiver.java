@@ -14,6 +14,9 @@ import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugEventDb;
 import michaelbumes.therapysupportapp.fragments.DrugEvent;
 
+import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
+
+
 /**
  * Created by Michi on 06.04.2018.
  */
@@ -36,7 +39,7 @@ public class BootReceiver extends BroadcastReceiver {
                 bundle.putString("drugName", drug.getDrugName());
                 bundle.putInt("alarmType", drugEvent.getAlarmType());
                 bundle.putInt("takingPattern", drugEvent.getTakingPattern());
-                bundle.putString("dosageForm", AppDatabase.getAppDatabase(context).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+                bundle.putString("dosageForm", databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
                 bundle.putString("endDay", drugEvent.getEndDate());
                 bundle.putString("startDay", drugEvent.getStartingDate());
                 bundle.putString("discreteTitle", drugEvent.getDiscreteTitle());

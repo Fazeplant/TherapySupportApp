@@ -6,39 +6,40 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
+import com.huma.room_for_asset.RoomAsset;
+
+import michaelbumes.therapysupportapp.TimestampConverter;
 import michaelbumes.therapysupportapp.dao.DosageFormDao;
+import michaelbumes.therapysupportapp.dao.DrugDao;
 import michaelbumes.therapysupportapp.dao.DrugEventDbDao;
 import michaelbumes.therapysupportapp.dao.DrugListDao;
 import michaelbumes.therapysupportapp.dao.MoodDiaryDao;
 import michaelbumes.therapysupportapp.dao.TakenDrugDao;
 import michaelbumes.therapysupportapp.entity.DosageForm;
 import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.dao.DrugDao;
 import michaelbumes.therapysupportapp.entity.DrugEventDb;
 import michaelbumes.therapysupportapp.entity.DrugList;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
-import michaelbumes.therapysupportapp.TimestampConverter;
 import michaelbumes.therapysupportapp.entity.TakenDrug;
 
 /**
- * Created by Michi on 16.01.2018.
+ * Created by Michi on 11.04.2018.
  */
-@Database(entities = {Drug.class, MoodDiary.class, DrugEventDb.class, TakenDrug.class}, version = 1)
+@Database(entities = {DrugList.class, DosageForm.class}, version = 2)
 @TypeConverters(TimestampConverter.class)
-public abstract class AppDatabase extends RoomDatabase{
+public abstract class DatabaseDrugList extends RoomDatabase {
 
-    private static AppDatabase INSTANCE;
+    private static DatabaseDrugList INSTANCE;
 
-    public abstract DrugDao drugDao();
-    public abstract MoodDiaryDao moodDiaryDao();
-    public abstract DrugEventDbDao drugEventDbDao();
-    public abstract TakenDrugDao takenDrugDao();
+    public abstract DrugListDao drugListDao();
+    public abstract DosageFormDao dosageFormDao();
 
 
-    public static AppDatabase getAppDatabase(Context context) {
+    public static DatabaseDrugList getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "database")
+                    RoomAsset
+                            .databaseBuilder(context.getApplicationContext(), DatabaseDrugList.class, "drug_list.db")
                             .allowMainThreadQueries()
                             .build();
         }
@@ -48,6 +49,8 @@ public abstract class AppDatabase extends RoomDatabase{
     public static void destroyInstance() {
         INSTANCE = null;
     }
+
+
 
 
 }

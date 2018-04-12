@@ -29,8 +29,10 @@ import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.CustomListView;
-import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
+
+import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
+
 
 /**
  * Created by Michi on 06.03.2018.
@@ -159,9 +161,9 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
         }
         stringListHour1 = new String[]{"Intervall", "Start", "Anzahl Intervalle", "Dosierung"};
         if (mDrugEvent.getTakingPatternHourNumber() == -1){
-            stringListHour2 = new String[]{"4 Stunden", "08:00", "2",  "1 " + AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId())};
+            stringListHour2 = new String[]{"4 Stunden", "08:00", "2",  "1 " + databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId())};
         }else {
-            stringListHour2 = new String[]{mDrugEvent.getTakingPatternHourInterval() + " Stunden", mDrugEvent.getTakingPatternHourStart(), String.valueOf(mDrugEvent.getTakingPatternHourNumber()),  "1 " + AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId())};
+            stringListHour2 = new String[]{mDrugEvent.getTakingPatternHourInterval() + " Stunden", mDrugEvent.getTakingPatternHourStart(), String.valueOf(mDrugEvent.getTakingPatternHourNumber()),  "1 " + databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId())};
 
         }
 
@@ -598,7 +600,7 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     List<Integer> mDosage = new ArrayList<>();
                     mDosage.add(numberPicker.getValue());
                     mDrugEvent.setDosage(mDosage);
-                    stringListHour2[3] = String.valueOf(numberPicker.getValue()) + " " + AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId());
+                    stringListHour2[3] = String.valueOf(numberPicker.getValue()) + " " + databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId());
                 }else if(mode == INTERVAL) {
                     mDrugEvent.setTakingPatternHourInterval(numberPicker.getValue());
                     stringListHour2[0] = String.valueOf(numberPicker.getValue()) + " Stunden";

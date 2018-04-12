@@ -38,6 +38,8 @@ import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugEventDb;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
 
+import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -109,7 +111,7 @@ public class TodayFragment extends BaseFragment {
 
 
             textViewDrugName.setText(drug.getDrugName());
-            textViewDosage.setText(dosage.get(latestId) + " " + AppDatabase.getAppDatabase(getContext()).dosageFormDao().findById(drug.getDosageFormId()).getDosageFormName());
+            textViewDosage.setText(dosage.get(latestId) + " " + databaseDrugList.dosageFormDao().findById(drug.getDosageFormId()).getDosageFormName());
             textViewTime.setText(latestAlarmString);
 
         } else {

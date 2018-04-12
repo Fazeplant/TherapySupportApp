@@ -19,7 +19,9 @@ import java.util.List;
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.DrugAdapter;
 import michaelbumes.therapysupportapp.database.AppDatabase;
+import michaelbumes.therapysupportapp.database.DatabaseDrugList;
 import michaelbumes.therapysupportapp.entity.Drug;
+import michaelbumes.therapysupportapp.entity.DrugList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +45,7 @@ public class DrugPlanFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.title_drug_plan);
+
 
         recyclerView = view.findViewById(R.id.recyler_view);
 

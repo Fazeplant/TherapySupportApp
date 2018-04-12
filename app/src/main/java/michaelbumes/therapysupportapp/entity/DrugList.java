@@ -25,6 +25,28 @@ public class DrugList {
     @ColumnInfo(name = "pzn")
     private String pzn;
 
+    @ColumnInfo(name = "dope")
+    private String dope;
+
+    public String getDope() {
+        return dope;
+    }
+
+    public void setDope(String dope) {
+        this.dope = dope;
+    }
+
+    public String getPackageSize() {
+        return packageSize;
+    }
+
+    public void setPackageSize(String packageSize) {
+        this.packageSize = packageSize;
+    }
+
+    @ColumnInfo(name = "package_size")
+    private String packageSize;
+
     @ColumnInfo(name = "dosage_form_id")
     private int dosageFormId;
 

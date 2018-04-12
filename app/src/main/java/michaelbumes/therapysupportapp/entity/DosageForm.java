@@ -16,9 +16,6 @@ public class DosageForm {
         this.id = id;
     }
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
     public String getDosageFormName() {
         return dosageFormName;
     }
@@ -26,6 +23,10 @@ public class DosageForm {
     public void setDosageFormName(String dosageFormName) {
         this.dosageFormName = dosageFormName;
     }
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
 
     @ColumnInfo(name = "dosage_form_name")
     private String dosageFormName;

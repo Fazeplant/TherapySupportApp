@@ -29,6 +29,7 @@ import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugList;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +61,7 @@ public class AddMedicineFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.add_medicine);
         nameEdit = view.findViewById(R.id.edit_drug_name);
-        drugListNames = AppDatabase.getAppDatabase(getContext()).drugListDao().getAllNames();
+        drugListNames = databaseDrugList.drugListDao().getAllNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,drugListNames);
         nameEdit.setAdapter(adapter);
         storeButton = view.findViewById(R.id.store_button);
@@ -103,7 +104,7 @@ public class AddMedicineFragment extends BaseFragment {
                     nameEdit.setError("Geben Sie einen Namen ein");
                     return;
                 }else if(isQR ==false) {
-                    drugList = AppDatabase.getAppDatabase(getContext()).drugListDao().findByName(drugName);
+                    drugList = databaseDrugList.drugListDao().findByName(drugName);
                     if (drugList == null){
                         Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
                         return;
@@ -162,7 +163,7 @@ public class AddMedicineFragment extends BaseFragment {
                     Toast.makeText(getContext(), "Barcode nicht unterstützt", Toast.LENGTH_SHORT).show();
                 }
                 try {
-                    drugList = AppDatabase.getAppDatabase(getContext()).drugListDao().findByPzn(pzn);
+                    drugList = databaseDrugList.drugListDao().findByPzn(pzn);
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "PZN nicht in Datenbank gefunden", Toast.LENGTH_SHORT).show();
                     return;

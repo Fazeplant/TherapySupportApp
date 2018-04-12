@@ -9,18 +9,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.DosageForm;
 import michaelbumes.therapysupportapp.entity.DrugList;
 
+import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends BaseFragment {
     Button nukeButton;
-    Button createButton;
+    Button createButton , testButton;
 
     public static SettingsFragment  newInstance(int instance) {
         Bundle args = new Bundle();
@@ -37,17 +42,27 @@ public class SettingsFragment extends BaseFragment {
         getActivity().setTitle(R.string.title_settings);
         nukeButton = view.findViewById(R.id.nuke_button);
         createButton=view.findViewById(R.id.create_drug_list);
+        testButton = view.findViewById(R.id.test_button_settings);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrugList drugList = databaseDrugList.drugListDao().findByPzn("03393767");
+                List<DosageForm> dosageForm = databaseDrugList.dosageFormDao().getAll();
+                Toast.makeText(getContext(), drugList.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
         nukeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AppDatabase.getAppDatabase(getContext()).drugEventDbDao().nukeTable();
                 AppDatabase.getAppDatabase(getContext()).drugDao().nukeTable();
-                AppDatabase.getAppDatabase(getContext()).drugListDao().nukeTable();
+                databaseDrugList.drugListDao().nukeTable();
                 AppDatabase.getAppDatabase(getContext()).moodDiaryDao().nukeTable();
                 AppDatabase.destroyInstance();
 
             }
         });
+/*
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,6 +95,7 @@ public class SettingsFragment extends BaseFragment {
                 dosageForm12.setDosageFormName("Tropfen");
                 dosageForm13.setDosageFormName("Zäpfchen");
 
+*/
 /*                dosageForm1.setDosageFormName("Tablette(n)");
                 dosageForm2.setDosageFormName("Kapsel(n)");
                 dosageForm3.setDosageFormName("Stück");
@@ -95,7 +111,8 @@ public class SettingsFragment extends BaseFragment {
                 dosageForm11.setDosageFormName("Hub/Hübe");
 
                 dosageForm12.setDosageFormName("Anwendung(en)");
-                dosageForm13.setDosageFormName("Einheit(en)");*/
+                dosageForm13.setDosageFormName("Einheit(en)");*//*
+
 
 
                 DrugList drug1 = new DrugList();
@@ -132,10 +149,11 @@ public class SettingsFragment extends BaseFragment {
                 drug4.setTakingNote("Täglich über drei Tage");
 
 
-                AppDatabase.getAppDatabase(getContext()).drugListDao().insertAll(drug1,drug2,drug3,drug4);
-                AppDatabase.getAppDatabase(getContext()).dosageFormDao().insertAll(dosageForm1,dosageForm2, dosageForm3, dosageForm4, dosageForm5, dosageForm6, dosageForm7, dosageForm8, dosageForm9, dosageForm10, dosageForm11, dosageForm12, dosageForm13);
+                databaseDrugList.drugListDao().insertAll(drug1,drug2,drug3,drug4);
+                databaseDrugList.dosageFormDao().insertAll(dosageForm1,dosageForm2, dosageForm3, dosageForm4, dosageForm5, dosageForm6, dosageForm7, dosageForm8, dosageForm9, dosageForm10, dosageForm11, dosageForm12, dosageForm13);
             }
         });
+*/
 
 
     }
@@ -144,4 +162,6 @@ public class SettingsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
+
+
 }

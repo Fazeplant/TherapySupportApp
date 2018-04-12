@@ -44,6 +44,8 @@ import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugEventDb;
 
+import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
+
 
 public class DrugFragment extends BaseFragment implements NumberPicker.OnValueChangeListener {
     private static final String TAG = DrugFragment.class.getName();
@@ -231,7 +233,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
 
                     stringDosage.add("1");
-                    stringDosageForm.add(AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+                    stringDosageForm.add(databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
                     justifyListViewHeightBasedOnChildren(lstDrugTime);
                     customListViewDrugTime.notifyDataSetChanged();
                 }
@@ -456,7 +458,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 bundle.putString("drugName", drug.getDrugName());
                 bundle.putInt("alarmType", mDrugEvent.getAlarmType());
                 bundle.putInt("takingPattern", mDrugEvent.getTakingPattern());
-                bundle.putString("dosageForm", AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+                bundle.putString("dosageForm", databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
                 bundle.putString("endDay", mDrugEvent.getEndDate());
                 bundle.putString("startDay", mDrugEvent.getStartingDate());
                 bundle.putString("discreteTitle", mDrugEvent.getDiscreteTitle());
@@ -664,7 +666,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             stringTime = new ArrayList<String>((ArrayList<String>) mTimeList);
             stringDosage = new ArrayList<String>((ArrayList<String>) mDosageList);
             for (int i = 0; i <  mTimeList.size(); i++) {
-                stringDosageForm.add(AppDatabase.getAppDatabase(getContext()).dosageFormDao().getNamebyId(drug.getDosageFormId()));
+                stringDosageForm.add(databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
             }
 
 

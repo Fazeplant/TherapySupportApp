@@ -12,15 +12,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.CustomListView;
-import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
+
+import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
+
 
 /**
  * Created by Michi on 08.03.2018.
@@ -67,7 +68,8 @@ public class DrugDetailFragment extends BaseFragment {
 
         lst1 = view.findViewById(R.id.list_view_drug_detail);
 
-        dosageFormList = AppDatabase.getAppDatabase(getContext()).dosageFormDao().getAllNames();
+
+        dosageFormList = databaseDrugList.dosageFormDao().getAllNames();
 
         name = drug.getDrugName();
         manufacturer = drug.getManufacturer();
