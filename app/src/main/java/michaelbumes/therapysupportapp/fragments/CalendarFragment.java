@@ -1,21 +1,25 @@
 package michaelbumes.therapysupportapp.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.text.ParseException;
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,6 +40,7 @@ import michaelbumes.therapysupportapp.entity.TakenDrug;
  * A simple {@link Fragment} subclass.
  */
 public class CalendarFragment extends BaseFragment {
+    private static final String TAG = "Peter";
     CalendarView cv;
 
     private Calendar calStartOfDay, calEndOfDay;
@@ -46,6 +51,7 @@ public class CalendarFragment extends BaseFragment {
     private View mView;
     private Bundle mBundle;
     private SimpleDateFormat sdf;
+    private CompactCalendarView compactCalendarView;
     private TextView textViewMood, textViewNote, textViewFood, textViewTakenDrug;
     private Long selectedDateLong;
 
@@ -67,7 +73,69 @@ public class CalendarFragment extends BaseFragment {
         mBundle = savedInstanceState;
         sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        cv = view.findViewById(R.id.calendar_view);
+
+
+
+
+
+        compactCalendarView = view.findViewById(R.id.compactcalendar_view);
+        List<MoodDiary> moodDiaryList =AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAllByArtId(1);
+        for (int i = 0; i < moodDiaryList.size(); i++) {
+            Date date = moodDiaryList.get(i).getDate();
+            Calendar calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
+            calStartOfDay.setTime(date); // compute start of the day for the timestamp
+            calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
+            calStartOfDay.set(Calendar.MINUTE, 0);
+            calStartOfDay.set(Calendar.SECOND, 0);
+            calStartOfDay.set(Calendar.MILLISECOND, 0);
+
+            Calendar calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
+            calEndOfDay.setTime(date); // compute start of the day for the timestamp
+            calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
+            calEndOfDay.set(Calendar.MINUTE, 59);
+            calEndOfDay.set(Calendar.SECOND, 59);
+            calEndOfDay.set(Calendar.MILLISECOND, 999);
+            List<MoodDiary> moodDiaryList1 = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getFromTable(calStartOfDay.getTime(), calEndOfDay.getTime());
+            int color = calculateAverageMoodColor(moodDiaryList1);
+
+            Event event = new Event(color, date.getTime());
+            compactCalendarView.addEvent(event);
+
+        }
+
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                List<Event> events = compactCalendarView.getEvents(dateClicked);
+                Log.d(TAG, "Day was clicked: " + dateClicked + " with events " + events);
+                Date date = null;
+
+                calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
+                calStartOfDay.setTime(dateClicked); // compute start of the day for the timestamp
+                calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
+                calStartOfDay.set(Calendar.MINUTE, 0);
+                calStartOfDay.set(Calendar.SECOND, 0);
+                calStartOfDay.set(Calendar.MILLISECOND, 0);
+
+                calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
+                calEndOfDay.setTime(dateClicked); // compute start of the day for the timestamp
+                calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
+                calEndOfDay.set(Calendar.MINUTE, 59);
+                calEndOfDay.set(Calendar.SECOND, 59);
+                calEndOfDay.set(Calendar.MILLISECOND, 999);
+                updateRecyclerViews();
+
+
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                Log.d(TAG, "Month was scrolled to: " + firstDayOfNewMonth);
+            }
+        });
+
+
+/*        cv = view.findViewById(R.id.calendar_view);
         selectedDateLong = cv.getDate();
         cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -96,8 +164,12 @@ public class CalendarFragment extends BaseFragment {
 
 
             }
-        });
-        Date date = new Date(selectedDateLong);
+        });*/
+
+
+        //Date date = new Date(compactCalendarView);
+        Date date = new Date(Calendar.getInstance().getTime().getTime());
+
 
         calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
         calStartOfDay.setTime(date); // compute start of the day for the timestamp
@@ -126,6 +198,41 @@ public class CalendarFragment extends BaseFragment {
 
 
     }
+
+    private int calculateAverageMoodColor(List<MoodDiary> moodDiary) {
+        int count = 0;
+        int plus = 0;
+        int average;
+        if (moodDiary.size() >1){
+            for (int i = 0; i < moodDiary.size(); i++) {
+                plus = plus + Integer.valueOf(moodDiary.get(i).getInfo1());
+                count = count + 1;
+
+            }
+            average = plus/count;
+        }else {
+            average = Integer.parseInt(moodDiary.get(0).getInfo1());
+        }
+
+        if (average == -3) {
+            return ResourcesCompat.getColor(getResources(), R.color.mood_0, null);
+        } else if (average <= -2) {
+            return ResourcesCompat.getColor(getResources(), R.color.mood_1, null);
+        } else if (average <= -1) {
+            return ResourcesCompat.getColor(getResources(), R.color.mood_2, null);
+        } else if (average == 0) {
+            return ResourcesCompat.getColor(getResources(), R.color.mood_normal, null);
+        } else if (average < 2) {
+            return ResourcesCompat.getColor(getResources(), R.color.mood_3, null);
+        } else if (average < 3) {
+            return ResourcesCompat.getColor(getResources(), R.color.mood_4, null);
+        } else if (average <4) {
+            return ResourcesCompat.getColor(getResources(), R.color.mood_5, null);
+        }
+        return ResourcesCompat.getColor(getResources(), R.color.mood_normal, null);
+
+    }
+
 
     private void updateRecyclerViews() {
 

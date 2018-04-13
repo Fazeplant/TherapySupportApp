@@ -32,6 +32,25 @@ public class DrugEvent {
     private int takingPattern = 1;
     private int takingPatternDaysWithIntake = -1;
     private int takingPatternDaysWithoutIntake = -1;
+    private int takingPatternDaysWithIntakeChange = -1;
+
+    public int getTakingPatternDaysWithIntakeChange() {
+        return takingPatternDaysWithIntakeChange;
+    }
+
+    public void setTakingPatternDaysWithIntakeChange(int takingPatternDaysWithIntakeChange) {
+        this.takingPatternDaysWithIntakeChange = takingPatternDaysWithIntakeChange;
+    }
+
+    public int getTakingPatternDaysWithoutIntakeChange() {
+        return takingPatternDaysWithoutIntakeChange;
+    }
+
+    public void setTakingPatternDaysWithoutIntakeChange(int takingPatternDaysWithoutIntakeChange) {
+        this.takingPatternDaysWithoutIntakeChange = takingPatternDaysWithoutIntakeChange;
+    }
+
+    private int takingPatternDaysWithoutIntakeChange = -1;
     private int takingPatternEveryOtherDay = -1;
     private String takingPatternHourStart = "-1";
     private int takingPatternHourNumber = -1;

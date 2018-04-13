@@ -542,6 +542,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         drugEventDb.setTakingPatternEveryOtherDay(mDrugEvent.getTakingPatternEveryOtherDay());
         drugEventDb.setTakingPatternHourNumber(mDrugEvent.getTakingPatternHourNumber());
         drugEventDb.setTakingPatternHourStart(mDrugEvent.getTakingPatternHourStart());
+        drugEventDb.setTakingPatternDaysWithOutIntakeChange(mDrugEvent.getTakingPatternDaysWithoutIntakeChange());
+        drugEventDb.setTakingPatternDaysWithIntakeChange(mDrugEvent.getTakingPatternDaysWithIntakeChange());
 
         return AppDatabase.getAppDatabase(getContext()).drugEventDbDao().insert(drugEventDb);
 

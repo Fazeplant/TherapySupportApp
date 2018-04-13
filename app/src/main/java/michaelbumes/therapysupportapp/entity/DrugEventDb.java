@@ -59,11 +59,35 @@ public class DrugEventDb implements Serializable {
     @ColumnInfo(name = "running_time")
     private int runningTime = 1;
 
+    public int getTakingPatternDaysWithIntakeChange() {
+        return takingPatternDaysWithIntakeChange;
+    }
+
+    public void setTakingPatternDaysWithIntakeChange(int takingPatternDaysWithIntakeChange) {
+        this.takingPatternDaysWithIntakeChange = takingPatternDaysWithIntakeChange;
+    }
+
+    public int getTakingPatternDaysWithOutIntakeChange() {
+        return takingPatternDaysWithOutIntakeChange;
+    }
+
+    public void setTakingPatternDaysWithOutIntakeChange(int takingPatternDaysWithOutIntakeChange) {
+        this.takingPatternDaysWithOutIntakeChange = takingPatternDaysWithOutIntakeChange;
+    }
+
     @ColumnInfo(name = "taking_pattern_days_with_intake")
+
     private int takingPatternDaysWithIntake = -1;
 
     @ColumnInfo(name = "taking_pattern_days_without_intake")
     private int takingPatternDaysWithOutIntake = -1;
+
+    @ColumnInfo(name = "taking_pattern_days_with_intake_change")
+    private int takingPatternDaysWithIntakeChange = -1;
+
+    @ColumnInfo(name = "taking_pattern_days_without_intake_change")
+    private int takingPatternDaysWithOutIntakeChange = -1;
+
 
     @ColumnInfo(name = "taking_pattern_every_other_day")
     private int takingPatternEveryOtherDay = -1;

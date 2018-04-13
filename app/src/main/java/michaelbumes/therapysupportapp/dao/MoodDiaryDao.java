@@ -26,7 +26,7 @@ public interface MoodDiaryDao {
     MoodDiary findById(int id);
 
     @Query("SELECT * FROM moodDiary where date = :date")
-    MoodDiary findByDate(int date);
+    MoodDiary findByDate(Date date);
 
     @Query("SELECT COUNT(*) from moodDiary")
     int countMoodDiary();

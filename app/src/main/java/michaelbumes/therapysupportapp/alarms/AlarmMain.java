@@ -12,8 +12,11 @@ import android.text.format.DateUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
+import michaelbumes.therapysupportapp.database.AppDatabase;
+import michaelbumes.therapysupportapp.entity.DrugEventDb;
 import michaelbumes.therapysupportapp.fragments.DrugEvent;
 
 import java.util.Date;
@@ -102,10 +105,10 @@ public class AlarmMain extends BroadcastReceiver {
     }
 
     private void createAlarmCycle() {
-        mExtras.putInt("daysWithIntake" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithIntake());
-        mExtras.putInt("daysWithoutIntake" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithoutIntake());
-        mExtras.putInt("daysWithIntakeStatic" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithIntake());
-        mExtras.putInt("daysWithoutIntakeStatic" + String.valueOf(id), mDrugEvent.getTakingPatternDaysWithoutIntake());
+        mExtras.putInt("daysWithIntake", mDrugEvent.getTakingPatternDaysWithIntake());
+        mExtras.putInt("daysWithoutIntake", mDrugEvent.getTakingPatternDaysWithoutIntake());
+        mExtras.putInt("daysWithIntakeStatic", mDrugEvent.getTakingPatternDaysWithIntake());
+        mExtras.putInt("daysWithoutIntakeStatic", mDrugEvent.getTakingPatternDaysWithoutIntake());
 
         ArrayList<String> alarmTimeArray = new ArrayList<>(alarmTime);
         mExtras.putStringArrayList("alarmTime", alarmTimeArray);
@@ -285,7 +288,7 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         //600000 = 10 min Toleranz
-        if (todayMillis2 - 600000> startDayDate.getTime() + hrLong +minLong) {
+        if (todayMillis2  < startDayDate.getTime() + hrLong +minLong) {
             return;
         }
 
@@ -303,23 +306,28 @@ public class AlarmMain extends BroadcastReceiver {
             }
         }
         if (takingPattern == 5) {
+            DrugEventDb drugEventDb = AppDatabase.getAppDatabase(context).drugEventDbDao().findById(AppDatabase.getAppDatabase(context).drugDao().findById(id).getDrugEventDbId());
             AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            daysWithIntake = bundle.getInt("daysWithIntake" + String.valueOf(id));
-            daysWithoutIntake = bundle.getInt("daysWithoutIntake" + String.valueOf(id));
+            daysWithIntake = drugEventDb.getTakingPatternDaysWithIntakeChange();
+            daysWithoutIntake = drugEventDb.getTakingPatternDaysWithOutIntakeChange();
 
+            String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
+            String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
+            String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-            ArrayList<String> alarmTimeArray = bundle.getStringArrayList("alarmTime");
+            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+            //ArrayList<String> alarmTimeArray = new ArrayList<String>(Integer.parseInt(drugEventDb.getAlarmTime()));
+
             if (daysWithIntake > 0) {
-                daysWithIntake = daysWithIntake - 1;
-                bundle.putInt("daysWithIntake" + String.valueOf(id), daysWithIntake);
-                intent.putExtra(REMINDER_BUNDLE, bundle);
+                drugEventDb.setTakingPatternDaysWithIntakeChange(daysWithIntake - 1);
+                AppDatabase.getAppDatabase(context).drugEventDbDao().update(drugEventDb);
 
-                for (int i = 0; i < alarmTimeArray.size(); i++) {
-                    String s = alarmTimeArray.get(i);
+                for (int i = 0; i < alarmTime.size(); i++) {
+                    String s = alarmTime.get(i);
                     int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
-                    mExtras.putInt("idGenerated" ,idGenerated);
-                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
-                    intent.putExtra(REMINDER_BUNDLE,mExtras);
+                    bundle.putInt("idGenerated" ,idGenerated);
+                    bundle.putString("alarmTimeI" , alarmTime.get(i));
+                    intent.putExtra(REMINDER_BUNDLE,bundle);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
                     c.set(Calendar.HOUR_OF_DAY, hr);
@@ -332,22 +340,21 @@ public class AlarmMain extends BroadcastReceiver {
 
 
             } else if (daysWithoutIntake < 1) {
-                int daysWithIntakeStatic = bundle.getInt("daysWithIntakeStatic" + String.valueOf(id));
-                int daysWithoutIntakeStatic = bundle.getInt("daysWithoutIntakeStatic" + String.valueOf(id));
+                int daysWithIntakeStatic = drugEventDb.getTakingPatternDaysWithIntake();
+                int daysWithoutIntakeStatic = drugEventDb.getTakingPatternDaysWithOutIntake();
 
-                bundle.putInt("daysWithIntake" + String.valueOf(id), daysWithIntakeStatic);
-                bundle.putInt("daysWithoutIntake" + String.valueOf(id), daysWithoutIntakeStatic);
-                intent.putExtra(REMINDER_BUNDLE, bundle);
+                drugEventDb.setTakingPatternDaysWithIntakeChange(daysWithIntakeStatic);
+                drugEventDb.setTakingPatternDaysWithIntakeChange(daysWithoutIntakeStatic);
+                AppDatabase.getAppDatabase(context).drugEventDbDao().update(drugEventDb);
 
-                for (int i = 0; i < alarmTimeArray.size(); i++) {
-                    String s = alarmTimeArray.get(i);
+                for (int i = 0; i < alarmTime.size(); i++) {
+                    String s = alarmTime.get(i);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
-                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
                     int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
-                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
-                    mExtras.putInt("idGenerated" ,idGenerated);
-                    intent.putExtra(REMINDER_BUNDLE,mExtras);
+                    bundle.putString("alarmTimeI" , alarmTime.get(i));
+                    bundle.putInt("idGenerated" ,idGenerated);
+                    intent.putExtra(REMINDER_BUNDLE,bundle);
                     //Kein Tag, Monat oder Jahr, weil Alarm auf morgen gesetzt werden soll
                     c.set(Calendar.HOUR_OF_DAY, hr);
                     c.set(Calendar.MINUTE, min);
@@ -356,15 +363,15 @@ public class AlarmMain extends BroadcastReceiver {
                     alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + 86400000L, pendingIntent);
                 }
             } else {
-                daysWithoutIntake = daysWithoutIntake - 1;
-                bundle.putInt("daysWithoutIntake" + String.valueOf(id), daysWithoutIntake);
-                intent.putExtra(REMINDER_BUNDLE, bundle);
-                for (int i = 0; i < alarmTimeArray.size(); i++) {
-                    String s = alarmTimeArray.get(i);
+                drugEventDb.setTakingPatternDaysWithOutIntakeChange(daysWithoutIntake - 1);
+                AppDatabase.getAppDatabase(context).drugEventDbDao().update(drugEventDb);
+
+                for (int i = 0; i < alarmTime.size(); i++) {
+                    String s = alarmTime.get(i);
                     int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
-                    mExtras.putInt("idGenerated" ,idGenerated);
-                    mExtras.putString("alarmTimeI" , alarmTime.get(i));
-                    intent.putExtra(REMINDER_BUNDLE,mExtras);
+                    bundle.putInt("idGenerated" ,idGenerated);
+                    bundle.putString("alarmTimeI" , alarmTime.get(i));
+                    intent.putExtra(REMINDER_BUNDLE,bundle);
                     int hr = Integer.parseInt(s.substring(0, 2));
                     int min = Integer.parseInt(s.substring(3, 5));
                     c.set(Calendar.HOUR_OF_DAY, hr);

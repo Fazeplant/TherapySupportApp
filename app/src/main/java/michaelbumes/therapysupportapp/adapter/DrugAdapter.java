@@ -173,6 +173,9 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
         drugEvent.setTakingPatternEveryOtherDay(drugEventDb.getTakingPatternEveryOtherDay());
         drugEvent.setTakingPatternHourNumber(drugEventDb.getTakingPatternHourNumber());
         drugEvent.setTakingPatternHourStart(drugEventDb.getTakingPatternHourStart());
+        drugEvent.setTakingPatternDaysWithIntakeChange(drugEventDb.getTakingPatternDaysWithIntakeChange());
+        drugEvent.setTakingPatternDaysWithoutIntakeChange(drugEventDb.getTakingPatternDaysWithOutIntakeChange());
+
         return drugEvent;
 
     }

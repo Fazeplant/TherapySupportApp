@@ -336,7 +336,9 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                         stringListCycle2[0] = "14";
                         stringListCycle2[1] = "7";
                         mDrugEvent.setTakingPatternDaysWithIntake(14);
+                        mDrugEvent.setTakingPatternDaysWithIntakeChange(14);
                         mDrugEvent.setTakingPatternDaysWithoutIntake(7);
+                        mDrugEvent.setTakingPatternDaysWithoutIntakeChange(7);
                     }
 
 
@@ -534,10 +536,12 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                         case 0:
                             stringListCycle2[0] = String.valueOf(numberPicker.getValue());
                             mDrugEvent.setTakingPatternDaysWithIntake(numberPicker.getValue());
+                            mDrugEvent.setTakingPatternDaysWithIntakeChange(numberPicker.getValue());
                             break;
                         case 1:
                             stringListCycle2[1] = String.valueOf(numberPicker.getValue());
                             mDrugEvent.setTakingPatternDaysWithoutIntake(numberPicker.getValue());
+                            mDrugEvent.setTakingPatternDaysWithoutIntakeChange(numberPicker.getValue());
                             break;
 
                     }
