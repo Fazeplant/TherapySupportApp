@@ -22,6 +22,10 @@ public interface DrugEventDbDao {
     @Query("SELECT * FROM drug_event")
     List<DrugEventDb> getAll();
 
+    @Query("SELECT * FROM drug_event where is_regularly=:isRegularly")
+    List<DrugEventDb> getRegularly(boolean isRegularly);
+
+
     @Query("SELECT * FROM drug_event where id=:id")
     DrugEventDb findById(long id);
 

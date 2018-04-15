@@ -33,6 +33,18 @@ public class TakenDrug implements Serializable {
     @ColumnInfo(name = "dosage")
     private int dosage;
 
+    public int getDosageFormId() {
+        return dosageFormId;
+    }
+
+    public void setDosageFormId(int dosageFormId) {
+        this.dosageFormId = dosageFormId;
+    }
+
+    @ColumnInfo(name = "dosage_form_id")
+    private int dosageFormId;
+
+
 
     @ColumnInfo(name = "dosage_form")
     private String dosageForm;

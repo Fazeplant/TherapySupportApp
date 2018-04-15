@@ -21,6 +21,7 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -95,8 +96,14 @@ public class CalendarFragment extends BaseFragment {
             calEndOfDay.set(Calendar.MINUTE, 59);
             calEndOfDay.set(Calendar.SECOND, 59);
             calEndOfDay.set(Calendar.MILLISECOND, 999);
-            List<MoodDiary> moodDiaryList1 = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getFromTable(calStartOfDay.getTime(), calEndOfDay.getTime());
-            int color = calculateAverageMoodColor(moodDiaryList1);
+            List<MoodDiary> moodDiaryListForDayAll = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getFromTable(calStartOfDay.getTime(), calEndOfDay.getTime());
+            List<MoodDiary> moodDiaryListForDayMood = new ArrayList<>();
+            for (int j = 0; j < moodDiaryListForDayAll.size(); j++) {
+                if (moodDiaryListForDayAll.get(j).getArtID() ==1){
+                    moodDiaryListForDayMood.add(moodDiaryListForDayAll.get(j));
+                }
+            }
+            int color = calculateAverageMoodColor(moodDiaryListForDayMood);
 
             Event event = new Event(color, date.getTime());
             compactCalendarView.addEvent(event);

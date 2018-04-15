@@ -85,14 +85,14 @@ public class MoodActivity extends AppCompatActivity {
         seekBar7 = findViewById(R.id.seek_bar_mood_7);
         seekBar8 = findViewById(R.id.seek_bar_mood_8);
 
-        seekBar1.setMax(8);
-        seekBar2.setMax(8);
-        seekBar3.setMax(8);
-        seekBar4.setMax(8);
-        seekBar5.setMax(8);
-        seekBar6.setMax(8);
-        seekBar7.setMax(8);
-        seekBar8.setMax(8);
+        seekBar1.setMax(6);
+        seekBar2.setMax(6);
+        seekBar3.setMax(6);
+        seekBar4.setMax(6);
+        seekBar5.setMax(6);
+        seekBar6.setMax(6);
+        seekBar7.setMax(6);
+        seekBar8.setMax(6);
 
 
 

@@ -113,13 +113,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         holder.textViewFood.setText(arrayList.get(0));
         if (arrayList.size() >1){
             switch (Integer.valueOf(arrayList.get(1))){
-                case 1:
+                case 2:
                     holder.textViewFoodType.setText("Frühstück");
                     break;
                 case 3:
                     holder.textViewFoodType.setText("Mittagessen");
                     break;
-                case 5:
+                case 6:
                     holder.textViewFoodType.setText("Abendessen");
                     break;
                 default:

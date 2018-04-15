@@ -268,10 +268,16 @@ public class AlarmMain extends BroadcastReceiver {
         long todayMillis2 = cal.getTimeInMillis();
         long millis = System.currentTimeMillis();
 
-
-
+        Date todayDate = null;
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
+
+        String todayString = sdfDate.format(startDate1);
+        try {
+             todayDate = sdfDate.parse(todayString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         Long hrLong = TimeUnit.HOURS.toMillis(Integer.parseInt(alarmTimeI.substring(0, 2)));
@@ -289,6 +295,9 @@ public class AlarmMain extends BroadcastReceiver {
 
         //600000 = 10 min Toleranz
         if (todayMillis2  < startDayDate.getTime() + hrLong +minLong) {
+            return;
+        }
+        if ((todayDate.getTime() == startDayDate.getTime()) && ((todayMillis2 >startDayDate.getTime() + hrLong +minLong)==true)){
             return;
         }
 

@@ -379,6 +379,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         TakenDrug takenDrug = new TakenDrug();
         takenDrug.setDosageForm(databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
         takenDrug.setDrugName(drug.getDrugName());
+        takenDrug.setDosageFormId(drug.getDosageFormId());
         takenDrug.setManufacturer(drug.getManufacturer());
         takenDrug.setSideEffects(drug.getSideEffects());
         takenDrug.setTakingNote(drug.getTakingNote());

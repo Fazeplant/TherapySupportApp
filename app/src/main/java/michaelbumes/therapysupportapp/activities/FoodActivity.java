@@ -114,23 +114,26 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
-                    case R.id.radio_button_food_breakfast:
+                    case R.id.radio_button_food_snack:
                         foodTypeId = 1;
                         break;
-                    case R.id.radio_button_food_snack1:
+                    case R.id.radio_button_food_breakfast:
                         foodTypeId = 2;
                         break;
-                    case R.id.radio_button_food_lunch:
+                    case R.id.radio_button_food_snack1:
                         foodTypeId = 3;
                         break;
-                    case R.id.radio_button_food_snack2:
+                    case R.id.radio_button_food_lunch:
                         foodTypeId = 4;
                         break;
-                    case R.id.radio_button_food_dinner:
+                    case R.id.radio_button_food_snack2:
                         foodTypeId = 5;
                         break;
-                    case R.id.radio_button_food_snack3:
+                    case R.id.radio_button_food_dinner:
                         foodTypeId = 6;
+                        break;
+                    case R.id.radio_button_food_snack3:
+                        foodTypeId = 7;
                         break;
                 }
             }
@@ -143,21 +146,24 @@ public class FoodActivity extends AppCompatActivity {
                 textEditFood.setText(arrayList.get(0));
                 switch (Integer.valueOf(arrayList.get(1))) {
                     case 1:
-                        radioGroup.check(R.id.radio_button_food_breakfast);
+                        radioGroup.check(R.id.radio_button_food_snack);
                         break;
                     case 2:
-                        radioGroup.check(R.id.radio_button_food_snack1);
+                        radioGroup.check(R.id.radio_button_food_breakfast);
                         break;
                     case 3:
-                        radioGroup.check(R.id.radio_button_food_lunch);
+                        radioGroup.check(R.id.radio_button_food_snack1);
                         break;
                     case 4:
-                        radioGroup.check(R.id.radio_button_food_snack2);
+                        radioGroup.check(R.id.radio_button_food_lunch);
                         break;
                     case 5:
-                        radioGroup.check(R.id.radio_button_food_dinner);
+                        radioGroup.check(R.id.radio_button_food_snack2);
                         break;
                     case 6:
+                        radioGroup.check(R.id.radio_button_food_dinner);
+                        break;
+                    case 7:
                         radioGroup.check(R.id.radio_button_food_snack3);
                         break;
                 }

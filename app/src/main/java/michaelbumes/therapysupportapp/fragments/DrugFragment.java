@@ -52,6 +52,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private static final int REGULARLY = 0;
     private static final int ONLY_WHEN_REQUIRED = 1;
     private int kindOfTakingFlag = REGULARLY;
+    private boolean isNew = true;
     private View view1;
 
     private Drug drug;
@@ -301,7 +302,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                         break;
                     case 1:
                         if (mDrugEvent.isRegularly()) {
-
+                            isNew =false;
                             kindOfTakingFlag = ONLY_WHEN_REQUIRED;
                             cardViewDrugTime.setVisibility(View.GONE);
                             addTimeButton.setVisibility(View.GONE);
@@ -312,6 +313,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                             dosageList.clear();
                             mDrugEvent.setAlarmTime(alarmTimeList);
                             mDrugEvent.setDosage(dosageList);
+                            mDrugEvent.setRecurringReminder(false);
                             stringTime.clear();
                             stringDosageForm.clear();
                             stringDosage.clear();
@@ -328,7 +330,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                             }else {
                                 cardViewDrugTime.setVisibility(View.VISIBLE);
                                 addTimeButton.setVisibility(View.VISIBLE);
-                                addTimeButton.performClick();
+                                if (!isNew){
+                                    addTimeButton.performClick();
+
+                                }
                             }
 
                             kindOfTakingFlag = REGULARLY;
@@ -384,6 +389,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             }
         });
         if (!mDrugEvent.isRegularly()){
+            isNew = true;
             kindOfTakingFlag = ONLY_WHEN_REQUIRED;
             cardViewDrugTime.setVisibility(View.GONE);
             addTimeButton.setVisibility(View.GONE);
@@ -401,16 +407,17 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             cardView3.setVisibility(View.VISIBLE);
             customListView1.notifyDataSetChanged();
             customListView2.notifyDataSetChanged();
+
         }
-
-
         if (mDrugEvent.getTakingPattern() == 2){
             cardViewDrugTime.setVisibility(View.GONE);
             addTimeButton.setVisibility(View.GONE);
-        }else {
+        }else if (mDrugEvent.isRegularly()){
             addTimeButton.setVisibility(View.VISIBLE);
             cardViewDrugTime.setVisibility(View.VISIBLE);
         }
+
+
 
 
     }
@@ -507,7 +514,6 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
         drugEventDb.setRecurringReminder(mDrugEvent.isRecurringReminder());
         drugEventDb.setAlarmType(mDrugEvent.getAlarmType());
-        drugEventDb.setRecurringReminder(mDrugEvent.isRecurringReminder());
         drugEventDb.setMondaySelected(weekdays[0]);
         drugEventDb.setTuesdaySelected(weekdays[1]);
         drugEventDb.setWednesdaySelected(weekdays[2]);

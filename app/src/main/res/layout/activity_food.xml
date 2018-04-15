@@ -49,6 +49,12 @@
                 android:orientation="vertical">
 
                 <RadioButton
+                    android:id="@+id/radio_button_food_snack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/snack" />
+
+                <RadioButton
                     android:id="@+id/radio_button_food_breakfast"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class TodayFragment extends BaseFragment {
     private View mView;
     private Bundle mBundle;
     private TextView textViewMood, textViewNote, textViewFood;
+    private ImageView imageViewDrug;
 
 
     public static TodayFragment newInstance(int instance) {
@@ -77,8 +79,10 @@ public class TodayFragment extends BaseFragment {
 
         textViewDrugName = view.findViewById(R.id.drug_name_alarm);
         textViewDosage = view.findViewById(R.id.drug_dosage_alarm);
+        imageViewDrug = view.findViewById(R.id.image_drug_alarm);
         textViewTime = view.findViewById(R.id.alarm_time_alarm);
         textViewEmpty = view.findViewById(R.id.text_view_alarm_empty);
+        
         RelativeLayout relativeLayout = view.findViewById(R.id.drug_event_alarm);
 
 
@@ -91,9 +95,36 @@ public class TodayFragment extends BaseFragment {
 
 
         if (AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs() != 0) {
+/*            List<Drug> drugList = AppDatabase.getAppDatabase(getContext()).drugDao().getAll();
+            int count = 0;
+            for (int i = 0; i < drugList.size(); i++) {
+                DrugEventDb drugEventDb = AppDatabase.getAppDatabase(getContext()).drugEventDbDao().findById(drugList.get(i).getId());
+                if (drugEventDb.isRegularly()){
+                    count = count + 1;
+                }
+            }
+            if (drugList.size() == count){
+                relativeLayout.setVisibility(View.GONE);
+                textViewEmpty.setVisibility(View.VISIBLE);
+                return;
+            }
             textViewEmpty.setVisibility(View.GONE);
+            if (drugEventDb.getAlarmTime() ==null){
+                relativeLayout.setVisibility(View.GONE);
+                textViewEmpty.setVisibility(View.VISIBLE);
+                return;
+            }*/
             drugEventDb = getLatestDrugEventDb();
+            if (!drugEventDb.isRegularly()){
+                relativeLayout.setVisibility(View.GONE);
+                textViewEmpty.setVisibility(View.VISIBLE);
+                return;
+            }
             String latestAlarmStringPlusId = getLatestAlarmString(drugEventDb);
+/*            if (latestAlarmStringPlusId.equals("-")){
+                textViewEmpty.setVisibility(View.VISIBLE);
+                return;
+            }*/
             String latestAlarmString = latestAlarmStringPlusId.substring(0, 5);
             int latestId = Integer.parseInt(latestAlarmStringPlusId.substring(5));
             String dosageString = drugEventDb.getDosage();
@@ -111,6 +142,140 @@ public class TodayFragment extends BaseFragment {
 
 
             textViewDrugName.setText(drug.getDrugName());
+            switch (drug.getDosageFormId()){
+                case 1:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ampoules));
+                    break;
+                case 2:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_hashtag));
+                    break;
+                case 3:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_hashtag));
+                    break;
+                case 4:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_weight));
+                    break;
+                case 5:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_inhalator));
+                    break;
+                case 6:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_syringe));
+                    break;
+                case 7:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pills));
+                    break;
+                case 8:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_weight));
+                    break;
+                case 9:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 10:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_hashtag));
+                    break;
+                case 11:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 12:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 13:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_suppositories));
+                    break;
+                case 14:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ampoules));
+                    break;
+                case 15:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_hashtag));
+                    break;
+                case 16:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_hashtag));
+                    break;
+                case 17:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_weight));
+                    break;
+                case 18:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_inhalator));
+                    break;
+                case 19:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_syringe));
+                    break;
+                case 20:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pills));
+                    break;
+                case 21:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_weight));
+                    break;
+                case 22:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 23:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_hashtag));
+                    break;
+                case 24:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 25:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 26:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_suppositories));
+                    break;
+                case 27:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ampoules));
+                    break;
+                case 28:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 29:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pills));
+                    break;
+                case 30:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 31:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 32:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 33:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 34:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 35:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pills));
+                    break;
+                case 36:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 37:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_suppositories));
+                    break;
+                case 38:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 39:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_drop));
+                    break;
+                case 40:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 41:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                    break;
+                case 42:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pills));
+                    break;
+                case 43:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ampoules));
+                    break;
+                case 44:
+                    imageViewDrug.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ampoules));
+                    break;
+            }
             textViewDosage.setText(dosage.get(latestId) + " " + databaseDrugList.dosageFormDao().findById(drug.getDosageFormId()).getDosageFormName());
             textViewTime.setText(latestAlarmString);
 
@@ -156,25 +321,28 @@ public class TodayFragment extends BaseFragment {
 
         for (int i = 0; i < drugList.size(); i++) {
             DrugEventDb drugEventDb = AppDatabase.getAppDatabase(getContext()).drugEventDbDao().findById(drugList.get(i).getDrugEventDbId());
-            String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
-            String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
-            String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
+            if (drugEventDb.isRegularly()){
+                String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
+                String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
+                String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
-            for (int j = 0; j < alarmTime.size(); j++) {
-                int hr = Integer.parseInt(alarmTime.get(j).substring(0, 2));
-                int min = Integer.parseInt(alarmTime.get(j).substring(3, 5));
-                int alarmTimeInMinutes = hr * 60 + min;
-                if (currentTimeInMinutes < alarmTimeInMinutes) {
-                    if (alarmTimeInMinutes < mostRecentAlarmInt) {
-                        mostRecentAlarmInt = alarmTimeInMinutes;
-                        latestDrugEventDb = drugEventDb;
+                List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+                for (int j = 0; j < alarmTime.size(); j++) {
+                    int hr = Integer.parseInt(alarmTime.get(j).substring(0, 2));
+                    int min = Integer.parseInt(alarmTime.get(j).substring(3, 5));
+                    int alarmTimeInMinutes = hr * 60 + min;
+                    if (currentTimeInMinutes < alarmTimeInMinutes) {
+                        if (alarmTimeInMinutes < mostRecentAlarmInt) {
+                            mostRecentAlarmInt = alarmTimeInMinutes;
+                            latestDrugEventDb = drugEventDb;
+
+                        }
 
                     }
 
                 }
-
             }
+
 
 
         }
@@ -242,25 +410,29 @@ public class TodayFragment extends BaseFragment {
 
         for (int i = 0; i < drugList.size(); i++) {
             DrugEventDb drugEventDb = AppDatabase.getAppDatabase(getContext()).drugEventDbDao().findById(drugList.get(i).getDrugEventDbId());
-            String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
-            String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
-            String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
+            if (drugEventDb.isRegularly()){
+                String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
+                String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
+                String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
-            for (int j = 0; j < alarmTime.size(); j++) {
-                int hr = Integer.parseInt(alarmTime.get(j).substring(0, 2));
-                int min = Integer.parseInt(alarmTime.get(j).substring(3, 5));
-                int alarmTimeInMinutes = hr * 60 + min;
-                if (currentTimeInMinutes > alarmTimeInMinutes) {
-                    if (alarmTimeInMinutes < mostRecentAlarmInt) {
-                        mostRecentAlarmInt = alarmTimeInMinutes;
-                        latestDrugEventDb = drugEventDb;
+                List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+                for (int j = 0; j < alarmTime.size(); j++) {
+                    int hr = Integer.parseInt(alarmTime.get(j).substring(0, 2));
+                    int min = Integer.parseInt(alarmTime.get(j).substring(3, 5));
+                    int alarmTimeInMinutes = hr * 60 + min;
+                    if (currentTimeInMinutes > alarmTimeInMinutes) {
+                        if (alarmTimeInMinutes < mostRecentAlarmInt) {
+                            mostRecentAlarmInt = alarmTimeInMinutes;
+                            latestDrugEventDb = drugEventDb;
+
+                        }
 
                     }
 
                 }
 
             }
+
 
 
         }

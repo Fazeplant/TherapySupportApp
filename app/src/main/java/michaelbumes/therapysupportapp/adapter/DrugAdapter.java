@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +56,149 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
     public void onBindViewHolder(DrugAdapter.ViewHolder holder, int position) {
         holder.drugName.setText(drugs.get(position).getDrugName());
         holder.drugManufacturer.setText(drugs.get(position).getManufacturer());
-        updateAlarmTime(holder,position);
+        if (AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drugs.get(position).getDrugEventDbId()).isRegularly()){
+            holder.imageViewAlarm.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_black_24dp));
+        }else {
+            holder.imageViewAlarm.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_off_black_24dp));
+            holder.alarmTime.setText("    -    ");
+        }
+        switch (drugs.get(position).getDosageFormId()){
+            case 1:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ampoules));
+                break;
+            case 2:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_hashtag));
+                break;
+            case 3:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_hashtag));
+                break;
+            case 4:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_weight));
+                break;
+            case 5:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_inhalator));
+                break;
+            case 6:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_syringe));
+                break;
+            case 7:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pills));
+                break;
+            case 8:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_weight));
+                break;
+            case 9:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 10:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_hashtag));
+                break;
+            case 11:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 12:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 13:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_suppositories));
+                break;
+            case 14:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ampoules));
+                break;
+            case 15:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_hashtag));
+                break;
+            case 16:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_hashtag));
+                break;
+            case 17:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_weight));
+                break;
+            case 18:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_inhalator));
+                break;
+            case 19:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_syringe));
+                break;
+            case 20:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pills));
+                break;
+            case 21:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_weight));
+                break;
+            case 22:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 23:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_hashtag));
+                break;
+            case 24:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 25:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 26:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_suppositories));
+                break;
+            case 27:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ampoules));
+                break;
+            case 28:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 29:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pills));
+                break;
+            case 30:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 31:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 32:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 33:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 34:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 35:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pills));
+                break;
+            case 36:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 37:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_suppositories));
+                break;
+            case 38:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 39:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_drop));
+                break;
+            case 40:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 41:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_medical_pills_couple));
+                break;
+            case 42:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pills));
+                break;
+            case 43:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ampoules));
+                break;
+            case 44:
+                holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ampoules));
+                break;
+        }
+        if (AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drugs.get(position).getDrugEventDbId()).isRegularly()){
+            updateAlarmTime(holder,position);
+        }
 
         //        holder.drugManufacturer.setText((CharSequence) AppDatabase.getAppDatabase(context).manufacturerDao().findById(drugs.get(position).getManufacturer()));
 
@@ -72,6 +215,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
         public TextView drugName;
         public TextView drugManufacturer;
         public TextView alarmTime;
+        public ImageView imageViewDrug, imageViewAlarm;
 
 
         public ViewHolder(View itemView) {
@@ -80,6 +224,8 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
             drugName = itemView.findViewById(R.id.drug_name);
             drugManufacturer = itemView.findViewById(R.id.drug_manufacturer);
             alarmTime = itemView.findViewById(R.id.drug_plan_alarm_time);
+            imageViewDrug = itemView.findViewById(R.id.image_drug);
+            imageViewAlarm = itemView.findViewById(R.id.image_alarm);
         }
 
         @Override
@@ -184,21 +330,24 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
 
     public void deleteItem(int position){
         DrugEventDb drugEventDb = AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drugs.get(position).getDrugEventDbId());
-        String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
-        String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
-        String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
+        if (drugEventDb.isRegularly()){
+            String replaceAlarmTime1 = drugEventDb.getAlarmTime().replace("[", "");
+            String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
+            String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-        List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
 
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent myIntent = new Intent(context.getApplicationContext(), AlarmMain.class);
-        for (int i = 0; i < alarmTime.size() ; i++) {
-            int idGenerated = Integer.parseInt(drugEventDb.getId() + "" +String.valueOf(i));
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), idGenerated, myIntent, 0);
-            alarmManager.cancel(pendingIntent);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent myIntent = new Intent(context.getApplicationContext(), AlarmMain.class);
+            for (int i = 0; i < alarmTime.size() ; i++) {
+                int idGenerated = Integer.parseInt(drugEventDb.getId() + "" +String.valueOf(i));
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), idGenerated, myIntent, 0);
+                alarmManager.cancel(pendingIntent);
+            }
+
+
         }
-
 
 
         Toast.makeText(context, "Medikament: " + drugs.get(position).getDrugName() + " gelöscht", Toast.LENGTH_SHORT).show();
