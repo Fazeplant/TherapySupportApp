@@ -70,25 +70,25 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
     public void onBindViewHolder(MoodAdapter.ViewHolder holder, final int position) {
         switch (Integer.valueOf(moodDiaries.get(position).getInfo1())){
             case -3:
-                holder.moodButton0.setPaintFlags(holder.moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.moodButton0.setBackground(context.getResources().getDrawable(R.drawable.border_mood_0));
                 break;
             case -2:
-                holder.moodButton1.setPaintFlags(holder.moodButton1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.moodButton1.setBackground(context.getResources().getDrawable(R.drawable.border_mood_1));
                 break;
             case -1:
-                holder.moodButton2.setPaintFlags(holder.moodButton2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.moodButton2.setBackground(context.getResources().getDrawable(R.drawable.border_mood_2));
                 break;
             case 0:
-                holder.moodButtonNormal.setPaintFlags(holder.moodButtonNormal.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.moodButtonNormal.setBackground(context.getResources().getDrawable(R.drawable.border_mood_normal));
                 break;
             case 1:
-                holder.moodButton3.setPaintFlags(holder.moodButton3.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.moodButton3.setBackground(context.getResources().getDrawable(R.drawable.border_mood_3));
                 break;
             case 2:
-                holder.moodButton4.setPaintFlags(holder.moodButton4.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.moodButton4.setBackground(context.getResources().getDrawable(R.drawable.border_mood_4));
                 break;
             case 3:
-                holder.moodButton5.setPaintFlags(holder.moodButton5.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                holder.moodButton5.setBackground(context.getResources().getDrawable(R.drawable.border_mood_5));
                 break;
 
         }

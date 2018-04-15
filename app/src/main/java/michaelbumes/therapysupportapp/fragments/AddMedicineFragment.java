@@ -23,6 +23,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
@@ -61,7 +64,7 @@ public class AddMedicineFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.add_medicine);
         nameEdit = view.findViewById(R.id.edit_drug_name);
-        drugListNames = databaseDrugList.drugListDao().getAllNames();
+        drugListNames = new HashSet<String>(Arrays.asList(databaseDrugList.drugListDao().getAllNames())).toArray(new String[0]);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,drugListNames);
         nameEdit.setAdapter(adapter);
         storeButton = view.findViewById(R.id.store_button);

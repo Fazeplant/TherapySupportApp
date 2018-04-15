@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -136,6 +138,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
             EventBus.getDefault().postSticky(mDrugEvent);
         }
+        NestedScrollView nestedScrollView = view.findViewById(R.id.nested_scroll_view_drug);
+        nestedScrollView.setNestedScrollingEnabled(false);
+        LinearLayout linearLayout = view.findViewById(R.id.linear_layout_drug);
+        linearLayout.setVerticalScrollBarEnabled(false);
 
 
         setStrings();
@@ -193,6 +199,11 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         lst3.setAdapter(customListView3);
         lst4.setAdapter(customListView4);
         lstDrugTime.setAdapter(customListViewDrugTime);
+        lst.setScrollContainer(false);
+        lst2.setScrollContainer(false);
+        lst3.setScrollContainer(false);
+        lst4.setScrollContainer(false);
+        lstDrugTime.setScrollContainer(false);
 
 
 

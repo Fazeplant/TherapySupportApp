@@ -344,7 +344,17 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     Toast.makeText(this, "Bestätigt", Toast.LENGTH_SHORT).show();
                     int idGenerated = intent.getBundleExtra("notiBundle").getInt("id");
                     int dosage = intent.getBundleExtra("notiBundle").getInt("dosage");
-                    int id = Integer.valueOf(String.valueOf(idGenerated).substring(0,1));
+                    int id;
+                    if (idGenerated >999){
+                        id = Integer.valueOf(String.valueOf(idGenerated).substring(0,3));
+
+                    }
+                    else if (idGenerated>99){
+                        id = Integer.valueOf(String.valueOf(idGenerated).substring(0,2));
+                    }else {
+                        id = Integer.valueOf(String.valueOf(idGenerated).substring(0,1));
+
+                    }
                     Drug drug = AppDatabase.getAppDatabase(getApplicationContext()).drugDao().findById(id);
                     TakenDrug takenDrug = drugToTakenDrug(getApplicationContext(), drug, dosage);
                     AppDatabase.getAppDatabase(getApplicationContext()).takenDrugDao().insert(takenDrug);

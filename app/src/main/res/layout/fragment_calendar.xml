@@ -25,8 +25,8 @@
             app:compactCalendarEventIndicatorStyle="fill_large_indicator"
             app:compactCalendarBackgroundColor="#ffffff"
             app:compactCalendarTextColor="#000000"
-            app:compactCalendarCurrentSelectedDayBackgroundColor="#a8ae00"
-            app:compactCalendarCurrentDayBackgroundColor="#f2ff00"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorAccent"
+            app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimaryDark"
             app:compactCalendarMultiEventIndicatorColor="#079600"
             />
 

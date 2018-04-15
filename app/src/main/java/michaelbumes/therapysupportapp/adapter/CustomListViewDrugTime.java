@@ -37,6 +37,8 @@ public class CustomListViewDrugTime extends ArrayAdapter<String> {
         if (r==null){
             LayoutInflater layoutInflater = context.getLayoutInflater();
             r = layoutInflater.inflate(R.layout.listview_layout_drug_time, null, true);
+            r.setNestedScrollingEnabled(false);
+            r.setOverScrollMode(0);
             viewHolder = new ViewHolder(r);
             viewHolder.tvw1.setText(textViewDrugTime.get(position));
             viewHolder.tvw2.setText(textViewDosage.get(position));

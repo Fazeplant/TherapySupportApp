@@ -126,7 +126,12 @@ public class TodayFragment extends BaseFragment {
                 return;
             }*/
             String latestAlarmString = latestAlarmStringPlusId.substring(0, 5);
-            int latestId = Integer.parseInt(latestAlarmStringPlusId.substring(5));
+            int latestId = 0;
+            try {
+                 latestId = Integer.parseInt(latestAlarmStringPlusId.substring(5));
+            }catch (Exception e){
+
+            }
             String dosageString = drugEventDb.getDosage();
 
             String replaceDosage1 = dosageString.replace("[", "");
@@ -477,6 +482,7 @@ public class TodayFragment extends BaseFragment {
                 }
             }
         }
+        //TODO +"0" ?
         return mostRecentAlarmString;
     }
 

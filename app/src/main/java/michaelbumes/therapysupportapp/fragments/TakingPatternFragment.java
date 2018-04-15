@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.invoke.CallSite;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -569,6 +570,9 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 String curTime = String.format("%02d:%02d", selectedHour, selectedMinute);
                 mDrugEvent.setTakingPatternHourStart(curTime);
+                List<String> alarmTime = new ArrayList<>();
+                alarmTime.add(curTime);
+                mDrugEvent.setAlarmTime(alarmTime);
                 stringListHour2[1] = curTime;
                 customListViewHours.notifyDataSetChanged();
                 lstHour.setAdapter(customListViewHours);

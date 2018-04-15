@@ -109,13 +109,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moodFlag = MOOD_0;
-                moodButton0.setPaintFlags(moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                moodButton1.setPaintFlags(0);
-                moodButton2.setPaintFlags(0);
-                moodButton3.setPaintFlags(0);
-                moodButton4.setPaintFlags(0);
-                moodButton5.setPaintFlags(0);
-                moodButtonNormal.setPaintFlags(0);
+                moodButton0.setBackground(getResources().getDrawable(R.drawable.border_mood_0));
+                moodButton1.setBackground(getResources().getDrawable(R.color.mood_1));
+                moodButton2.setBackground(getResources().getDrawable(R.color.mood_2));
+                moodButton3.setBackground(getResources().getDrawable(R.color.mood_3));
+                moodButton4.setBackground(getResources().getDrawable(R.color.mood_4));
+                moodButton5.setBackground(getResources().getDrawable(R.color.mood_5));
+                moodButtonNormal.setBackground(getResources().getDrawable(R.color.mood_normal));
 
             }
         });
@@ -123,13 +123,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moodFlag = MOOD_1;
-                moodButton1.setPaintFlags(moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                moodButton0.setPaintFlags(0);
-                moodButton2.setPaintFlags(0);
-                moodButton3.setPaintFlags(0);
-                moodButton4.setPaintFlags(0);
-                moodButton5.setPaintFlags(0);
-                moodButtonNormal.setPaintFlags(0);
+                moodButton1.setBackground(getResources().getDrawable(R.drawable.border_mood_1));
+                moodButton0.setBackground(getResources().getDrawable(R.color.mood_0));
+                moodButton2.setBackground(getResources().getDrawable(R.color.mood_2));
+                moodButton3.setBackground(getResources().getDrawable(R.color.mood_3));
+                moodButton4.setBackground(getResources().getDrawable(R.color.mood_4));
+                moodButton5.setBackground(getResources().getDrawable(R.color.mood_5));
+                moodButtonNormal.setBackground(getResources().getDrawable(R.color.mood_normal));
 
             }
         });
@@ -137,13 +137,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moodFlag = MOOD_2;
-                moodButton2.setPaintFlags(moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                moodButton1.setPaintFlags(0);
-                moodButton0.setPaintFlags(0);
-                moodButton3.setPaintFlags(0);
-                moodButton4.setPaintFlags(0);
-                moodButton5.setPaintFlags(0);
-                moodButtonNormal.setPaintFlags(0);
+                moodButton2.setBackground(getResources().getDrawable(R.drawable.border_mood_2));
+                moodButton1.setBackground(getResources().getDrawable(R.color.mood_1));
+                moodButton0.setBackground(getResources().getDrawable(R.color.mood_0));
+                moodButton3.setBackground(getResources().getDrawable(R.color.mood_3));
+                moodButton4.setBackground(getResources().getDrawable(R.color.mood_4));
+                moodButton5.setBackground(getResources().getDrawable(R.color.mood_5));
+                moodButtonNormal.setBackground(getResources().getDrawable(R.color.mood_normal));
 
             }
         });
@@ -151,13 +151,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moodFlag = MOOD_3;
-                moodButton3.setPaintFlags(moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                moodButton1.setPaintFlags(0);
-                moodButton2.setPaintFlags(0);
-                moodButton0.setPaintFlags(0);
-                moodButton4.setPaintFlags(0);
-                moodButton5.setPaintFlags(0);
-                moodButtonNormal.setPaintFlags(0);
+                moodButton3.setBackground(getResources().getDrawable(R.drawable.border_mood_3));
+                moodButton1.setBackground(getResources().getDrawable(R.color.mood_1));
+                moodButton2.setBackground(getResources().getDrawable(R.color.mood_2));
+                moodButton0.setBackground(getResources().getDrawable(R.color.mood_0));
+                moodButton4.setBackground(getResources().getDrawable(R.color.mood_4));
+                moodButton5.setBackground(getResources().getDrawable(R.color.mood_5));
+                moodButtonNormal.setBackground(getResources().getDrawable(R.color.mood_normal));
 
             }
         });
@@ -165,13 +165,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moodFlag = MOOD_4;
-                moodButton4.setPaintFlags(moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                moodButton1.setPaintFlags(0);
-                moodButton2.setPaintFlags(0);
-                moodButton3.setPaintFlags(0);
-                moodButton0.setPaintFlags(0);
-                moodButton5.setPaintFlags(0);
-                moodButtonNormal.setPaintFlags(0);
+                moodButton4.setBackground(getResources().getDrawable(R.drawable.border_mood_4));
+                moodButton1.setBackground(getResources().getDrawable(R.color.mood_1));
+                moodButton2.setBackground(getResources().getDrawable(R.color.mood_2));
+                moodButton3.setBackground(getResources().getDrawable(R.color.mood_3));
+                moodButton0.setBackground(getResources().getDrawable(R.color.mood_0));
+                moodButton5.setBackground(getResources().getDrawable(R.color.mood_5));
+                moodButtonNormal.setBackground(getResources().getDrawable(R.color.mood_normal));
 
             }
         });
@@ -179,13 +179,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moodFlag = MOOD_5;
-                moodButton5.setPaintFlags(moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                moodButton1.setPaintFlags(0);
-                moodButton2.setPaintFlags(0);
-                moodButton3.setPaintFlags(0);
-                moodButton4.setPaintFlags(0);
-                moodButton0.setPaintFlags(0);
-                moodButtonNormal.setPaintFlags(0);
+                moodButton5.setBackground(getResources().getDrawable(R.drawable.border_mood_5));
+                moodButton1.setBackground(getResources().getDrawable(R.color.mood_1));
+                moodButton2.setBackground(getResources().getDrawable(R.color.mood_2));
+                moodButton3.setBackground(getResources().getDrawable(R.color.mood_3));
+                moodButton4.setBackground(getResources().getDrawable(R.color.mood_4));
+                moodButton0.setBackground(getResources().getDrawable(R.color.mood_0));
+                moodButtonNormal.setBackground(getResources().getDrawable(R.color.mood_normal));
 
             }
         });
@@ -193,13 +193,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moodFlag = MOOD_NORMAL;
-                moodButtonNormal.setPaintFlags(moodButton0.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                moodButton1.setPaintFlags(0);
-                moodButton2.setPaintFlags(0);
-                moodButton3.setPaintFlags(0);
-                moodButton4.setPaintFlags(0);
-                moodButton5.setPaintFlags(0);
-                moodButton0.setPaintFlags(0);
+                moodButtonNormal.setBackground(getResources().getDrawable(R.drawable.border_mood_normal));
+                moodButton1.setBackground(getResources().getDrawable(R.color.mood_1));
+                moodButton2.setBackground(getResources().getDrawable(R.color.mood_2));
+                moodButton3.setBackground(getResources().getDrawable(R.color.mood_3));
+                moodButton4.setBackground(getResources().getDrawable(R.color.mood_4));
+                moodButton5.setBackground(getResources().getDrawable(R.color.mood_5));
+                moodButton0.setBackground(getResources().getDrawable(R.color.mood_0));
 
             }
         });

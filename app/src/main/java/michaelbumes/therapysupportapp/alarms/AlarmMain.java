@@ -147,7 +147,7 @@ public class AlarmMain extends BroadcastReceiver {
         int hr = Integer.parseInt(s.substring(0, 2));
         int min = Integer.parseInt(s.substring(3, 5));
         mExtras.putInt("dosage", dosage.get(0));
-        mExtras.putString("alarmTimeI" , alarmTime.get(0));
+        mExtras.putString("alarmTimeI" , s);
         mExtras.putInt("idGenerated" ,Integer.parseInt(id + "" +String.valueOf(0)));
         intent.putExtra(REMINDER_BUNDLE,mExtras);
         calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -161,12 +161,30 @@ public class AlarmMain extends BroadcastReceiver {
 
 
         for (int i = 0; i < mDrugEvent.getTakingPatternHourNumber(); i++) {
-            int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
-            mExtras.putInt("dosage", dosage.get(i));
+            int idGenerated = Integer.parseInt(id + "" +String.valueOf(i+1));
+            mExtras.putInt("dosage", dosage.get(0));
             mExtras.putInt("idGenerated" ,idGenerated);
-            mExtras.putString("alarmTimeI" , alarmTime.get(i));
+            int alarmTimeHr = hr + mDrugEvent.getTakingPatternHourInterval();
+            String alarmTimeHrString;
+            String alarmTimeMinString;
+            if (min<10){
+                alarmTimeMinString = "0" + String.valueOf(min);
+            }else {
+                alarmTimeMinString = String.valueOf(min);
+            }
+            if (alarmTimeHr> 24){
+                alarmTimeHr = alarmTimeHr -24;
+            }
+            if (alarmTimeHr <10){
+
+                alarmTimeHrString = "0" + String.valueOf(alarmTimeHr) + ":" +alarmTimeMinString;
+            }else {
+                alarmTimeHrString = String.valueOf(alarmTimeHr) + ":" +alarmTimeMinString;
+            }
+            mExtras.putString("alarmTimeI" , alarmTimeHrString);
             intent.putExtra(REMINDER_BUNDLE,mExtras);
             calendar.set(Calendar.HOUR_OF_DAY, hr + mDrugEvent.getTakingPatternHourInterval());
+            hr = hr + mDrugEvent.getTakingPatternHourInterval();
             calendar.set(Calendar.MINUTE, min);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
@@ -297,7 +315,7 @@ public class AlarmMain extends BroadcastReceiver {
         if (todayMillis2  < startDayDate.getTime() + hrLong +minLong) {
             return;
         }
-        if ((todayDate.getTime() == startDayDate.getTime()) && ((todayMillis2 >startDayDate.getTime() + hrLong +minLong)==true)){
+        if ((todayDate.getTime() == startDayDate.getTime()) && ((todayMillis2 > startDayDate.getTime() + hrLong + minLong))){
             return;
         }
 
