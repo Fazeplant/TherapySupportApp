@@ -6,13 +6,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Michi on 07.04.2018.
  */
 
 public class TimestampConverter {
-    static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss" , Locale.getDefault());
 
     @TypeConverter
     public static Date fromTimestamp(String value) {

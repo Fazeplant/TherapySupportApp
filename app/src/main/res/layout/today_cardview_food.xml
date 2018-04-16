@@ -23,14 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:layout_toRightOf="@+id/image_view_food_today"
+            android:layout_toEndOf="@+id/image_view_food_today"
             android:textSize="24sp" />
         <TextView
             android:id="@+id/text_view_food_type_today"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_food_today"
-            android:layout_toRightOf="@+id/image_view_food_today"
+            android:layout_toEndOf="@+id/image_view_food_today"
             android:textSize="18sp" />
 
         <ImageView

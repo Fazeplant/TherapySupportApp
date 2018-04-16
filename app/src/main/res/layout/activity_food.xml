@@ -31,13 +31,13 @@
                 android:layout_below="@+id/text_edit_food"
                 android:layout_centerInParent="true"
                 android:background="@drawable/custom_button_accent"
-                android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
+                android:drawableStart="@drawable/ic_camera_alt_black_24dp"
                 android:drawablePadding="-10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:paddingStart="10dp"
                 android:singleLine="true"
-                android:text="Foto hinzufügen"
+                android:text="@string/add_photo"
                 android:textAlignment="center"
                 android:textAllCaps="false" />
 
@@ -107,7 +107,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:background="@drawable/custom_button_fade"
-        android:text="Hinzufügen"
+        android:text="@string/add"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp" />
@@ -121,6 +121,7 @@
         android:layout_below="@+id/card_view_food"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@color/transparent" />
+        app:srcCompat="@color/transparent"
+        android:contentDescription="ImageView for Food" />
 
 </RelativeLayout>

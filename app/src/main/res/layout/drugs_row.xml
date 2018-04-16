@@ -41,12 +41,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/drug_name"
-                android:layout_marginLeft="30dp"
-                android:layout_toLeftOf="@id/image_alarm"
-                android:layout_toRightOf="@id/image_drug"
+                android:layout_marginStart="30dp"
+                android:layout_toStartOf="@id/image_alarm"
+                android:layout_toEndOf="@id/image_drug"
                 android:text="Program"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/drug_plan_alarm_time"
@@ -68,7 +68,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@id/image_drug"
                 android:layout_marginTop="8dp"
                 app:srcCompat="@android:drawable/ic_lock_idle_alarm" />

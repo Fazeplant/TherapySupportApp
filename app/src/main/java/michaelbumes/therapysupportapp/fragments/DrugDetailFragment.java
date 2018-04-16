@@ -33,14 +33,11 @@ public class DrugDetailFragment extends BaseFragment {
     private final int CHANGE_MANUFACTURER = 2;
 
     private View view1;
-    private  ListView lst1;
-    private String[] string1;
     private String[] string2;
     private String[] dosageFormList;
     private AlertDialog alertDialogDosageForm;
     private CustomListView customListView;
     private Drug drug;
-    private  String dosageForm, name, manufacturer;
     private DrugEvent mDrugEvent;
 
 
@@ -64,19 +61,17 @@ public class DrugDetailFragment extends BaseFragment {
         drug = mDrugEvent.getDrug();
 
 
-
-
-        lst1 = view.findViewById(R.id.list_view_drug_detail);
+        ListView lst1 = view.findViewById(R.id.list_view_drug_detail);
 
 
         dosageFormList = databaseDrugList.dosageFormDao().getAllNames();
 
-        name = drug.getDrugName();
-        manufacturer = drug.getManufacturer();
-        dosageForm = dosageFormList[drug.getDosageFormId() -1];
+        String name = drug.getDrugName();
+        String manufacturer = drug.getManufacturer();
+        String dosageForm = dosageFormList[drug.getDosageFormId() - 1];
 
-        string1 = new String[]{"Name", "Hersteller", "Darreichungsform"};
-        string2 = new String[]{name , manufacturer, dosageForm};
+        String[] string1 = new String[]{"Name", "Hersteller", "Darreichungsform"};
+        string2 = new String[]{name, manufacturer, dosageForm};
 
         customListView = new CustomListView(getActivity(), string1, string2);
 
@@ -114,7 +109,7 @@ public class DrugDetailFragment extends BaseFragment {
         return view1;
     }
 
-    public void createAlertDialogDosageFrom(){
+    private void createAlertDialogDosageFrom(){
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -195,7 +190,7 @@ public class DrugDetailFragment extends BaseFragment {
     }
 
 
-    public  void createAlertDialogText(String title, final int mode){
+    private void createAlertDialogText(String title, final int mode){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(title);
 

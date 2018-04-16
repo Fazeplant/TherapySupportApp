@@ -19,7 +19,7 @@ public class MoodDiary {
 
     @ColumnInfo(name = "date")
     @TypeConverters({TimestampConverter.class})
-    public Date date;
+    private Date date;
 
     @ColumnInfo(name = "artID")
     private int artID;

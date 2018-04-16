@@ -22,14 +22,14 @@
             android:id="@+id/text_view_note_today"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
             android:paddingTop="4dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/border"
 
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="Notiz"
-            android:layout_toRightOf="@+id/image_view_note_today"/>
+            android:text="@string/note"
+            android:layout_toEndOf="@+id/image_view_note_today"/>
 
         <ImageView
             android:id="@+id/image_view_note_today_expanded"

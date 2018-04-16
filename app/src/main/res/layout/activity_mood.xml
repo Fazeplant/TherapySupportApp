@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,14 +16,14 @@
         <Button
             android:id="@+id/add_mood_button"
             android:layout_width="match_parent"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_vertical_margin"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/custom_button_fade"
-            android:text="Hinzufügen"
+            android:text="@string/add"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -61,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:paddingTop="10dp"
-                        android:text="Wie fühlen Sie sich heute?"
+                        android:text="@string/how_do_you_feel_today"
                         android:textAlignment="center"
                         android:textColor="@color/actionBarText"
                         android:textSize="24sp"
@@ -73,7 +72,7 @@
                         android:layout_height="60dp"
                         android:layout_below="@+id/text_view_depressive"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal"
@@ -159,17 +158,16 @@
                         android:layout_alignStart="@+id/mood_linear_layout"
                         android:layout_below="@+id/text_mood"
                         android:layout_marginTop="8dp"
-                        android:text="Depressiv"
+                        android:text="@string/depressive"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/text_view_mania"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/text_view_depressive"
                         android:layout_alignEnd="@+id/mood_linear_layout"
-                        android:text="Manisch"
+                        android:text="@string/manic"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
@@ -184,10 +182,10 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/custom_button_accent"
                 android:drawablePadding="-60dp"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
                 android:gravity="center_vertical"
-                android:paddingRight="10dp"
-                android:text="Mehr Zeit?"
+                android:paddingEnd="10dp"
+                android:text="@string/more_time"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textSize="18sp" />
@@ -219,7 +217,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:text="Erweiterte Eingabe"
+                            android:text="@string/extended_input"
                             android:textAlignment="center"
                             android:textColor="@color/actionBarText"
                             android:textSize="24sp"
@@ -237,9 +235,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Besorgt"
+                                android:text="@string/concerned"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -248,9 +246,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginRight="15dp"
+                                android:layout_marginEnd="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Unbeschwert"
+                                android:text="@string/carefree"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -260,7 +258,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 
@@ -285,9 +283,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Abgelenkt"
+                                android:text="@string/distracted"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -296,9 +294,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginRight="15dp"
+                                android:layout_marginEnd="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Konzentriert"
+                                android:text="@string/concentrated"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -308,7 +306,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 
@@ -333,9 +331,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Ängstlich"
+                                android:text="@string/anxious"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -344,9 +342,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginRight="15dp"
+                                android:layout_marginEnd="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Furchtlos"
+                                android:text="@string/furchtlos"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -356,7 +354,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 
@@ -381,9 +379,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Wertlos"
+                                android:text="@string/worthless"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -392,9 +390,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginRight="15dp"
+                                android:layout_marginEnd="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Wertvoll"
+                                android:text="@string/precious"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -404,7 +402,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 
@@ -429,9 +427,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Müde"
+                                android:text="@string/tired"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -442,7 +440,7 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_marginRight="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Energetisch"
+                                android:text="@string/energetically"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -452,7 +450,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 
@@ -477,9 +475,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Einsam"
+                                android:text="@string/lonely"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -490,7 +488,7 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_marginRight="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Beteiligt"
+                                android:text="@string/involved"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -500,7 +498,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 
@@ -525,9 +523,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Hoffnungslos"
+                                android:text="@string/hopeless"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -538,7 +536,7 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_marginRight="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Hoffnungsvoll"
+                                android:text="@string/hopeful"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -548,7 +546,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 
@@ -562,7 +560,6 @@
                         </RelativeLayout>
 
                         <RelativeLayout
-                            android:id="@+id/relative_layout_mood_8"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
                             android:layout_below="@id/relative_layout_mood_7"
@@ -573,9 +570,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginStart="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Schwerfällig"
+                                android:text="@string/cumbersome"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -586,7 +583,7 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_marginRight="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="Leichtfüßig"
+                                android:text="@string/nimbly"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
@@ -596,7 +593,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginRight="10dp"
                                 android:layout_marginTop="-15dp"
 

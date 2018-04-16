@@ -58,12 +58,18 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
     public final int ART_ID_MOOD = 1;
     public final int ART_ID_FOOD = 2;
 
-    ImageView dim_layout;
+    private ImageView dim_layout;
 
     private FragNavController mNavController;
-    FloatingActionButton floatingActionButton, fabNote, fabMood, fabFood;
-    Animation fabOpen, fabClose, rotateForward, rotateBackwards;
-    Boolean isOpen = false;
+    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton fabNote;
+    private FloatingActionButton fabMood;
+    private FloatingActionButton fabFood;
+    private Animation fabOpen;
+    private Animation fabClose;
+    private Animation rotateForward;
+    private Animation rotateBackwards;
+    private Boolean isOpen = false;
     int instanceInt = 0;
 
 
@@ -361,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     NotificationManagerCompat.from(getApplicationContext()).cancel(idGenerated);
                     try {
                         NotificationHelper.ringtone.stop();
-                    }catch (Exception e){
+                    }catch (Exception ignored){
 
                     }
                     break;
@@ -371,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                     NotificationManagerCompat.from(getApplicationContext()).cancel(intent.getBundleExtra("notiBundle").getInt("id"));
                     try {
                         NotificationHelper.ringtone.stop();
-                    }catch (Exception e){
+                    }catch (Exception ignored){
 
                     }
                     break;
@@ -385,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         super.onNewIntent(intent);
     }
 
-    public static TakenDrug drugToTakenDrug(Context context, Drug drug , int dosage){
+    private static TakenDrug drugToTakenDrug(Context context, Drug drug, int dosage){
         TakenDrug takenDrug = new TakenDrug();
         takenDrug.setDosageForm(databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
         takenDrug.setDrugName(drug.getDrugName());

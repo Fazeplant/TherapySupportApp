@@ -42,7 +42,7 @@ public interface DrugDao {
     Drug findByManufacturer(String manufacturer);
 
     @Query("DELETE FROM drug")
-    public void nukeTable();
+    void nukeTable();
 
     @Insert
     long insert(Drug drug);

@@ -1,8 +1,6 @@
 package michaelbumes.therapysupportapp.utils;
 
 import android.content.Context;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.VideoView;
 

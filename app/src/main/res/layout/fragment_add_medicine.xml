@@ -29,11 +29,11 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/custom_button_accent"
-        android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
+        android:drawableStart="@drawable/ic_camera_alt_black_24dp"
         android:drawablePadding="-10dp"
         android:paddingStart="10dp"
         android:singleLine="true"
-        android:text="Barcode Scannen"
+        android:text="@string/scan_barcode"
         android:textAlignment="center"
         android:textAllCaps="false" />
 
@@ -44,7 +44,7 @@
         android:layout_below="@+id/edit_drug_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="- ODER -"
+        android:text="@string/hyphen_or_hyphen"
         android:textSize="18sp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
@@ -58,7 +58,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="15dp"
         android:background="@drawable/custom_button_fade"
-        android:text="Weiter"
+        android:text="@string/m_continue"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp" />

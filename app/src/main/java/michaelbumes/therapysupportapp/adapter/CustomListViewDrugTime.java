@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,11 +20,11 @@ import michaelbumes.therapysupportapp.R;
 
 public class CustomListViewDrugTime extends ArrayAdapter<String> {
 
-    private ArrayList<String> textViewDrugTime;
-    private ArrayList<String> textViewDosage;
-    private ArrayList<String> textViewDosageForm;
+    private final ArrayList<String> textViewDrugTime;
+    private final ArrayList<String> textViewDosage;
+    private final ArrayList<String> textViewDosageForm;
     private ImageButton imageButtonCancle;
-    private Activity context;
+    private final Activity context;
     private View.OnClickListener durgTimeOnclickListener,dosageOnclickListener,dosageFormOnclickListener, imageButtonOnclickListener;
 
 
@@ -75,10 +74,10 @@ public class CustomListViewDrugTime extends ArrayAdapter<String> {
     }
 
     class ViewHolder{
-        TextView tvw1;
-        TextView tvw2;
-        TextView tvw3;
-        ImageButton imb;
+        final TextView tvw1;
+        final TextView tvw2;
+        final TextView tvw3;
+        final ImageButton imb;
         ViewHolder(View v){
             tvw1 = v.findViewById(R.id.text_view_drug_time);
             tvw2 = v.findViewById(R.id.text_view_drug_time_dosage);

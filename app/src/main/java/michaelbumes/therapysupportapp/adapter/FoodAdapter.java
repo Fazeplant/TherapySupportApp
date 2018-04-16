@@ -8,82 +8,43 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.TimeZone;
 
-import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.NoteActivity;
-import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.entity.MoodDiary;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.ncapdevi.fragnav.FragNavController;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import michaelbumes.therapysupportapp.R;
-import michaelbumes.therapysupportapp.activities.MainActivity;
-import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.entity.DrugEventDb;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
-import michaelbumes.therapysupportapp.fragments.DrugEvent;
-import michaelbumes.therapysupportapp.fragments.DrugFragment;
 
-/**
- * Created by Michi on 07.04.2018.
- */
+
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
-    List<MoodDiary> food;
+    private final List<MoodDiary> food;
     private Context context;
     int instanceInt = 0;
 
@@ -108,32 +69,32 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final FoodAdapter.ViewHolder holder, final int position) {
-        List<String> arrayList = new ArrayList<String>(Arrays.asList(food.get(position).getInfo1().split(",")));
+    public void onBindViewHolder(final FoodAdapter.ViewHolder holder,int i ){
+        List<String> arrayList = new ArrayList<String>(Arrays.asList(food.get(holder.getAdapterPosition()).getInfo1().split(",")));
         holder.textViewFood.setText(arrayList.get(0));
         if (arrayList.size() >1){
             switch (Integer.valueOf(arrayList.get(1))){
                 case 2:
-                    holder.textViewFoodType.setText("Frühstück");
+                    holder.textViewFoodType.setText(R.string.breakfast);
                     break;
                 case 3:
-                    holder.textViewFoodType.setText("Mittagessen");
+                    holder.textViewFoodType.setText(R.string.lunch);
                     break;
                 case 6:
-                    holder.textViewFoodType.setText("Abendessen");
+                    holder.textViewFoodType.setText(R.string.dinner);
                     break;
                 default:
-                    holder.textViewFoodType.setText("Snack");
+                    holder.textViewFoodType.setText(R.string.snack);
                     break;
             }
         }
-        if (food.get(position).getInfo2() != null) {
-            File imgFile = new File(food.get(position).getInfo2());
+        if (food.get(holder.getAdapterPosition()).getInfo2() != null) {
+            File imgFile = new File(food.get(holder.getAdapterPosition()).getInfo2());
             if (imgFile.exists()) {
                 //Bild korrekt drehen, falls Gerät nicht kompatibel
                 ExifInterface exif = null;
                 try {
-                    exif = new ExifInterface(food.get(position).getInfo2());
+                    exif = new ExifInterface(food.get(holder.getAdapterPosition()).getInfo2());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -143,9 +104,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
                 if (rotation != 0f) {
                     matrix.preRotate(rotationInDegrees);
                 }
-                Bitmap myBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(food.get(position).getInfo2()), 150, 150);
+                Bitmap myBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(food.get(holder.getAdapterPosition()).getInfo2()), 150, 150);
 
-                //Bitmap myBitmap = BitmapFactory.decodeFile(food.get(position).getInfo2());
+                //Bitmap myBitmap = BitmapFactory.decodeFile(food.get(holder.getAdapterPosition()).getInfo2());
 
                 Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
                 holder.imageView.setImageBitmap(adjustedBitmap);
@@ -157,7 +118,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (food.get(position).getInfo2() != null) {
+                if (food.get(holder.getAdapterPosition()).getInfo2() != null) {
                         holder.zoomImageFromThumb(holder.imageView);
 
                 }
@@ -184,10 +145,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView textViewFood, textViewFoodType;
-        public ImageView imageView;
+        public final TextView textViewFood;
+        public final TextView textViewFoodType;
+        public final ImageView imageView;
         private Animator mCurrentAnimator;
-        private int mShortAnimationDuration;
+        private final int mShortAnimationDuration;
 
 
         public ViewHolder(View itemView) {
@@ -222,7 +184,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
             }
 
             // Load the high-resolution "zoomed-in" image.
-            final ImageView expandedImageView = (ImageView) itemView.findViewById(
+            final ImageView expandedImageView = itemView.findViewById(
                     R.id.image_view_food_today_expanded);
             ExifInterface exif = null;
             try {

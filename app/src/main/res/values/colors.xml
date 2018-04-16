@@ -13,25 +13,15 @@
     <color name="colorPrimary">#88C542</color>
     <color name="colorPrimaryDark">#5a9216</color>
     <color name="colorAccent">#eaff00</color>
-    <color name="colorAccent2">#F0A32F</color>
 
-    <color name="colorLila">#6200ea</color>
-    <color name="colorAccentDark">#3F4D5F</color>
     <color name="white">#ffffff</color>
-    <color name="colorText">#000000</color>
     <color name="colorBackground">#EAEAEA</color>
 
-
-    <color name="login">#bababa</color>
-
-
-    <color name="black_25_transparent">#40000000</color>
 
     <color name="transparent">#00000000</color>
     <color name="black">#000000</color>
 
     <color name="actionBarText">#263238</color>
-    <color name="colorDark">#3F4D5F</color>
 
     <color name="mood_normal">#64dd17</color>
     <color name="mood_0">#2433ff</color>
@@ -40,10 +30,8 @@
     <color name="mood_3">#fa6562</color>
     <color name="mood_4">#ff4542</color>
     <color name="mood_5">#e60c00</color>
-    <color name="cardview_custom_color">#eaeaea</color>
     <color name="black_150_transparent">#96000000</color>
     <color name="grey">#757575</color>
-    <color name="item_delete_background">#ff0000</color>
 
 
 </resources>

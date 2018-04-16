@@ -1,12 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 <android.support.v7.widget.CardView
-    android:id="@+id/today_card_view_mood"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/activity_vertical_margin"
@@ -24,24 +20,23 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/text_view_depressive"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_weight="1"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:layout_marginTop="8dp"
-                android:text="Depressiv"
+                android:text="@string/depressive"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_view_mania"
                 android:layout_width="wrap_content"
-                android:layout_marginRight="18dp"
-                android:layout_gravity="right"
-                android:gravity="right"
+                android:layout_marginEnd="18dp"
+                android:layout_gravity="end"
+                android:gravity="end"
                 android:layout_height="wrap_content"
-                android:text="Manisch"
+                android:text="@string/manic"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -49,12 +44,10 @@
 
 
         <LinearLayout
-            android:id="@+id/today_mood_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
 
-            android:layout_below="@+id/text_view_depressive"
-            android:layout_centerHorizontal="true"
+
             android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp"
             android:orientation="horizontal"

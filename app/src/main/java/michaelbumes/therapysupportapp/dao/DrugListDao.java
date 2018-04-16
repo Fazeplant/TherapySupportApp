@@ -34,7 +34,7 @@ public interface DrugListDao {
     int countDrugList();
 
     @Query("DELETE FROM drug_list")
-    public void nukeTable();
+    void nukeTable();
 
     @Insert
     void insertAll(DrugList... drugs);

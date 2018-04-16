@@ -37,7 +37,7 @@ public class NotificationHelper extends ContextWrapper {
     private static final String CANCLE_ACTION ="michaelbumes.therapysupportapp.CANCLE_ACTION" ;
     private Uri notiUri;
     public static Ringtone ringtone;
-    int notificationMode = -1;
+    private int notificationMode = -1;
 
     private NotificationManager manager;
     public NotificationHelper(Context context){
@@ -154,57 +154,67 @@ public class NotificationHelper extends ContextWrapper {
             case 5:
                 notificationChannel = NOTIFICATION_ID_SILENT;
                 notiUri = null;
-                v.vibrate(500);
+                if (v != null) {
+                    v.vibrate(500);
+                }
                 notificationMode = Notification.DEFAULT_VIBRATE;
                 break;
             case 6:
                 int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-                if (currentDay == Calendar.SUNDAY && discretePattern[6] == false) {
+                if (currentDay == Calendar.SUNDAY && !discretePattern[6]) {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     notiUri = null;
+                    assert v != null;
                     v.vibrate(500);
                     notificationMode = Notification.DEFAULT_VIBRATE;
                     break;
-                } else if (currentDay == Calendar.MONDAY && discretePattern[0] == false) {
+                } else if (currentDay == Calendar.MONDAY && !discretePattern[0]) {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     notiUri = null;
+                    assert v != null;
                     v.vibrate(500);
                     notificationMode = Notification.DEFAULT_VIBRATE;
                     break;
 
-                } else if (currentDay == Calendar.TUESDAY && discretePattern[1] == false) {
+                } else if (currentDay == Calendar.TUESDAY && !discretePattern[1]) {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     notiUri = null;
+                    assert v != null;
                     v.vibrate(500);
                     notificationMode = Notification.DEFAULT_VIBRATE;
                     break;
-                } else if (currentDay == Calendar.WEDNESDAY && discretePattern[2] == false) {
+                } else if (currentDay == Calendar.WEDNESDAY && !discretePattern[2]) {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     notiUri = null;
+                    assert v != null;
                     v.vibrate(500);
                     notificationMode = Notification.DEFAULT_VIBRATE;
                     break;
-                } else if (currentDay == Calendar.THURSDAY && discretePattern[3] == false) {
+                } else if (currentDay == Calendar.THURSDAY && !discretePattern[3]) {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     notiUri = null;
+                    assert v != null;
                     v.vibrate(500);
                     notificationMode = Notification.DEFAULT_VIBRATE;
                     break;
-                } else if (currentDay == Calendar.FRIDAY && discretePattern[4] == false) {
+                } else if (currentDay == Calendar.FRIDAY && !discretePattern[4]) {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     notiUri = null;
+                    assert v != null;
                     v.vibrate(500);
                     notificationMode = Notification.DEFAULT_VIBRATE;
                     break;
-                } else if (currentDay == Calendar.SATURDAY && discretePattern[5] == false) {
+                } else if (currentDay == Calendar.SATURDAY && !discretePattern[5]) {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     notiUri = null;
+                    assert v != null;
                     v.vibrate(500);
                     notificationMode = Notification.DEFAULT_VIBRATE;
                     break;
                 }else {
                     notificationChannel = NOTIFICATION_ID_SILENT;
                     Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    assert vibrator != null;
                     vibrator.vibrate(500);
                     notiUri = null;
                     notificationMode = Notification.DEFAULT_ALL;

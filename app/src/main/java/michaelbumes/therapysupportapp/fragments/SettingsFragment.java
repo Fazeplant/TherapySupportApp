@@ -1,22 +1,30 @@
 package michaelbumes.therapysupportapp.fragments;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.lang.reflect.Method;
+import java.nio.channels.FileChannel;
+import java.util.Random;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.entity.DosageForm;
-import michaelbumes.therapysupportapp.entity.DrugList;
 
 import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDrugList;
 
@@ -24,8 +32,9 @@ import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDru
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends BaseFragment {
-    Button nukeButton;
-    Button createButton , testButton;
+    private Button nukeButton;
+    private Button createButton;
+    private Button testButton;
 
     public static SettingsFragment  newInstance(int instance) {
         Bundle args = new Bundle();
@@ -46,9 +55,7 @@ public class SettingsFragment extends BaseFragment {
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DrugList drugList = databaseDrugList.drugListDao().findByPzn("03393767");
-                List<DosageForm> dosageForm = databaseDrugList.dosageFormDao().getAll();
-                Toast.makeText(getContext(), drugList.getName(), Toast.LENGTH_SHORT).show();
+                exportDatabse(getContext());
             }
         });
         nukeButton.setOnClickListener(new View.OnClickListener() {
@@ -62,98 +69,6 @@ public class SettingsFragment extends BaseFragment {
 
             }
         });
-/*
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DosageForm dosageForm1 = new DosageForm();
-                DosageForm dosageForm2 = new DosageForm();
-                DosageForm dosageForm3 = new DosageForm();
-                DosageForm dosageForm4 = new DosageForm();
-                DosageForm dosageForm5 = new DosageForm();
-                DosageForm dosageForm6 = new DosageForm();
-                DosageForm dosageForm7 = new DosageForm();
-                DosageForm dosageForm8 = new DosageForm();
-                DosageForm dosageForm9 = new DosageForm();
-                DosageForm dosageForm10 = new DosageForm();
-                DosageForm dosageForm11 = new DosageForm();
-                DosageForm dosageForm12 = new DosageForm();
-                DosageForm dosageForm13 = new DosageForm();
-
-                dosageForm1.setDosageFormName("Ampulle(n)");
-                dosageForm2.setDosageFormName("Anwendung(en)");
-                dosageForm3.setDosageFormName("Einheit(en)");
-                dosageForm4.setDosageFormName("Gramm");
-                dosageForm5.setDosageFormName("Hub/Hübe");
-                dosageForm6.setDosageFormName("Injektion(en)");
-                dosageForm7.setDosageFormName("Kapsel(n)");
-                dosageForm8.setDosageFormName("Milligramm");
-                dosageForm9.setDosageFormName("Milliliter");
-                dosageForm10.setDosageFormName("Stück");
-                dosageForm11.setDosageFormName("Tablette(n)");
-                dosageForm12.setDosageFormName("Tropfen");
-                dosageForm13.setDosageFormName("Zäpfchen");
-
-*/
-/*                dosageForm1.setDosageFormName("Tablette(n)");
-                dosageForm2.setDosageFormName("Kapsel(n)");
-                dosageForm3.setDosageFormName("Stück");
-                dosageForm4.setDosageFormName("Milliliter");
-                dosageForm5.setDosageFormName("Milligramm");
-                dosageForm6.setDosageFormName("Gramm");
-                dosageForm7.setDosageFormName("Tropfen");
-
-                dosageForm8.setDosageFormName("Injektion(en)");
-                dosageForm9.setDosageFormName("Ampulle(n)");
-
-                dosageForm10.setDosageFormName("Zäpfchen");
-                dosageForm11.setDosageFormName("Hub/Hübe");
-
-                dosageForm12.setDosageFormName("Anwendung(en)");
-                dosageForm13.setDosageFormName("Einheit(en)");*//*
-
-
-
-                DrugList drug1 = new DrugList();
-                DrugList drug2 = new DrugList();
-                DrugList drug3 = new DrugList();
-                DrugList drug4 = new DrugList();
-
-                drug1.setName("Antidepressiva Test 1 P");
-                drug1.setManufacturer("STADA Diagnostik");
-                drug1.setPzn("10110497");
-                drug1.setDosageFormId(11);
-                drug1.setSideEffects("Appetitlosigkeit, Erhöhung des Blutzuckers");
-                drug1.setTakingNote("Täglich über drei Tage");
-
-                drug2.setName("LITHIUM APOGEPHA");
-                drug2.setManufacturer("Apogepha Arzneimittel GmbH");
-                drug2.setPzn("4775459");
-                drug2.setDosageFormId(11);
-                drug2.setSideEffects("Vermehrung der weißen Blutkörperchen");
-                drug2.setTakingNote("Täglich über drei Tage");
-
-                drug3.setName("Hypnorex ret.");
-                drug3.setManufacturer("Sanofi-Aventis Deutschland GmbH");
-                drug3.setPzn("3873987");
-                drug3.setDosageFormId(11);
-                drug3.setSideEffects("Haluzinationen");
-                drug3.setTakingNote("Täglich über drei Tage");
-
-                drug4.setName("Isla Cassis");
-                drug4.setManufacturer("Engelhard Arzneimittel GmbH & Co.KG");
-                drug4.setPzn("-03397699");
-                drug4.setDosageFormId(11);
-                drug4.setSideEffects("Haluzinationen");
-                drug4.setTakingNote("Täglich über drei Tage");
-
-
-                databaseDrugList.drugListDao().insertAll(drug1,drug2,drug3,drug4);
-                databaseDrugList.dosageFormDao().insertAll(dosageForm1,dosageForm2, dosageForm3, dosageForm4, dosageForm5, dosageForm6, dosageForm7, dosageForm8, dosageForm9, dosageForm10, dosageForm11, dosageForm12, dosageForm13);
-            }
-        });
-*/
 
 
     }
@@ -163,5 +78,53 @@ public class SettingsFragment extends BaseFragment {
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
+    @SuppressWarnings("resource")
+    private static void exportDatabse(Context context) {
+        File backupDB = null;
+        if(Build.VERSION.SDK_INT>=24){
+            try{
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = "//data//" + context.getPackageName()
+                        + "//databases//" + "database" + "";
+                File currentDB = new File(data, currentDBPath);
+                backupDB = new File(sd, "database");
+
+                if (currentDB.exists()) {
+
+                    FileChannel src = new FileInputStream(currentDB)
+                            .getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB)
+                            .getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("*/*");
+/*        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+                new String[]{email});*/
+
+        Random r = new Random();
+
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+                "Datenbank " + r.nextInt());
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(backupDB));
+        context.startActivity(Intent.createChooser(emailIntent, "Datenbank exportieren"));
+    }
 
 }

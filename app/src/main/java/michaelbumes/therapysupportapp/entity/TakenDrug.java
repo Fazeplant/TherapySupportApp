@@ -28,7 +28,7 @@ public class TakenDrug implements Serializable {
 
     @ColumnInfo(name = "date")
     @TypeConverters({TimestampConverter.class})
-    public Date date;
+    private Date date;
 
     @ColumnInfo(name = "dosage")
     private int dosage;

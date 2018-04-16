@@ -1,29 +1,16 @@
 package michaelbumes.therapysupportapp.activities;
 
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Toast;
-
-import com.ncapdevi.fragnav.FragNavController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +21,6 @@ import java.util.List;
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
-import michaelbumes.therapysupportapp.fragments.TodayFragment;
 
 
 public class MoodActivity extends AppCompatActivity {
@@ -52,10 +38,25 @@ public class MoodActivity extends AppCompatActivity {
     private MoodDiary moodDiaryToday;
 
 
-    Button moodButton0, moodButton1, moodButton2, moodButton3, moodButtonNormal, moodButton4, moodButton5 ,addMoodButton, expandMoodButton;
-    LinearLayout cardViewMoodExpand;
+    private Button moodButton0;
+    private Button moodButton1;
+    private Button moodButton2;
+    private Button moodButton3;
+    private Button moodButtonNormal;
+    private Button moodButton4;
+    private Button moodButton5;
+    private Button addMoodButton;
+    private Button expandMoodButton;
+    private LinearLayout cardViewMoodExpand;
 
-    SeekBar seekBar1, seekBar2, seekBar3, seekBar4, seekBar5, seekBar6, seekBar7, seekBar8;
+    private SeekBar seekBar1;
+    private SeekBar seekBar2;
+    private SeekBar seekBar3;
+    private SeekBar seekBar4;
+    private SeekBar seekBar5;
+    private SeekBar seekBar6;
+    private SeekBar seekBar7;
+    private SeekBar seekBar8;
 
 
     @Override
@@ -272,13 +273,13 @@ public class MoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isExpanded){
-                    expandMoodButton.setText("Mehr Zeit?");
+                    expandMoodButton.setText(R.string.more_time);
                     isExpanded = false;
                     Drawable img = getApplicationContext().getResources().getDrawable(R.drawable.ic_arrow_drop_down_black_24dp);
                     expandMoodButton.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
                     cardViewMoodExpand.setVisibility(View.GONE);
                 }else {
-                    expandMoodButton.setText("Weniger Zeit?");
+                    expandMoodButton.setText(R.string.less_time);
                     isExpanded = true;
                     Drawable img = getApplicationContext().getResources().getDrawable(R.drawable.ic_arrow_drop_up_black_24dp);
                     expandMoodButton.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);

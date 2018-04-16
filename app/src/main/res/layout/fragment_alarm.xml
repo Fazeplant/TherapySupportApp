@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="50dp"
+                    android:layout_marginEnd="50dp"
                     android:text="Aktivieren Sie diese Funktion, um alle fünf Minuten errinert zu werden, bis Sie die Aufgabe bestätigt oder übersprungen haben"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -52,7 +52,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ton"
+                    android:text="@string/sound"
                     android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -166,8 +166,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="An folgenden Wochentagen:"
-                    android:layout_marginLeft="8dp"
+                    android:text="@string/on_these_weekdays"
+                    android:layout_marginStart="8dp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -178,7 +178,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:paddingLeft="30dp"
+                        android:paddingStart="30dp"
                         android:text="@string/monday"
                         android:textColor="@color/grey"
                         android:textSize="18sp" />
@@ -188,7 +188,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:paddingLeft="30dp"
+                        android:paddingStart="30dp"
                         android:text="@string/tuesday"
                         android:textColor="@color/grey"
                         android:textSize="18sp" />
@@ -198,7 +198,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:paddingLeft="30dp"
+                        android:paddingStart="30dp"
                         android:text="@string/wednesday"
                         android:textColor="@color/grey"
                         android:textSize="18sp" />
@@ -208,7 +208,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:paddingLeft="30dp"
+                        android:paddingStart="30dp"
                         android:text="@string/thursday"
                         android:textColor="@color/grey"
                         android:textSize="18sp" />
@@ -218,7 +218,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:paddingLeft="30dp"
+                        android:paddingStart="30dp"
                         android:text="@string/friday"
                         android:textColor="@color/grey"
                         android:textSize="18sp" />
@@ -228,7 +228,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:paddingLeft="30dp"
+                        android:paddingStart="30dp"
                         android:text="@string/saturday"
                         android:textColor="@color/grey"
                         android:textSize="18sp" />
@@ -238,7 +238,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:paddingLeft="30dp"
+                        android:paddingStart="30dp"
                         android:text="@string/sunday"
                         android:textColor="@color/grey"
                         android:textSize="18sp" />

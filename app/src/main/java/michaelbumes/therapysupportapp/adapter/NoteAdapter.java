@@ -12,7 +12,6 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.ExifInterface;
-import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +30,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.NoteActivity;
@@ -46,7 +44,7 @@ import static android.provider.MediaStore.Video.Thumbnails.MINI_KIND;
  */
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
-    List<MoodDiary> notes;
+    private final List<MoodDiary> notes;
     private Context context;
     int instanceInt = 0;
 
@@ -71,19 +69,19 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final NoteAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final NoteAdapter.ViewHolder holder,  int i) {
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (notes.get(position).getInfo2() != null) {
-                    if (isImageFile(notes.get(position).getInfo2())) {
-                        File imgFile = new File(notes.get(position).getInfo2());
+                if (notes.get(holder.getAdapterPosition()).getInfo2() != null) {
+                    if (isImageFile(notes.get(holder.getAdapterPosition()).getInfo2())) {
+                        File imgFile = new File(notes.get(holder.getAdapterPosition()).getInfo2());
 
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
                         holder.zoomImageFromThumb(holder.imageView, myBitmap);
-                    } else if (isVideoFile(notes.get(position).getInfo2())) {
-                        holder.zoomVideoFromThumb(holder.imageView, notes.get(position).getInfo2());
+                    } else if (isVideoFile(notes.get(holder.getAdapterPosition()).getInfo2())) {
+                        holder.zoomVideoFromThumb(holder.imageView, notes.get(holder.getAdapterPosition()).getInfo2());
                     }
 
                 }
@@ -93,14 +91,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         });
 
 
-        holder.textView.setText(notes.get(position).getInfo1());
-        if (notes.get(position).getInfo2() != null && isImageFile(notes.get(position).getInfo2())) {
-            File imgFile = new File(notes.get(position).getInfo2());
+        holder.textView.setText(notes.get(holder.getAdapterPosition()).getInfo1());
+        if (notes.get(holder.getAdapterPosition()).getInfo2() != null && isImageFile(notes.get(holder.getAdapterPosition()).getInfo2())) {
+            File imgFile = new File(notes.get(holder.getAdapterPosition()).getInfo2());
             if (imgFile.exists()) {
                 //Bild korrekt drehen, falls Gerät nicht kompatibel
                 ExifInterface exif = null;
                 try {
-                    exif = new ExifInterface(notes.get(position).getInfo2());
+                    exif = new ExifInterface(notes.get(holder.getAdapterPosition()).getInfo2());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -111,9 +109,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                     matrix.preRotate(rotationInDegrees);
                 }
 
-                Bitmap myBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(notes.get(position).getInfo2()), 150, 150);
+                Bitmap myBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(notes.get(holder.getAdapterPosition()).getInfo2()), 150, 150);
 
-                //Bitmap myBitmap = BitmapFactory.decodeFile(notes.get(position).getInfo2());
+                //Bitmap myBitmap = BitmapFactory.decodeFile(notes.get(holder.getAdapterPosition()).getInfo2());
 
                 Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
                 holder.imageView.setImageBitmap(adjustedBitmap);
@@ -121,8 +119,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
             }
         }
-        if (notes.get(position).getInfo2() != null && isVideoFile(notes.get(position).getInfo2())) {
-            Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(notes.get(position).getInfo2(), MINI_KIND);
+        if (notes.get(holder.getAdapterPosition()).getInfo2() != null && isVideoFile(notes.get(holder.getAdapterPosition()).getInfo2())) {
+            Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(notes.get(holder.getAdapterPosition()).getInfo2(), MINI_KIND);
 
             holder.imageView.setImageBitmap(Bitmap.createScaledBitmap(thumbnail, 80, 80, false));
 
@@ -146,10 +144,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView textView;
-        public ImageView imageView;
+        public final TextView textView;
+        public final ImageView imageView;
         private Animator mCurrentAnimator;
-        private int mShortAnimationDuration;
+        private final int mShortAnimationDuration;
 
 
         public ViewHolder(View itemView) {
@@ -183,7 +181,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             }
 
             // Load the high-resolution "zoomed-in" image.
-            final ImageView expandedImageView = (ImageView) itemView.findViewById(
+            final ImageView expandedImageView = itemView.findViewById(
                     R.id.image_view_note_today_expanded);
             ExifInterface exif = null;
             try {
@@ -338,7 +336,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             }
 
             // Load the high-resolution "zoomed-in" image.
-            final MyVideoView expandedVideoView = (MyVideoView) itemView.findViewById(
+            final MyVideoView expandedVideoView = itemView.findViewById(
                     R.id.video_view_note_today_expanded);
 
             Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFilePath, MINI_KIND);

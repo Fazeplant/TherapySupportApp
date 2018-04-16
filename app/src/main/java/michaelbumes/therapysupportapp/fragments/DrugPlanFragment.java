@@ -12,25 +12,22 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.DrugAdapter;
 import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.database.DatabaseDrugList;
 import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.entity.DrugList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DrugPlanFragment extends BaseFragment {
-    FloatingActionButton fab;
+    private FloatingActionButton fab;
    private RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
-    List<Drug> drugs;
+    private RecyclerView.Adapter adapter;
+    private List<Drug> drugs;
 
 
     public static DrugPlanFragment  newInstance(int instance) {
@@ -62,7 +59,7 @@ public class DrugPlanFragment extends BaseFragment {
 
 
 
-        fab = (FloatingActionButton)view.findViewById(R.id.fab);
+        fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,12 +74,11 @@ public class DrugPlanFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_drug_plan, container, false);
 
-        return view;
+        return inflater.inflate(R.layout.fragment_drug_plan, container, false);
     }
 
-    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+    private final ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             return false;

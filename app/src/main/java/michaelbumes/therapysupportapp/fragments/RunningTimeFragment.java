@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import michaelbumes.therapysupportapp.R;
@@ -47,18 +48,15 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
     private int notificationFlag = -1;
 
     private View view1;
-    private ListView lst1, lst2;
-    private RadioGroup radioGroup;
-    private String[] stringFirstNotification, stringStartDate, stringMain2, stringSecond2;
-    private CardView cardView1, cardView2;
+    private String[] stringStartDate;
+    private String[] stringMain2;
+    private String[] stringSecond2;
+    private CardView cardView2;
     private Drug drug;
     private  CustomListView customListView1, customListView2;
     private SimpleDateFormat sdf;
     private Date tempDate;
     private DrugEvent myDrugEvent;
-    private RadioButton radioButtonUnlimitedTerm, radioButtonDefined, radioButtonDays;
-
-
 
 
     public static RunningTimeFragment newInstance(int instance) {
@@ -83,27 +81,26 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
         int startDay = c.get(Calendar.DAY_OF_MONTH);
         Date currentDate = c.getTime();
 
-        final Calendar cAddTime = c;
-        cAddTime.setTime(currentDate);
-        cAddTime.add(Calendar.DATE, 10);
-        sdf = new SimpleDateFormat("dd/MM/yyyy");
+        c.setTime(currentDate);
+        c.add(Calendar.DATE, 10);
+        sdf = new SimpleDateFormat("dd/MM/yyyy" , Locale.getDefault());
 
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(), this, startYear, startMonth, startDay);
 
-        radioGroup = view.findViewById(R.id.radio_group_running_time);
-        radioButtonUnlimitedTerm = view.findViewById(R.id.radio_button_unlimited_term);
-        radioButtonDefined = view.findViewById(R.id.radio_button_defined_end_date);
-        radioButtonDays= view.findViewById(R.id.radio_button_term_in_days);
+        RadioGroup radioGroup = view.findViewById(R.id.radio_group_running_time);
+        RadioButton radioButtonUnlimitedTerm = view.findViewById(R.id.radio_button_unlimited_term);
+        RadioButton radioButtonDefined = view.findViewById(R.id.radio_button_defined_end_date);
+        RadioButton radioButtonDays = view.findViewById(R.id.radio_button_term_in_days);
 
-        lst1 = view.findViewById(R.id.list_view_running_time_1);
-        lst2 = view.findViewById(R.id.list_view_running_time_2);
+        ListView lst1 = view.findViewById(R.id.list_view_running_time_1);
+        ListView lst2 = view.findViewById(R.id.list_view_running_time_2);
 
-        cardView1 = view.findViewById(R.id.card_view_running_time_1);
+        CardView cardView1 = view.findViewById(R.id.card_view_running_time_1);
         cardView2 = view.findViewById(R.id.card_view_running_time_2);
 
-        stringFirstNotification = new String[]{"Erste Erinnerung"};
+        String[] stringFirstNotification = new String[]{"Erste Erinnerung"};
         stringStartDate = new String[]{myDrugEvent.getStartingDate()};
 
 
@@ -116,7 +113,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
         }
 
         if (myDrugEvent.getEndDate().equals("-1")){
-            stringSecond2 = new String[]{sdf.format(cAddTime.getTime())};
+            stringSecond2 = new String[]{sdf.format(c.getTime())};
         }else {
             if (myDrugEvent.getRunningTime() == 2){
                 stringSecond2 = new String[]{myDrugEvent.getEndDate()};
@@ -182,9 +179,9 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
                     cardView2.setVisibility(View.VISIBLE);
                     stringMain2[0] = "Letzte Erinnerung";
                     if (myDrugEvent.getEndDate().equals("-1")){
-                        myDrugEvent.setEndDate(sdf.format(cAddTime.getTime()));
+                        myDrugEvent.setEndDate(sdf.format(c.getTime()));
                         EventBus.getDefault().postSticky(myDrugEvent);
-                        stringSecond2[0] = sdf.format(cAddTime.getTime());
+                        stringSecond2[0] = sdf.format(c.getTime());
                     }else {
                         stringSecond2[0] = myDrugEvent.getEndDate();
                     }
@@ -200,7 +197,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
 
                     if (myDrugEvent.getEndDate().equals("-1")){
-                        myDrugEvent.setEndDate(sdf.format(cAddTime.getTime()));
+                        myDrugEvent.setEndDate(sdf.format(c.getTime()));
                         EventBus.getDefault().postSticky(myDrugEvent);
                         stringSecond2[0] = "10";
                     }else {
@@ -267,14 +264,14 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
     }
 
-    public void pickDays() {
+    private void pickDays() {
         final AlertDialog.Builder d = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.number_picker_dialog, null);
         d.setTitle("Anzahl Tage");
         d.setMessage("");
         d.setView(dialogView);
-        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        final NumberPicker numberPicker = dialogView.findViewById(R.id.dialog_number_picker);
         numberPicker.setMaxValue(365);
         numberPicker.setMinValue(1);
         numberPicker.setWrapSelectorWheel(false);

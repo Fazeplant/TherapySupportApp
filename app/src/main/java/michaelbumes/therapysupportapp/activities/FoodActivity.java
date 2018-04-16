@@ -8,18 +8,12 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,6 +29,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.database.AppDatabase;
@@ -43,16 +38,16 @@ import michaelbumes.therapysupportapp.entity.MoodDiary;
 import static michaelbumes.therapysupportapp.activities.NoteActivity.exifToDegrees;
 
 public class FoodActivity extends AppCompatActivity {
-    EditText textEditFood;
-    Button photoButtonFood, adFood;
-    RadioGroup radioGroup;
-    ImageView imageViewFood;
-    String mCurrentPhotoPath;
-    private RadioButton radioButtonBreakfast, radioButtonSnack1, radioButtonLunch, radioButtonSnack2, radioButtonDinner, radioButtonSnack3;
-    File image;
-    boolean photoTaken = false;
+    private EditText textEditFood;
+    private Button photoButtonFood;
+    private Button adFood;
+    private RadioGroup radioGroup;
+    private ImageView imageViewFood;
+    private String mCurrentPhotoPath;
+    private File image;
+    private boolean photoTaken = false;
     private static final int REQUEST_TAKE_PHOTO = 0;
-    ExifInterface exif;
+    private ExifInterface exif;
     private int foodTypeId = -1;
     private MoodDiary moodDiaryToday;
 
@@ -73,12 +68,12 @@ public class FoodActivity extends AppCompatActivity {
         radioGroup = findViewById(R.id.radio_group_food);
         imageViewFood = findViewById(R.id.image_view_food);
 
-        radioButtonBreakfast = findViewById(R.id.radio_button_food_breakfast);
-        radioButtonSnack1 = findViewById(R.id.radio_button_food_snack1);
-        radioButtonLunch = findViewById(R.id.radio_button_food_lunch);
-        radioButtonSnack2 = findViewById(R.id.radio_button_food_snack2);
-        radioButtonDinner = findViewById(R.id.radio_button_food_dinner);
-        radioButtonSnack3 = findViewById(R.id.radio_button_food_snack3);
+        RadioButton radioButtonBreakfast = findViewById(R.id.radio_button_food_breakfast);
+        RadioButton radioButtonSnack1 = findViewById(R.id.radio_button_food_snack1);
+        RadioButton radioButtonLunch = findViewById(R.id.radio_button_food_lunch);
+        RadioButton radioButtonSnack2 = findViewById(R.id.radio_button_food_snack2);
+        RadioButton radioButtonDinner = findViewById(R.id.radio_button_food_dinner);
+        RadioButton radioButtonSnack3 = findViewById(R.id.radio_button_food_snack3);
         moodDiaryToday = null;
 
         Intent intent = getIntent();
@@ -213,7 +208,7 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     private String getImageName() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss", Locale.getDefault());
         String timestamp = simpleDateFormat.format(new Date());
         return "Food_Image_" + timestamp;
     }

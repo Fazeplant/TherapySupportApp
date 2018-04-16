@@ -7,7 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateUtils;
+import android.text.format.DateFormat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +21,7 @@ import michaelbumes.therapysupportapp.fragments.DrugEvent;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -33,8 +34,6 @@ public class AlarmMain extends BroadcastReceiver {
     private final String REMINDER_BUNDLE = "MyReminderBundle";
     private final String NOTIFICATION_CHANNEL = "MyNotificationChannel";
     private NotificationManager notifManager;
-    private NotificationHelper helper;
-    private android.support.v4.app.NotificationCompat.Builder builder;
     private Calendar calendar;
     private AlarmManager alarmMgr;
     private Intent intent;
@@ -63,16 +62,16 @@ public class AlarmMain extends BroadcastReceiver {
         id = extras.getInt("id");
 
 
-        SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         try {
             startingDay = sdfDate.parse(mDrugEvent.getStartingDate());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         android.text.format.DateFormat df = new android.text.format.DateFormat();
-        startDay = Integer.parseInt(df.format("dd", startingDay).toString());
-        startMonth = Integer.parseInt(df.format("MM", startingDay).toString());
-        startYear = Integer.parseInt(df.format("yyyy", startingDay).toString());
+        startDay = Integer.parseInt(DateFormat.format("dd", startingDay).toString());
+        startMonth = Integer.parseInt(DateFormat.format("MM", startingDay).toString());
+        startYear = Integer.parseInt(DateFormat.format("yyyy", startingDay).toString());
 
 
         alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -97,9 +96,6 @@ public class AlarmMain extends BroadcastReceiver {
                 break;
 
         }
-
-
-        ;
 
 
     }
@@ -406,35 +402,35 @@ public class AlarmMain extends BroadcastReceiver {
                     c.set(Calendar.SECOND, 0);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + 86400000L, pendingIntent);
-                    return;
                 }
+                return;
 
             }
         }
 
         if (takingPattern == 4) {
             boolean[] takingPatternWeekdays = bundle.getBooleanArray("daysToAlarm");
-            if (currentDay == Calendar.SUNDAY && takingPatternWeekdays[6] == false) {
+            if (currentDay == Calendar.SUNDAY && !takingPatternWeekdays[6]) {
                 return;
-            } else if (currentDay == Calendar.MONDAY && takingPatternWeekdays[0] == false) {
+            } else if (currentDay == Calendar.MONDAY && !takingPatternWeekdays[0]) {
                 return;
 
-            } else if (currentDay == Calendar.TUESDAY && takingPatternWeekdays[1] == false) {
+            } else if (currentDay == Calendar.TUESDAY && !takingPatternWeekdays[1]) {
                 return;
-            } else if (currentDay == Calendar.WEDNESDAY && takingPatternWeekdays[2] == false) {
+            } else if (currentDay == Calendar.WEDNESDAY && !takingPatternWeekdays[2]) {
                 return;
-            } else if (currentDay == Calendar.THURSDAY && takingPatternWeekdays[3] == false) {
+            } else if (currentDay == Calendar.THURSDAY && !takingPatternWeekdays[3]) {
                 return;
-            } else if (currentDay == Calendar.FRIDAY && takingPatternWeekdays[4] == false) {
+            } else if (currentDay == Calendar.FRIDAY && !takingPatternWeekdays[4]) {
                 return;
-            } else if (currentDay == Calendar.SATURDAY && takingPatternWeekdays[5] == false) {
+            } else if (currentDay == Calendar.SATURDAY && !takingPatternWeekdays[5]) {
                 return;
             }
         }
 
 
-        helper = new NotificationHelper(context);
-        builder = helper.getChannelNotification("Medizin einehmen! ", drugName + " ", dosage ," " + dosageForm, alarmType, mIdGenerated,discreteTitle,discreteBody,discretePattern);
+        NotificationHelper helper = new NotificationHelper(context);
+        android.support.v4.app.NotificationCompat.Builder builder = helper.getChannelNotification("Medizin einehmen! ", drugName + " ", dosage, " " + dosageForm, alarmType, mIdGenerated, discreteTitle, discreteBody, discretePattern);
         helper.getManger().notify(mIdGenerated, builder.build());
     }
 
@@ -442,7 +438,7 @@ public class AlarmMain extends BroadcastReceiver {
         return str.length() < 2 ? str : str.substring(0, 2);
     }
 
-    public static void cancelAlarm(Context context, int id) {
+    private static void cancelAlarm(Context context, int id) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmMain.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);

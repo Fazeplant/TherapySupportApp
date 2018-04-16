@@ -8,10 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-
-import com.ncapdevi.fragnav.FragNavTransactionOptions;
 
 import michaelbumes.therapysupportapp.R;
 
@@ -21,7 +17,7 @@ import michaelbumes.therapysupportapp.R;
 public class BaseFragment extends Fragment {
 
 
-    public static final String ARGS_INSTANCE = "com.ncapdevi.sample.argsInstance";
+    static final String ARGS_INSTANCE = "com.ncapdevi.sample.argsInstance";
 
     FragmentNavigation fragmentNavigation;
     int instanceInt = 0;

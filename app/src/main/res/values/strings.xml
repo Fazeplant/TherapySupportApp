@@ -9,15 +9,10 @@
     <string name="add_medicine">Medizin hinzufügen</string>
 
 
-    <string name="drug_name">Medikament</string>
-    <string name="drug_manufacturer">Hersteller</string>
-    <string name="drug_manufacturer_description">Hersteller</string>
     <string name="drug_name_description">Name des Medikaments</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main2">Main2Activity</string>
     <string name="add_note">Notiz hinzufügen</string>
     <string name="title_mood">Stimmung hinzufügen</string>
     <string name="title_food">Mahlzeit hinzufügen</string>
@@ -26,79 +21,15 @@
     <string name="lunch">Mittagessen</string>
     <string name="dinner">Abendessen</string>
     <string name="food_hint">Mahlzeit</string>
-    <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
     <string name="drug">Medikament</string>
     <string name="save">Speichern</string>
     <string name="alarm">Alarm</string>
@@ -120,8 +51,6 @@
     <string name="saturday">Samstag</string>
     <string name="sunday">Sonntag</string>
     <string name="drug_detail">Detail</string>
-    <string name="standard">Standart</string>
-    <string name="mLong">Lang</string>
     <string name="silent">Stumm</string>
     <string name="no_notification">Keine Erinnerung</string>
     <string name="silent_notification">Stumme Erinnerung</string>
@@ -129,4 +58,43 @@
     <string name="discrete_notification">Diskrete Erinnerung</string>
     <string name="recurring_reminder">Wiederkehrende Erinnerungen</string>
     <string name="notification">Benachrichtigungston</string>
+    <string name="add_photo">Foto hinzufügen</string>
+    <string name="add">Hinzufügen</string>
+    <string name="how_do_you_feel_today">Wie fühlen Sie sich heute?</string>
+    <string name="depressive">Depressiv</string>
+    <string name="manic">Manisch</string>
+    <string name="more_time">Mehr Zeit?</string>
+    <string name="extended_input">Erweiterte Eingabe</string>
+    <string name="concerned">Besorgt</string>
+    <string name="carefree">Unbeschwert</string>
+    <string name="distracted">Abgelenkt</string>
+    <string name="concentrated">Konzentriert</string>
+    <string name="anxious">Ängstlich</string>
+    <string name="furchtlos">fearless</string>
+    <string name="worthless">Wertlos</string>
+    <string name="precious">Wertvoll</string>
+    <string name="tired">Müde</string>
+    <string name="energetically">Energetisch</string>
+    <string name="lonely">Einsam</string>
+    <string name="involved">Beteiligt</string>
+    <string name="hopeless">Hoffnungslos</string>
+    <string name="hopeful">Hoffnungsvoll</string>
+    <string name="cumbersome">Schwerfällig</string>
+    <string name="nimbly">Leichtfüßig</string>
+    <string name="add_note_dot_dot_dot">Notiz hinzufügen...</string>
+    <string name="add_video">Video hinzufügen</string>
+    <string name="scan_barcode">Barcode Scannen</string>
+    <string name="hyphen_or_hyphen">- ODER -</string>
+    <string name="m_continue">Weiter</string>
+    <string name="sound">Ton</string>
+    <string name="on_these_weekdays">An folgenden Wochentagen:</string>
+    <string name="taken_medicine">Eingenommene Medikamente:</string>
+    <string name="notes_colon">Notizen:</string>
+    <string name="food_colon">Mahlzeiten:</string>
+    <string name="add_taking_time">Einnahmezeit hinzufügen</string>
+    <string name="next_alarm">Nächster Alarm:</string>
+    <string name="please_add_medicine_first">- Bitte fügen Sie zuerst ein Medikament hinzu -</string>
+    <string name="mooddiary_listings">Stimmungstagebuch Einträge:</string>
+    <string name="note">Notiz</string>
+    <string name="less_time">Weniger Zeit?</string>
 </resources>

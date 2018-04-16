@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import michaelbumes.therapysupportapp.R;
-import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.entity.Drug;
 import michaelbumes.therapysupportapp.entity.DrugList;
 
@@ -40,13 +39,12 @@ import static michaelbumes.therapysupportapp.activities.MainActivity.databaseDru
 public class AddMedicineFragment extends BaseFragment {
     private static final String TAG = AddMedicineFragment.class.getName();
 
-    private Button storeButton,qrButton;
     private Drug drug;
-    AutoCompleteTextView nameEdit;
-    String[] drugListNames;
-    DrugList drugList;
-    String pzn = "-1";
-    boolean isQR = false;
+    private AutoCompleteTextView nameEdit;
+    private String[] drugListNames;
+    private DrugList drugList;
+    private String pzn = "-1";
+    private boolean isQR = false;
 
 
 
@@ -67,8 +65,8 @@ public class AddMedicineFragment extends BaseFragment {
         drugListNames = new HashSet<String>(Arrays.asList(databaseDrugList.drugListDao().getAllNames())).toArray(new String[0]);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,drugListNames);
         nameEdit.setAdapter(adapter);
-        storeButton = view.findViewById(R.id.store_button);
-        qrButton = view.findViewById(R.id.qr_button);
+        Button storeButton = view.findViewById(R.id.store_button);
+        Button qrButton = view.findViewById(R.id.qr_button);
         nameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -106,7 +104,7 @@ public class AddMedicineFragment extends BaseFragment {
                 if (drugName.isEmpty()) {
                     nameEdit.setError("Geben Sie einen Namen ein");
                     return;
-                }else if(isQR ==false) {
+                }else if(!isQR) {
                     drugList = databaseDrugList.drugListDao().findByName(drugName);
                     if (drugList == null){
                         Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
@@ -143,8 +141,7 @@ public class AddMedicineFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view1 = inflater.inflate(R.layout.fragment_add_medicine, container, false);
-        return view1;
+        return inflater.inflate(R.layout.fragment_add_medicine, container, false);
     }
 
     @Override

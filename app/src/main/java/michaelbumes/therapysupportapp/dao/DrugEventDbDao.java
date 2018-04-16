@@ -32,10 +32,10 @@ public interface DrugEventDbDao {
 
 
     @Query("DELETE FROM drug_event")
-    public void nukeTable();
+    void nukeTable();
 
     @Query("DELETE FROM drug_event WHERE id = :id")
-    abstract void deleteById(long id);
+    void deleteById(long id);
 
     @Insert
     long insert(DrugEventDb drugEventDb);

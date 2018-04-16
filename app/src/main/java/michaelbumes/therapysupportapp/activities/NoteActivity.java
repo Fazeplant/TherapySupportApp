@@ -1,7 +1,6 @@
 package michaelbumes.therapysupportapp.activities;
 
 
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -13,28 +12,19 @@ import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 
 import java.io.File;
@@ -45,7 +35,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
+import java.util.Locale;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.NoteAdapter;
@@ -67,21 +57,22 @@ public class NoteActivity extends AppCompatActivity {
     private static final int PHOTO_FLAG = 11;
     private static final int VIDEO_FLAG = 12;
 
-    int flag = 0;
-    EditText noteEdit;
-    String noteText;
-    Button photoButton, videoButton;
-    RelativeLayout relativeLayout;
-    Button addButton;
-    ImageView noteImage;
-    MyVideoView noteVideo;
-    String mCurrentPhotoPath;
-    String mCurrentVideoPath;
-    File image;
-    File video;
+    private int flag = 0;
+    private EditText noteEdit;
+    private String noteText;
+    private Button photoButton;
+    private Button videoButton;
+    private RelativeLayout relativeLayout;
+    private Button addButton;
+    private ImageView noteImage;
+    private MyVideoView noteVideo;
+    private String mCurrentPhotoPath;
+    private String mCurrentVideoPath;
+    private File image;
+    private File video;
     private MoodDiary moodDiaryToday;
 
-    ExifInterface exif;
+    private ExifInterface exif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,13 +283,13 @@ public class NoteActivity extends AppCompatActivity {
 
 
     private String getImageName() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss", Locale.getDefault());
         String timestamp = simpleDateFormat.format(new Date());
         return "Note_Image_" + timestamp;
     }
 
     private String getVideoName() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss", Locale.getDefault());
         String timestamp = simpleDateFormat.format(new Date());
         return "Note_Video_" + timestamp + ".mp4";
     }

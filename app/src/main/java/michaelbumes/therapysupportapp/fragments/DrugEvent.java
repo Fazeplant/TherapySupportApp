@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import michaelbumes.therapysupportapp.entity.Drug;
 
@@ -13,9 +14,9 @@ import michaelbumes.therapysupportapp.entity.Drug;
  */
 
 public class DrugEvent {
-    final Calendar c = Calendar.getInstance();
-    Date currentDate = c.getTime();
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private final Calendar c = Calendar.getInstance();
+    private final Date currentDate = c.getTime();
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private Drug drug;
     private String startingDate = sdf.format(currentDate);
     private String endDate = "-1";

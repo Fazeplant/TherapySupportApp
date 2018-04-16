@@ -18,12 +18,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.Arrays;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.CustomListView;
@@ -36,15 +33,14 @@ import michaelbumes.therapysupportapp.entity.Drug;
 public class AlarmFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = AlarmFragment.class.getName();
     private static final int TITLE = 1;
-    RadioGroup radioGroup;
-    Switch aSwitch;
+    private RadioGroup radioGroup;
+    private Switch aSwitch;
     private DrugEvent mDrugEvent;
     private Drug drug;
     private View view1;
     private CardView cardViewDiscrete;
     private CustomListView customListViewDiscrete;
-    private ListView listViewDiscrete;
-    private String[] stringDiscrete1, stringDiscrete2;
+    private String[] stringDiscrete2;
     private CheckBox checkBoxMonday, checkBoxTuesday, checkBoxWednesday, checkBoxThursday, checkBoxFriday, checkBoxSaturday, checkBoxSunday;
 
 
@@ -68,12 +64,12 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
         radioGroup = view.findViewById(R.id.radio_group_alarm);
         aSwitch = view.findViewById(R.id.switch_alarm_recurring_reminder);
 
-        stringDiscrete1 = new String[]{"Titel", "Inhalt"};
+        String[] stringDiscrete1 = new String[]{"Titel", "Inhalt"};
         stringDiscrete2 = new String[]{mDrugEvent.getDiscreteTitle(), mDrugEvent.getDiscreteBody()};
 
         cardViewDiscrete = view.findViewById(R.id.card_view_alarm_discrete);
         customListViewDiscrete  = new CustomListView(getActivity(), stringDiscrete1, stringDiscrete2);
-        listViewDiscrete = view.findViewById(R.id.list_view_alarm_discrete);
+        ListView listViewDiscrete = view.findViewById(R.id.list_view_alarm_discrete);
         listViewDiscrete.setAdapter(customListViewDiscrete);
         justifyListViewHeightBasedOnChildren(listViewDiscrete);
 
@@ -229,17 +225,16 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 
     }
 
-    public void justifyListViewHeightBasedOnChildren (ListView listView) {
+    private void justifyListViewHeightBasedOnChildren(ListView listView) {
 
         ListAdapter adapter = listView.getAdapter();
 
         if (adapter == null) {
             return;
         }
-        ViewGroup vg = listView;
         int totalHeight = 0;
         for (int i = 0; i < adapter.getCount(); i++) {
-            View listItem = adapter.getView(i, null, vg);
+            View listItem = adapter.getView(i, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
         }
@@ -250,7 +245,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
         listView.requestLayout();
     }
 
-    public  void createAlertDialogText(String title, final int mode){
+    private void createAlertDialogText(String title, final int mode){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(title);
 
@@ -290,63 +285,28 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 
         try {
             mWeekdays = mDrugEvent.getAlarmDiscretePatternWeekdays();
-        }catch (Exception e){
+        }catch (Exception ignored){
 
         }
         switch (view.getId()){
             case R.id.check_box_alarm_monday:
-                if (checkBoxMonday.isChecked()){
-                    mWeekdays[0] = true;
-                }else {
-                    mWeekdays[0] = false;
-
-                }
+                mWeekdays[0] = checkBoxMonday.isChecked();
                 break;
             case R.id.check_box_alarm_tuesday:
-                if (checkBoxTuesday.isChecked()){
-                    mWeekdays[1] = true;
-                }else {
-                    mWeekdays[1] = false;
-
-                }
+                mWeekdays[1] = checkBoxTuesday.isChecked();
                 break;
             case R.id.check_box_alarm_wednesday:
-                if (checkBoxWednesday.isChecked()){
-                    mWeekdays[2] = true;
-                }else {
-                    mWeekdays[2] = false;
-
-                }
+                mWeekdays[2] = checkBoxWednesday.isChecked();
             case R.id.check_box_alarm_thursday:
-                if (checkBoxThursday.isChecked()){
-                    mWeekdays[3] = true;
-                }else {
-                    mWeekdays[3] = false;
-
-                }
+                mWeekdays[3] = checkBoxThursday.isChecked();
                 break;
             case R.id.check_box_alarm_friday:
-                if (checkBoxFriday.isChecked()){
-                    mWeekdays[4] = true;
-                }else {
-                    mWeekdays[4] = false;
-
-                }
+                mWeekdays[4] = checkBoxFriday.isChecked();
             case R.id.check_box_alarm_saturday:
-                if (checkBoxSaturday.isChecked()){
-                    mWeekdays[5] = true;
-                }else {
-                    mWeekdays[5] = false;
-
-                }
+                mWeekdays[5] = checkBoxSaturday.isChecked();
                 break;
             case R.id.check_box_alarm_sunday:
-                if (checkBoxSunday.isChecked()){
-                    mWeekdays[6] = true;
-                }else {
-                    mWeekdays[6] = false;
-
-                }
+                mWeekdays[6] = checkBoxSunday.isChecked();
                 break;
         }
         mDrugEvent.setAlarmDiscretePatternWeekdays(mWeekdays);

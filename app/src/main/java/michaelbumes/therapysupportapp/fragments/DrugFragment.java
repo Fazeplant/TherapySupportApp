@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.activities.MainActivity;
@@ -60,7 +61,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private Drug drug;
 
 
-    FragNavController mFragmentNavigation;
+    private FragNavController mFragmentNavigation;
 
     static Dialog d ;
 
@@ -73,8 +74,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private CustomListViewDrugTime customListViewDrugTime;
 
 
-
-    private ListView lst ,lst2, lst3, lst4, lstDrugTime;
+    private ListView lstDrugTime;
     private  Button addTimeButton;
 
     private  String[] stringList1;
@@ -88,11 +88,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private  ArrayList<String> stringTime;
     private  ArrayList<String> stringDosage;
     private  ArrayList<String> stringDosageForm;
-    private String[] tempString;
 
-    List<String> mAlarmTime;
-    List<Integer> mDosage;
-    List<String> mTimeList;
+    private List<String> mAlarmTime;
+    private List<Integer> mDosage;
+    private List<String> mTimeList;
 
     private   RunningTimeFragment runningTimeFragment = null;
     private  DrugDetailFragment drugDetailFragment = null;
@@ -100,8 +99,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
     private   AlarmFragment alarmFragment = null;
     private DrugEvent mDrugEvent;
 
-    private CustomListView customListView1,customListView2, customListView3, customListView4;
-
+    private CustomListView customListView1;
+    private CustomListView customListView2;
 
 
     private    CardView cardView1, cardView2, cardView3, cardViewDrugTime;
@@ -128,11 +127,11 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         drug = mDrugEvent.getDrug();
 
         if (mDrugEvent.getDosage().isEmpty()){
-            mDosage = new ArrayList<Integer>();
+            mDosage = new ArrayList<>();
             mDosage.add(1);
             mDrugEvent.setDosage(mDosage);
 
-            mAlarmTime = new ArrayList<String>();
+            mAlarmTime = new ArrayList<>();
             mAlarmTime.add("08:00");
             mDrugEvent.setAlarmTime(mAlarmTime);
 
@@ -171,10 +170,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         cardViewDrugTime = view.findViewById(R.id.card_view_drug_time);
 
 
-        lst = view.findViewById(R.id.list_view_drug);
-        lst2 = view.findViewById(R.id.list_view_drug_2);
-        lst3 = view.findViewById(R.id.list_view_drug_3);
-        lst4 = view.findViewById(R.id.list_view_drug_4);
+        ListView lst = view.findViewById(R.id.list_view_drug);
+        ListView lst2 = view.findViewById(R.id.list_view_drug_2);
+        ListView lst3 = view.findViewById(R.id.list_view_drug_3);
+        ListView lst4 = view.findViewById(R.id.list_view_drug_4);
 
         lstDrugTime = view.findViewById(R.id.list_view_drug_time);
 
@@ -184,8 +183,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
         customListView1 = new CustomListView(getActivity(), stringList1, stringList2);
         customListView2 = new CustomListView(getActivity(), stringList3, stringList4);
-        customListView3 = new CustomListView(getActivity(), stringList5, stringList6);
-        customListView4 = new CustomListView(getActivity(), stringList7, stringList8);
+        CustomListView customListView3 = new CustomListView(getActivity(), stringList5, stringList6);
+        CustomListView customListView4 = new CustomListView(getActivity(), stringList7, stringList8);
 
         customListViewDrugTime = new CustomListViewDrugTime(getActivity(), stringTime, stringDosage, stringDosageForm);
 
@@ -229,13 +228,29 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
             @Override
             public void onClick(View view) {
                     //TODO zwei mal selbe Zeit machte keinen sinn
-                    mDosage = new ArrayList<Integer>(mDrugEvent.getDosage());
+                if (mDrugEvent.getAlarmTime().size() > 8){
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                        builder1.setMessage("Es können nicht mehr als 9 Zeiten hinzugefügt werden.");
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+                        return;
+                    }
+                    mDosage = new ArrayList<>(mDrugEvent.getDosage());
                     mDosage.add(1);
                     mDrugEvent.setDosage(mDosage);
                     stringTime.add("08:00");
 
 
-                    mAlarmTime = new ArrayList<String>(mDrugEvent.getAlarmTime());
+                    mAlarmTime = new ArrayList<>(mDrugEvent.getAlarmTime());
 
                     mAlarmTime.add("08:00");
 
@@ -259,8 +274,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                 stringTime.remove(position);
                 stringDosageForm.remove(position);
                 stringDosage.remove(position);
-                List<Integer> tempInt = new ArrayList<Integer>(mDrugEvent.getDosage());
-                List<String> tempString = new ArrayList<String>(mDrugEvent.getAlarmTime());
+                List<Integer> tempInt = new ArrayList<>(mDrugEvent.getDosage());
+                List<String> tempString = new ArrayList<>(mDrugEvent.getAlarmTime());
                 tempInt.remove(position);
                 tempString.remove(position);
                 mDrugEvent.setAlarmTime(tempString);
@@ -318,8 +333,8 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                             cardViewDrugTime.setVisibility(View.GONE);
                             addTimeButton.setVisibility(View.GONE);
                             stringList2[1] = "Nur bei Bedarf";
-                            List<String> alarmTimeList = new ArrayList<String>(mDrugEvent.getAlarmTime());
-                            List<Integer> dosageList = new ArrayList<Integer>(mDrugEvent.getDosage());
+                            List<String> alarmTimeList = new ArrayList<>(mDrugEvent.getAlarmTime());
+                            List<Integer> dosageList = new ArrayList<>(mDrugEvent.getDosage());
                             alarmTimeList.clear();
                             dosageList.clear();
                             mDrugEvent.setAlarmTime(alarmTimeList);
@@ -567,17 +582,16 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
     }
 
-    public void justifyListViewHeightBasedOnChildren (ListView listView) {
+    private void justifyListViewHeightBasedOnChildren(ListView listView) {
 
         ListAdapter adapter = listView.getAdapter();
 
         if (adapter == null) {
             return;
         }
-        ViewGroup vg = listView;
         int totalHeight = 0;
         for (int i = 0; i < adapter.getCount(); i++) {
-            View listItem = adapter.getView(i, null, vg);
+            View listItem = adapter.getView(i, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
         }
@@ -588,14 +602,14 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         listView.requestLayout();
     }
 
-    public void pickDosage(final int position) {
+    private void pickDosage(final int position) {
         final AlertDialog.Builder d = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.number_picker_dialog, null);
         d.setTitle("Wähle Anzahl");
         d.setMessage("");
         d.setView(dialogView);
-        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        final NumberPicker numberPicker = dialogView.findViewById(R.id.dialog_number_picker);
         numberPicker.setMaxValue(50);
         numberPicker.setMinValue(1);
         numberPicker.setWrapSelectorWheel(false);
@@ -650,9 +664,9 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         stringList7 = new String[]{"Kauferinnerung"};
         stringList8 = new String[]{""};
 
-        stringTime = new ArrayList<String>();
-        stringDosage = new ArrayList<String>();
-        stringDosageForm = new ArrayList<String>();
+        stringTime = new ArrayList<>();
+        stringDosage = new ArrayList<>();
+        stringDosageForm = new ArrayList<>();
 
 
         switch(mDrugEvent.getAlarmType()){
@@ -678,12 +692,12 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         }
 
             mTimeList = mDrugEvent.getAlarmTime();
-            List<String> mDosageList = new ArrayList<String>(mDrugEvent.getDosage().size());
+            List<String> mDosageList = new ArrayList<>(mDrugEvent.getDosage().size());
             for (Integer myInt : mDrugEvent.getDosage()) {
                 mDosageList.add(String.valueOf(myInt));
             }
-            stringTime = new ArrayList<String>((ArrayList<String>) mTimeList);
-            stringDosage = new ArrayList<String>((ArrayList<String>) mDosageList);
+            stringTime = new ArrayList<>(mTimeList);
+            stringDosage = new ArrayList<>(mDosageList);
             for (int i = 0; i <  mTimeList.size(); i++) {
                 stringDosageForm.add(databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
             }
@@ -735,10 +749,10 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
                     stringList4[1] = "Wochenende";
                     break;
                 }else {
-                    tempString = new String[7];
+                    String[] tempString = new String[7];
                     boolean[] takingPattern = mDrugEvent.getTakingPatternWeekdays();
                     for (int i = 0; i < 7 ; i++) {
-                        if (takingPattern[i] == true){
+                        if (takingPattern[i]){
                             switch (i){
                                 case 0:
                                     tempString[i] = "Mo";
@@ -768,7 +782,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
                     }
                     //Null entfernen
-                    List<String> list = new ArrayList<String>(Arrays.asList(tempString));
+                    List<String> list = new ArrayList<>(Arrays.asList(tempString));
                     list.removeAll(Collections.singleton(null));
                     tempString = list.toArray(new String[list.size()]);
 
@@ -798,7 +812,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                String curTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+                String curTime = String.format(getResources().getConfiguration().locale,"%02d:%02d", selectedHour, selectedMinute);
                 mAlarmTime = mDrugEvent.getAlarmTime();
                 if (mAlarmTime.size() == position){
                     mAlarmTime.add(position, curTime);
@@ -824,7 +838,7 @@ public class DrugFragment extends BaseFragment implements NumberPicker.OnValueCh
 
     }
 
-    public class Alarm implements Serializable {
+    private class Alarm implements Serializable {
         int id;
         String name;
 

@@ -1,48 +1,30 @@
 package michaelbumes.therapysupportapp.adapter;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ncapdevi.fragnav.FragNavController;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import michaelbumes.therapysupportapp.R;
-import michaelbumes.therapysupportapp.activities.MainActivity;
-import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.database.AppDatabase;
-import michaelbumes.therapysupportapp.entity.Drug;
-import michaelbumes.therapysupportapp.entity.DrugEventDb;
 import michaelbumes.therapysupportapp.entity.MoodDiary;
-import michaelbumes.therapysupportapp.fragments.DrugEvent;
-import michaelbumes.therapysupportapp.fragments.DrugFragment;
 
 /**
  * Created by Michi on 07.04.2018.
  */
 
 public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
-    List<MoodDiary> moodDiaries;
+    private final List<MoodDiary> moodDiaries;
     private Context context;
     int instanceInt = 0;
 
@@ -115,7 +97,15 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public Button moodButton0, moodButton1, moodButton2, moodButton3, moodButtonNormal, moodButton4, moodButton5 ,addMoodButton, expandMoodButton;
+        public final Button moodButton0;
+        public final Button moodButton1;
+        public final Button moodButton2;
+        public final Button moodButton3;
+        public final Button moodButtonNormal;
+        public final Button moodButton4;
+        public final Button moodButton5;
+        public Button addMoodButton;
+        public Button expandMoodButton;
         public SeekBar seekBar1, seekBar2, seekBar3, seekBar4, seekBar5, seekBar6, seekBar7, seekBar8;
         CardView cardViewMoodExpand,cardViewMood;
 

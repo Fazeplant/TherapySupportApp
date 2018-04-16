@@ -86,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
-        android:layout_toLeftOf="@id/fab_mood"
+        android:layout_toStartOf="@id/fab_mood"
         android:layout_alignParentBottom="true"
         android:clickable="true"
         app:srcCompat="@drawable/ic_event_note_black_24dp" />
@@ -97,7 +97,7 @@
         android:layout_marginBottom="60dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/fab_mood"
+        android:layout_toEndOf="@id/fab_mood"
         android:layout_alignParentBottom="true"
         android:clickable="true"
         app:srcCompat="@drawable/ic_local_dining_black_24dp" />

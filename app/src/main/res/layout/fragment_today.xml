@@ -7,16 +7,15 @@
     tools:context="michaelbumes.therapysupportapp.fragments.TodayFragment">
 
     <LinearLayout
-        android:id="@+id/today_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Nächster Alarm:"
+            android:text="@string/next_alarm"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -47,7 +46,7 @@
                         android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="13dp"
+                        android:layout_marginStart="13dp"
                         android:layout_marginTop="12dp"
                         app:srcCompat="@drawable/ic_medical_pills_couple" />
 
@@ -68,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/drug_name_alarm"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginStart="30dp"
                         android:layout_toRightOf="@id/image_drug_alarm"
                         android:text="Program"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
@@ -99,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="46dp"
                     android:layout_marginTop="46dp"
-                    android:text="- Bitte fügen Sie zuerst ein Medikament hinzu -"
+                    android:text="@string/please_add_medicine_first"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -118,8 +117,8 @@
                 android:visibility="gone"
                 android:layout_marginBottom="6dp"
                 android:layout_height="wrap_content"
-                android:text="Stimmungstagebuch Einträge:"
-                android:layout_marginLeft="8dp"
+                android:text="@string/mooddiary_listings"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -134,8 +133,8 @@
             android:visibility="gone"
 
             android:layout_height="wrap_content"
-            android:text="Notizen:"
-            android:layout_marginLeft="8dp"
+            android:text="@string/notes_colon"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="6dp"
             android:textColor="@color/colorPrimary"
@@ -148,8 +147,8 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_marginBottom="6dp"
-            android:text="Mahlzeiten:"
-            android:layout_marginLeft="8dp"
+            android:text="@string/food_colon"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"

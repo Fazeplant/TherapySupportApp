@@ -22,11 +22,11 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.lang.invoke.CallSite;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import michaelbumes.therapysupportapp.R;
 import michaelbumes.therapysupportapp.adapter.CustomListView;
@@ -55,20 +55,30 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
     private Drug drug;
     private DrugEvent mDrugEvent;
     private int mTakingPattern = 1;
-    CustomListView customListView1, customListView2, customListViewHours;
+    private CustomListView customListView1;
+    private CustomListView customListView2;
+    private CustomListView customListViewHours;
     private View view1;
     private boolean[] allFalse;
-    private RadioButton radioButtonDaily, radioButtonDailyHour, radioButtonAllDay, radioButtonWeekdays, radioButtonCycle;
+    private RadioButton radioButtonDaily;
 
 
-
-
-    ListView lst1, lst2, lstHour;
-    RadioGroup radioGroup;
+    private ListView lst1;
+    private ListView lst2;
+    private ListView lstHour;
+    private RadioGroup radioGroup;
     private CheckBox checkBoxMonday, checkBoxTuesday, checkBoxWednesday, checkBoxThursday, checkBoxFriday, checkBoxSaturday, checkBoxSunday;
-    String[] stringAll, stringDuration, stringListCycle1, stringListCycle2, stringListHour1, stringListHour2;
-    CardView cardView1, cardView2, cardView3 , cardViewHour;
-    boolean[] weekDays;
+    private String[] stringAll;
+    private String[] stringDuration;
+    private String[] stringListCycle1;
+    private String[] stringListCycle2;
+    private String[] stringListHour1;
+    private String[] stringListHour2;
+    private CardView cardView1;
+    private CardView cardView2;
+    private CardView cardView3;
+    private CardView cardViewHour;
+    private boolean[] weekDays;
 
 
     public static TakingPatternFragment newInstance(int instance) {
@@ -107,10 +117,10 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
             EventBus.getDefault().postSticky(mDrugEvent);
         }
         radioButtonDaily = view.findViewById(R.id.radio_button_daily_day);
-        radioButtonDailyHour = view.findViewById(R.id.radio_button_daily_hour);
-        radioButtonAllDay = view.findViewById(R.id.radio_all_day);
-        radioButtonWeekdays = view.findViewById(R.id.radio_button_weekdays);
-        radioButtonCycle = view.findViewById(R.id.radio_button_cycle);
+        RadioButton radioButtonDailyHour = view.findViewById(R.id.radio_button_daily_hour);
+        RadioButton radioButtonAllDay = view.findViewById(R.id.radio_all_day);
+        RadioButton radioButtonWeekdays = view.findViewById(R.id.radio_button_weekdays);
+        RadioButton radioButtonCycle = view.findViewById(R.id.radio_button_cycle);
 
 
         checkBoxMonday = view.findViewById(R.id.check_box_taking_pattern_monday);
@@ -402,63 +412,28 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
 
         try {
             mWeekdays = mDrugEvent.getTakingPatternWeekdays();
-        }catch (Exception e){
+        }catch (Exception ignored){
 
         }
         switch (view.getId()){
             case R.id.check_box_taking_pattern_monday:
-                if (checkBoxMonday.isChecked()){
-                    mWeekdays[0] = true;
-                }else {
-                    mWeekdays[0] = false;
-
-                }
+                mWeekdays[0] = checkBoxMonday.isChecked();
                 break;
             case R.id.check_box_taking_pattern_tuesday:
-                if (checkBoxTuesday.isChecked()){
-                    mWeekdays[1] = true;
-                }else {
-                    mWeekdays[1] = false;
-
-                }
+                mWeekdays[1] = checkBoxTuesday.isChecked();
                 break;
             case R.id.check_box_taking_pattern_wednesday:
-                if (checkBoxWednesday.isChecked()){
-                    mWeekdays[2] = true;
-                }else {
-                    mWeekdays[2] = false;
-
-                }
+                mWeekdays[2] = checkBoxWednesday.isChecked();
             case R.id.check_box_taking_pattern_thursday:
-                if (checkBoxThursday.isChecked()){
-                    mWeekdays[3] = true;
-                }else {
-                    mWeekdays[3] = false;
-
-                }
+                mWeekdays[3] = checkBoxThursday.isChecked();
                 break;
             case R.id.check_box_taking_pattern_friday:
-                if (checkBoxFriday.isChecked()){
-                    mWeekdays[4] = true;
-                }else {
-                    mWeekdays[4] = false;
-
-                }
+                mWeekdays[4] = checkBoxFriday.isChecked();
             case R.id.check_box_taking_pattern_saturday:
-                if (checkBoxSaturday.isChecked()){
-                    mWeekdays[5] = true;
-                }else {
-                    mWeekdays[5] = false;
-
-                }
+                mWeekdays[5] = checkBoxSaturday.isChecked();
                 break;
             case R.id.check_box_taking_pattern_sunday:
-                if (checkBoxSunday.isChecked()){
-                    mWeekdays[6] = true;
-                }else {
-                    mWeekdays[6] = false;
-
-                }
+                mWeekdays[6] = checkBoxSunday.isChecked();
                 break;
         }
         if (Arrays.equals(mWeekdays, allFalse)){
@@ -501,14 +476,14 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
         mDrugEvent = event;
 
     }
-    public void pickDays(String title, final int takingPattern, final int listItemPosition) {
+    private void pickDays(String title, final int takingPattern, final int listItemPosition) {
         final AlertDialog.Builder d = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.number_picker_dialog, null);
         d.setTitle(title);
         d.setMessage("");
         d.setView(dialogView);
-        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        final NumberPicker numberPicker = dialogView.findViewById(R.id.dialog_number_picker);
         numberPicker.setMaxValue(365);
         if (takingPattern == 3) {
             numberPicker.setMinValue(2);
@@ -568,7 +543,7 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                String curTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+                String curTime = String.format(getResources().getConfiguration().locale,"%02d:%02d", selectedHour, selectedMinute);
                 mDrugEvent.setTakingPatternHourStart(curTime);
                 List<String> alarmTime = new ArrayList<>();
                 alarmTime.add(curTime);
@@ -584,14 +559,14 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
 
     }
 
-    public void pickDosage(final int mode) {
+    private void pickDosage(final int mode) {
         final AlertDialog.Builder d = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.number_picker_dialog, null);
         d.setTitle("Wähle Anzahl");
         d.setMessage("");
         d.setView(dialogView);
-        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        final NumberPicker numberPicker = dialogView.findViewById(R.id.dialog_number_picker);
         numberPicker.setMaxValue(50);
         numberPicker.setMinValue(1);
         numberPicker.setWrapSelectorWheel(false);

@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tabs>
+<!--suppress XmlHighlighting, XmlHighlighting, XmlHighlighting, XmlHighlighting -->
+<tabs xmlns:tools="http://schemas.android.com/tools">
     <tab
         icon="@drawable/ic_if_today"
         id="@+id/bb_menu_today"
         title="@string/title_today"
-        />
+        tools:ignore="MissingPrefix" />
     <tab
         icon="@drawable/ic_medical_pills_couple"
         id="@+id/bb_menu_drug_plan"
         title="@string/title_drug_plan"
-        />
+        tools:ignore="MissingPrefix" />
     <tab
         icon="@drawable/ic_blank"
         id="@+id/bb_menu_blank"
         title="title_blank"
-        />
+        tools:ignore="MissingPrefix" />
     <tab
         icon="@drawable/ic_if_calendar"
         id="@+id/bb_menu_calendar"
         title="@string/title_calendar"
-        />
+        tools:ignore="MissingPrefix" />
     <tab
         icon="@drawable/ic_if_settings"
         id="@+id/bb_menu_settings"
         title="@string/title_settings"
-        />
+        tools:ignore="MissingPrefix" />
 </tabs>

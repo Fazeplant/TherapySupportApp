@@ -35,9 +35,9 @@ import michaelbumes.therapysupportapp.fragments.DrugFragment;
  */
 
 public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
-    List<Drug> drugs;
+    private final List<Drug> drugs;
     private Context context;
-    int instanceInt = 0;
+    private final int instanceInt = 0;
 
 
 
@@ -212,10 +212,11 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView drugName;
-        public TextView drugManufacturer;
-        public TextView alarmTime;
-        public ImageView imageViewDrug, imageViewAlarm;
+        public final TextView drugName;
+        public final TextView drugManufacturer;
+        public final TextView alarmTime;
+        public final ImageView imageViewDrug;
+        public final ImageView imageViewAlarm;
 
 
         public ViewHolder(View itemView) {
@@ -257,13 +258,13 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
             String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
             String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+            List<String> alarmTime = new ArrayList<>(Arrays.asList(replaceAlarmTime3.split(",")));
 
             String replaceDosage1 = drugEventDb.getDosage().replace("[", "");
             String replaceDosage2 = replaceDosage1.replace("]", "");
             String replaceDosage3 = replaceDosage2.replace(" ", "");
-            List<String> arrayList = new ArrayList<String>(Arrays.asList(replaceDosage3.split(",")));
-            List<Integer> dosage = new ArrayList<Integer>();
+            List<String> arrayList = new ArrayList<>(Arrays.asList(replaceDosage3.split(",")));
+            List<Integer> dosage = new ArrayList<>();
             for(String i:arrayList){
                 dosage.add(Integer.parseInt(i.trim()));
             }
@@ -335,7 +336,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
             String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
             String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-            List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+            List<String> alarmTime = new ArrayList<>(Arrays.asList(replaceAlarmTime3.split(",")));
 
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -343,7 +344,9 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
             for (int i = 0; i < alarmTime.size() ; i++) {
                 int idGenerated = Integer.parseInt(drugEventDb.getId() + "" +String.valueOf(i));
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), idGenerated, myIntent, 0);
-                alarmManager.cancel(pendingIntent);
+                if (alarmManager != null) {
+                    alarmManager.cancel(pendingIntent);
+                }
             }
 
 
@@ -358,14 +361,14 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
         notifyItemRangeChanged(position,drugs.size());
     }
 
-    public void updateAlarmTime(DrugAdapter.ViewHolder holder, int position){
+    private void updateAlarmTime(DrugAdapter.ViewHolder holder, int position){
         String alarmTimeString = "Error";
         String alarmTime1 = AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drugs.get(position).getDrugEventDbId()).getAlarmTime();
         String replaceAlarmTime1 = alarmTime1.replace("[", "");
         String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
         String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-        List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+        List<String> alarmTime = new ArrayList<>(Arrays.asList(replaceAlarmTime3.split(",")));
 
 
 
@@ -406,12 +409,12 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
 
     }
 
-    public String getFirstAlarmString(String alarmTimeString) {
+    private String getFirstAlarmString(String alarmTimeString) {
         String replaceAlarmTime1 = alarmTimeString.replace("[", "");
         String replaceAlarmTime2 = replaceAlarmTime1.replace("]", "");
         String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
-        List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
+        List<String> alarmTime = new ArrayList<>(Arrays.asList(replaceAlarmTime3.split(",")));
 
         String mostRecentAlarmString = alarmTime.get(0);
 
