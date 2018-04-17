@@ -184,6 +184,7 @@
                 android:drawablePadding="-60dp"
                 android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
                 android:gravity="center_vertical"
+                android:textColor="@color/white"
                 android:paddingEnd="10dp"
                 android:text="@string/more_time"
                 android:textAlignment="center"

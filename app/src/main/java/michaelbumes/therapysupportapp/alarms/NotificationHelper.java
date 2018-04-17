@@ -29,12 +29,14 @@ import michaelbumes.therapysupportapp.activities.MainActivity;
 
 public class NotificationHelper extends ContextWrapper {
     private static final String NOTIFICATION_ID_SOUND = "notification_channel_sound_id";
+    private static final String CANCEL_ACTION_DAILY = "michaelbumes.therapysupportapp.CANCEL_ACTION_DAILY";
+    private static final String OK_ACTION_DAILY ="michaelbumes.therapysupportapp.OK_ACTION_DAILY" ;
     private String notificationChannel = "notification_channel_id";
     private static final String NOTIFICATION_ID_SILENT = "notification_channel_silent_id";
     private static final String NOTIFICATION_NAME_SILENT = "Medizineinnahme ohne Ton";
     private static final String NOTIFICATION_NAME_SOUND = "Medizineinnahme Ton";
     private static final String OK_ACTION ="michaelbumes.therapysupportapp.OK_ACTION" ;
-    private static final String CANCLE_ACTION ="michaelbumes.therapysupportapp.CANCLE_ACTION" ;
+    private static final String CANCEL_ACTION ="michaelbumes.therapysupportapp.CANCEL_ACTION" ;
     private Uri notiUri;
     public static Ringtone ringtone;
     private int notificationMode = -1;
@@ -108,6 +110,26 @@ public class NotificationHelper extends ContextWrapper {
     //notificationChannel gibt an in welchen Channel die Notifikation kommen soll (mit/ohne Ton)
     //notiUri zeigt auf die Standart Notifikation
     //notiUri wird auf null gesetzt um die Nachricht ohne Ton abzuspielen
+
+    public NotificationCompat.Builder getChannelNotification(String title,String body){
+        Intent okIntent = getNotificationIntent();
+        okIntent.setAction(OK_ACTION_DAILY);
+
+        Intent cancelIntent = getNotificationIntent();
+        cancelIntent.setAction(CANCEL_ACTION_DAILY);
+        PendingIntent cancelPendingIntent = PendingIntent.getActivity(this, 111111, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_ID_SILENT)
+                .setAutoCancel(true)
+                .setContentText(body)
+                .setContentTitle(title)
+                .setWhen(System.currentTimeMillis())
+                .addAction(R.drawable.ic_check_black_24dp , "Durchführen" , PendingIntent.getActivity(this, 111111, okIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .addAction(R.drawable.ic_cancel_black_24dp, "Überspringen", PendingIntent.getActivity(this, 111111, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                //.setDeleteIntent(cancelPendingIntent)
+                .setSmallIcon(getResources().getIdentifier("ic_medical_pills_couple", "drawable", getPackageName()));
+    }
+
+
 
     public NotificationCompat.Builder getChannelNotification(String title,String body1, int dosage, String body2, int alarmtype, int id, String discreteTitle, String discreteBody, boolean[] discretePattern){
         Intent okIntent = getNotificationIntent();
@@ -229,7 +251,7 @@ public class NotificationHelper extends ContextWrapper {
 
         Intent cancelIntent = getNotificationIntent();
         cancelIntent.putExtra("notiBundle",bundle);
-        cancelIntent.setAction(CANCLE_ACTION);
+        cancelIntent.setAction(CANCEL_ACTION);
         PendingIntent cancelPendingIntent = PendingIntent.getActivity(this, id, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 

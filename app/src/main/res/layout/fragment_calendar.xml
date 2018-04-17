@@ -7,10 +7,22 @@
     tools:context="michaelbumes.therapysupportapp.fragments.CalendarFragment">
 
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_view_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Monat"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
 
         <com.github.sundeepk.compactcalendarview.CompactCalendarView
             xmlns:app="http://schemas.android.com/apk/res-auto"

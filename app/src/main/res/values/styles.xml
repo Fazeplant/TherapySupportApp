@@ -11,9 +11,9 @@
         <item name="android:textColorPrimary">#646464</item>
         <item name="android:textColorSecondary">#646464</item>
         <item name="android:textColorTertiary">#646464</item>
-        <item name="android:textColorPrimaryInverse">#646464</item>
-        <item name="android:textColorSecondaryInverse">#646464</item>
-        <item name="android:textColorTertiaryInverse">#646464</item>
+        <item name="android:textColorPrimaryInverse">#ffffff</item>
+        <item name="android:textColorSecondaryInverse">#ffffff</item>
+        <item name="android:textColorTertiaryInverse">#000000</item>
     </style>
 
 

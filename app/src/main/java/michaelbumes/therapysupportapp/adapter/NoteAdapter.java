@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.ExifInterface;
+import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -89,6 +90,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             }
 
         });
+
+
 
 
         holder.textView.setText(notes.get(holder.getAdapterPosition()).getInfo1());
@@ -338,6 +341,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             // Load the high-resolution "zoomed-in" image.
             final MyVideoView expandedVideoView = itemView.findViewById(
                     R.id.video_view_note_today_expanded);
+
 
             Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFilePath, MINI_KIND);
             expandedVideoView.setVideoSize(thumbnail.getWidth() * 10, thumbnail.getHeight() * 10);

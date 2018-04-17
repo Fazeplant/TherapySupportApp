@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import michaelbumes.therapysupportapp.adapter.DrugAdapter;
@@ -31,9 +33,12 @@ public class BootReceiver extends BroadcastReceiver {
                 DrugEventDb drugEventDb = AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drugList.get(i).getDrugEventDbId());
                 DrugEvent drugEvent = new DrugEvent();
 
+                SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
 
                 Drug drug = drugList.get(i);
                 drugEvent = DrugAdapter.convertDrugEventDbToDrugEvent(drugEvent ,drugEventDb, drug);
+                //Wird überschrieben damit nach neustart nicht alle Alarme sofort ausgelöst werden
+                drugEvent.setStartingDate(sdfDate.format(Calendar.getInstance().getTime()));
 
                 Bundle bundle = new Bundle();
                 bundle.putString("drugName", drug.getDrugName());
@@ -46,6 +51,8 @@ public class BootReceiver extends BroadcastReceiver {
                 bundle.putString("discreteBody", drugEvent.getDiscreteBody());
                 bundle.putBooleanArray("discretePattern", drugEvent.getAlarmDiscretePatternWeekdays());
                 bundle.putInt("id", drug.getId());
+
+
 
                 if (drugEvent.getAlarmType() != 3 && drugEvent.isRegularly()) {
                     AlarmMain alarm = new AlarmMain(context, bundle, drugEvent);

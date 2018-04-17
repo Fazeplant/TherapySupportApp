@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -67,15 +66,9 @@ public class FoodActivity extends AppCompatActivity {
         photoButtonFood = findViewById(R.id.photo_button_food);
         radioGroup = findViewById(R.id.radio_group_food);
         imageViewFood = findViewById(R.id.image_view_food);
-
-        RadioButton radioButtonBreakfast = findViewById(R.id.radio_button_food_breakfast);
-        RadioButton radioButtonSnack1 = findViewById(R.id.radio_button_food_snack1);
-        RadioButton radioButtonLunch = findViewById(R.id.radio_button_food_lunch);
-        RadioButton radioButtonSnack2 = findViewById(R.id.radio_button_food_snack2);
-        RadioButton radioButtonDinner = findViewById(R.id.radio_button_food_dinner);
-        RadioButton radioButtonSnack3 = findViewById(R.id.radio_button_food_snack3);
         moodDiaryToday = null;
 
+        //ID wird gesetzt falls der Eintrag bearbeitet wird, also nicht neu erstellt wird
         Intent intent = getIntent();
         int id = intent.getIntExtra("foodId", -1);
 
@@ -83,19 +76,17 @@ public class FoodActivity extends AppCompatActivity {
         photoButtonFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Intent für die Kamera
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
                 try {
                     image = createImageFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                        "peter.provider",
+                        "file.provider",
                         image);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-
                 startActivityForResult(intent, REQUEST_TAKE_PHOTO);
             }
         });
@@ -108,6 +99,7 @@ public class FoodActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                //1 = Snack1 2 = Frühstück / 3 = Snack2 / 4 = Mittagsessen / 5 = Snack3 / 6 = Abendessen / 7 = Snack4
                 switch (i) {
                     case R.id.radio_button_food_snack:
                         foodTypeId = 1;
@@ -133,11 +125,13 @@ public class FoodActivity extends AppCompatActivity {
                 }
             }
         });
-
+        //Wird aufgerufen falls der Eintrag bearbeitet wird, also nicht neu erstellt wird
         if (id != -1) {
             moodDiaryToday = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().findById(id);
-            List<String> arrayList = new ArrayList<String>(Arrays.asList(moodDiaryToday.getInfo1().split(",")));
+            List<String> arrayList = new ArrayList<String>(Arrays.asList(moodDiaryToday.getInfo1().split("//")));
             if (arrayList.size() > 1) {
+                //arrayList.get(0) = Eingegebener Text der Mahlzeit
+                //arrayList.get(2) = foodTypeId
                 textEditFood.setText(arrayList.get(0));
                 switch (Integer.valueOf(arrayList.get(1))) {
                     case 1:
@@ -163,9 +157,11 @@ public class FoodActivity extends AppCompatActivity {
                         break;
                 }
             } else {
+                //Falls keine Angabe über foodTypeId gemacht wurde
                 textEditFood.setText(moodDiaryToday.getInfo1());
             }
             if (moodDiaryToday.getInfo2() != null) {
+                //Falls Info2 = Bild, vorhanden wird dieses als Thumbnail angezeigt
                 mCurrentPhotoPath = moodDiaryToday.getInfo2();
                 File imgFile = new File(moodDiaryToday.getInfo2());
                 if (imgFile.exists()) {
@@ -174,6 +170,7 @@ public class FoodActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    //Falls Bild falsch rotiert ist, wird dieses korrigiert
                     int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
                     int rotationInDegrees = exifToDegrees(rotation);
                     Matrix matrix = new Matrix();
@@ -197,12 +194,11 @@ public class FoodActivity extends AppCompatActivity {
         String imageFileName = getImageName();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -216,6 +212,7 @@ public class FoodActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //Wird nachdem das Foto aufgenommen wurde aufgerufen
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             photoTaken = true;
 
@@ -224,17 +221,15 @@ public class FoodActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            //Wenn die Rotationinformationen anders sind wird das Bild gedreht
             int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             int rotationInDegrees = exifToDegrees(rotation);
             Matrix matrix = new Matrix();
             if (rotation != 0f) {
                 matrix.preRotate(rotationInDegrees);
             }
-
             Bitmap myBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-
             Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
-
             imageViewFood.setImageBitmap(adjustedBitmap);
         }else {
             Toast.makeText(this, "Fehler", Toast.LENGTH_SHORT).show();
@@ -250,18 +245,20 @@ public class FoodActivity extends AppCompatActivity {
         } else {
             MoodDiary moodDiary = new MoodDiary();
             Date currentDate = Calendar.getInstance().getTime();
+            //Falls neu initialisiert wird neuer Eintrag erstellt, sonst wird der zu bearbeitende übernommen
             if (moodDiaryToday == null){
                 moodDiary.setDate(currentDate);
+                //ArtID 2 == Mahlzeit
                 moodDiary.setArtID(2);
 
             }else {
                 moodDiary = moodDiaryToday;
             }
-
+            //Falls keine foodTypeId angegebenwurde wird nur der Text gespeichert
             if (foodTypeId == -1){
                 moodDiary.setInfo1(foodText);
             }else {
-                moodDiary.setInfo1(foodText + "," + String.valueOf(foodTypeId));
+                moodDiary.setInfo1(foodText + "//" + String.valueOf(foodTypeId));
             }
             if (photoTaken) {
                 moodDiary.setInfo2(mCurrentPhotoPath);
@@ -271,7 +268,7 @@ public class FoodActivity extends AppCompatActivity {
                 AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().insert(moodDiary);
             }
             Toast.makeText(this, "Mahlzeit hinzugefügt", Toast.LENGTH_SHORT).show();
-            onBackPressed();
+            finish();
         }
     }
 }

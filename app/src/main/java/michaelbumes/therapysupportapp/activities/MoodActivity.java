@@ -97,7 +97,7 @@ public class MoodActivity extends AppCompatActivity {
 
 
 
-
+        //ID wird gesetzt falls der Eintrag bearbeitet wird, also nicht neu erstellt wird
         Intent intent = getIntent();
         int id = intent.getIntExtra("moodId", -1);
 

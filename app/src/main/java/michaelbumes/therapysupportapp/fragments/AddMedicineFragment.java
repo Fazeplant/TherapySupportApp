@@ -1,6 +1,8 @@
 package michaelbumes.therapysupportapp.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -107,7 +109,38 @@ public class AddMedicineFragment extends BaseFragment {
                 }else if(!isQR) {
                     drugList = databaseDrugList.drugListDao().findByName(drugName);
                     if (drugList == null){
-                        Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                        builder1.setMessage("Möchten Sie ein Medikament hinzufügen, welches nicht in der Datenbank ist?");
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Weiter",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        drug = new Drug();
+                                        drug.setDrugName(nameEdit.getText().toString());
+                                        drug.setDosageFormId(24);
+                                        drug.setManufacturer("Hersteller eingeben");
+                                        drug.setPzn(null);
+                                        drug.setSideEffects(null);
+                                        drug.setTakingNote(null);
+
+                                        DrugEvent event = new DrugEvent();
+                                        event.setDrug(drug);
+                                        EventBus.getDefault().removeAllStickyEvents();
+                                        EventBus.getDefault().postSticky(event);
+                                        fragmentNavigation.pushFragment(DrugFragment.newInstance(instanceInt + 1));
+                                    }
+                                });
+                        builder1.setNegativeButton(
+                                "Abbrechen",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
                         return;
                     }else {
                         pzn = drugList.getPzn();

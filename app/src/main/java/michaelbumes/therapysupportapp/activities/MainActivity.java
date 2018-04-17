@@ -1,6 +1,7 @@
 package michaelbumes.therapysupportapp.activities;
 
 import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +31,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 import java.util.Calendar;
 
 import michaelbumes.therapysupportapp.R;
+import michaelbumes.therapysupportapp.alarms.AlarmMain;
 import michaelbumes.therapysupportapp.alarms.NotificationHelper;
 import michaelbumes.therapysupportapp.database.AppDatabase;
 import michaelbumes.therapysupportapp.database.DatabaseDrugList;
@@ -52,7 +54,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
 
     private static final String OK_ACTION ="michaelbumes.therapysupportapp.OK_ACTION" ;
-    private static final String CANCLE_ACTION ="michaelbumes.therapysupportapp.CANCLE_ACTION" ;
+    private static final String CANCEL_ACTION ="michaelbumes.therapysupportapp.CANCEL_ACTION" ;
+    private static final String CANCEL_ACTION_DAILY = "michaelbumes.therapysupportapp.CANCEL_ACTION_DAILY";
+    private static final String OK_ACTION_DAILY ="michaelbumes.therapysupportapp.OK_ACTION_DAILY" ;
 
     public final int ART_ID_NOTE = 3;
     public final int ART_ID_MOOD = 1;
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
     private ImageView dim_layout;
 
-    private FragNavController mNavController;
+    public FragNavController mNavController;
     private FloatingActionButton floatingActionButton;
     private FloatingActionButton fabNote;
     private FloatingActionButton fabMood;
@@ -80,26 +84,31 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         final BottomBar bottomBar = findViewById(R.id.bottomBar);
 
 
+        //Wird bei Interaktion mit der Notiifikation aufgerufen
         processIntentAction(getIntent());
 
 
 
-
+        //Beim ersten Start der App wird nach den Berechtigungen gefragt
         verifyPermissions();
 
         databaseDrugList = DatabaseDrugList.getAppDatabase(getApplicationContext());
 
 
+        AlarmMain alarm = new AlarmMain(this);
+
+
+        //dim_layout verdunkelt den Bildschirm, beim drüchen des floatingActionButton
         dim_layout  =findViewById(R.id.dim_layout);
+        //floatingActionButton ist der haupt-floatingActionButton in der Mitte, welcher fabNote, fabMood und fabFood anzeigen lässt
         floatingActionButton = findViewById(R.id.floatingActionButton);
         fabNote = findViewById(R.id.fab_note);
         fabMood = findViewById(R.id.fab_mood);
         fabFood = findViewById(R.id.fab_food);
 
-
+        //Animationen für das Öffnen und Schließen des floatingActionButton
         fabOpen = AnimationUtils.loadAnimation(this,R.anim.fab_open);
         fabClose = AnimationUtils.loadAnimation(this,R.anim.fab_close);
-
         rotateForward = AnimationUtils.loadAnimation(this,R.anim.rotate_forward);
         rotateBackwards = AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
 
@@ -112,11 +121,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         fabNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Note fab Clicked!", Toast.LENGTH_SHORT).show();
-                Intent intent = getIntent();
-                String value = intent.getStringExtra("key");
                 Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.NoteActivity.class);
-                myIntent.putExtra("key", value); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
                 animateFab();
 
@@ -126,11 +131,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         fabMood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Mood fab Clicked!", Toast.LENGTH_SHORT).show();
-                Intent intent = getIntent();
-                String value = intent.getStringExtra("key");
                 Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.MoodActivity.class);
-                myIntent.putExtra("key", value); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
                 animateFab();
 
@@ -140,32 +141,30 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         fabFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Food fab Clicked!", Toast.LENGTH_SHORT).show();
-                Intent intent = getIntent();
-                String value = intent.getStringExtra("key");
                 Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.FoodActivity.class);
-                myIntent.putExtra("key", value); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
                 animateFab();
             }
         });
 
-
+        //Falls keine Instanz gespeichert, wird das Heute Fragment angezeigt
         boolean initial = savedInstanceState == null;
         if (initial) {
             bottomBar.selectTabAtPosition(INDEX_TODAY);
         }
+        //TabAtPosition 2 ist ein deaktivierter Tab in der BottomBar, da darüber der floatingActionButton liegt.
         bottomBar.getTabAtPosition(2).setEnabled(false);
 
+        //Hier könnten Animationen für die Fragmente eingefügt werden
+        FragNavTransactionOptions fragNavTransactionOptions = FragNavTransactionOptions.newBuilder()
+                .build();
 
+        //numberOfTabs = 5 wegen den deaktivierten Tab in der Mitte
         mNavController = FragNavController.newBuilder(savedInstanceState, getSupportFragmentManager(), R.id.container)
-
                 .transactionListener(this)
+                .defaultTransactionOptions(fragNavTransactionOptions)
                 .rootFragmentListener(this, 5)
                 .popStrategy(FragNavTabHistoryController.UNIQUE_TAB_HISTORY)
-
-                //.defaultTransactionOptions(FragNavTransactionOptions.newBuilder().transition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).build())
-                //.defaultTransactionOptions((FragNavTransactionOptions.newBuilder().customAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).build()))
                 .switchController(new FragNavSwitchController() {
                     @Override
                     public void switchTab(int index, FragNavTransactionOptions mNavTransactionOptions) {
@@ -207,11 +206,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
     @Override
     public void onBackPressed() {
-        switch (mNavController.getCurrentFrag().getClass().getName()){
-            case "michaelbumes.therapysupportapp.fragments.DrugDetailFragment":
-                Toast.makeText(this, "Funzt Lol", Toast.LENGTH_SHORT).show();
-                break;
-        }
         if(!mNavController.popFragment()) {
             super.onBackPressed();
         }
@@ -235,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
     @Override
     public void onTabTransaction(Fragment fragment, int index) {
-        // If we have a backstack, show the back button
         if (getSupportActionBar() != null && mNavController != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(!mNavController.isRootFragment());
         }
@@ -244,8 +237,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
     @Override
     public void onFragmentTransaction(Fragment fragment, FragNavController.TransactionType transactionType) {
-        //do fragmentty stuff. Maybe change title, I'm not going to tell you how to live your life
-        // If we have a backstack, show the back button
+        //Falls Fragmente auf dem Backstack liegen, wird der Zurück-Button link oben angezeigt
         if (getSupportActionBar() != null && mNavController != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(!mNavController.isRootFragment());
         }
@@ -264,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
             case INDEX_SETTINGS:
                 return SettingsFragment.newInstance(0);
         }
-        throw new IllegalStateException("Need to send an index that we know");
+        throw new IllegalStateException("Falscher Index");
     }
 
     @Override
@@ -338,19 +330,18 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         return mNavController;
     }
 
-    private Intent getNotificationIntent() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        return intent;
-    }
+
+    //Wird bei Interaktion mit der Notiifikation aufgerufen
     private void processIntentAction(Intent intent) {
         if (intent.getAction() != null) {
             switch (intent.getAction()) {
                 case OK_ACTION:
-                    Toast.makeText(this, "Bestätigt", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.confirmed, Toast.LENGTH_SHORT).show();
+                    //idGenerated ist die ID des Medikaments mit der angehängten Nummer der Alarmzeit (0 = erste Alarmzeit usw.)
                     int idGenerated = intent.getBundleExtra("notiBundle").getInt("id");
                     int dosage = intent.getBundleExtra("notiBundle").getInt("dosage");
                     int id;
+                    //Falls idGenerated viersellig ist, ist id die ersten drei
                     if (idGenerated >999){
                         id = Integer.valueOf(String.valueOf(idGenerated).substring(0,3));
 
@@ -361,25 +352,37 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
                         id = Integer.valueOf(String.valueOf(idGenerated).substring(0,1));
 
                     }
+                    //Umwandlung von drug -> takendrug und Speicherung in der Datenbank
                     Drug drug = AppDatabase.getAppDatabase(getApplicationContext()).drugDao().findById(id);
-                    TakenDrug takenDrug = drugToTakenDrug(getApplicationContext(), drug, dosage);
+                    TakenDrug takenDrug = drugToTakenDrug(drug, dosage);
                     AppDatabase.getAppDatabase(getApplicationContext()).takenDrugDao().insert(takenDrug);
                     NotificationManagerCompat.from(getApplicationContext()).cancel(idGenerated);
+                    //Alarm wird deaktiviert, falls vorhanden
                     try {
                         NotificationHelper.ringtone.stop();
                     }catch (Exception ignored){
 
                     }
                     break;
-                case CANCLE_ACTION:
+                case CANCEL_ACTION:
 
-                    Toast.makeText(this, "Übersprungen", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.skipped, Toast.LENGTH_SHORT).show();
                     NotificationManagerCompat.from(getApplicationContext()).cancel(intent.getBundleExtra("notiBundle").getInt("id"));
+                    //Alarm wird deaktiviert, falls vorhanden
                     try {
                         NotificationHelper.ringtone.stop();
                     }catch (Exception ignored){
 
                     }
+                    break;
+                case OK_ACTION_DAILY:
+                        Intent myIntent = new Intent(MainActivity.this, michaelbumes.therapysupportapp.activities.MoodActivity.class);
+                        MainActivity.this.startActivity(myIntent);
+                        NotificationManagerCompat.from(getApplicationContext()).cancel(111111);
+                        break;
+                case CANCEL_ACTION_DAILY:
+                    Toast.makeText(this, R.string.skipped, Toast.LENGTH_SHORT).show();
+                    NotificationManagerCompat.from(getApplicationContext()).cancel(111111);
                     break;
             }
         }
@@ -391,7 +394,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
         super.onNewIntent(intent);
     }
 
-    private static TakenDrug drugToTakenDrug(Context context, Drug drug, int dosage){
+
+    private static TakenDrug drugToTakenDrug(Drug drug, int dosage){
         TakenDrug takenDrug = new TakenDrug();
         takenDrug.setDosageForm(databaseDrugList.dosageFormDao().getNameById(drug.getDosageFormId()));
         takenDrug.setDrugName(drug.getDrugName());

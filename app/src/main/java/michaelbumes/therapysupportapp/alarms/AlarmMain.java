@@ -46,8 +46,24 @@ public class AlarmMain extends BroadcastReceiver {
     private Date startingDay, endDay;
     private int id;
 
+    public AlarmMain(){
 
-    public AlarmMain() {
+    }
+
+
+    public AlarmMain(Context context) {
+        Intent intent = new Intent(context, AlarmMain.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("dailyInt", 1);
+        intent.putExtra("daily", bundle);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1111, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
 
@@ -101,10 +117,10 @@ public class AlarmMain extends BroadcastReceiver {
     }
 
     private void createAlarmCycle() {
-        mExtras.putInt("daysWithIntake", mDrugEvent.getTakingPatternDaysWithIntake());
-        mExtras.putInt("daysWithoutIntake", mDrugEvent.getTakingPatternDaysWithoutIntake());
-        mExtras.putInt("daysWithIntakeStatic", mDrugEvent.getTakingPatternDaysWithIntake());
-        mExtras.putInt("daysWithoutIntakeStatic", mDrugEvent.getTakingPatternDaysWithoutIntake());
+        mExtras.putInt("daysWithIntake", mDrugEvent.getTakingPatternDaysWithIntakeChange());
+        mExtras.putInt("daysWithoutIntake", mDrugEvent.getTakingPatternDaysWithoutIntakeChange());
+        mExtras.putInt("daysWithIntakeStatic", mDrugEvent.getTakingPatternDaysWithIntakeChange());
+        mExtras.putInt("daysWithoutIntakeStatic", mDrugEvent.getTakingPatternDaysWithoutIntakeChange());
 
         ArrayList<String> alarmTimeArray = new ArrayList<>(alarmTime);
         mExtras.putStringArrayList("alarmTime", alarmTimeArray);
@@ -241,6 +257,17 @@ public class AlarmMain extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // here you can get the extras you passed in when creating the alarm
+        Bundle bundleDaily = null;
+        try {
+            bundleDaily = intent.getBundleExtra("daily");
+        }catch (Exception ignored){
+
+        }if (bundleDaily != null){
+            NotificationHelper helper = new NotificationHelper(context);
+            android.support.v4.app.NotificationCompat.Builder builder = helper.getChannelNotification("Wie fühlen Sie Sich heute?", "Stimmungstagebuch Eintrag hinzufügen");
+            helper.getManger().notify(111111, builder.build());
+            return;
+        }
         Bundle bundle = intent.getBundleExtra(REMINDER_BUNDLE);
         String drugName = bundle.getString("drugName");
         int alarmType = bundle.getInt("alarmType");
@@ -434,9 +461,6 @@ public class AlarmMain extends BroadcastReceiver {
         helper.getManger().notify(mIdGenerated, builder.build());
     }
 
-    public String firstTwo(String str) {
-        return str.length() < 2 ? str : str.substring(0, 2);
-    }
 
     private static void cancelAlarm(Context context, int id) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

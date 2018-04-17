@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_edit_food"
                 android:layout_centerInParent="true"
+                android:textColor="@color/black"
                 android:background="@drawable/custom_button_accent"
                 android:drawableStart="@drawable/ic_camera_alt_black_24dp"
                 android:drawablePadding="-10dp"

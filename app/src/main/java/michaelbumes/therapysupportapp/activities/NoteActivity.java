@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,6 +89,8 @@ public class NoteActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.relative_layout);
         moodDiaryToday =null;
 
+
+        //ID wird gesetzt falls der Eintrag bearbeitet wird, also nicht neu erstellt wird
         Intent intent = getIntent();
         int id = intent.getIntExtra("noteId", -1);
 
@@ -104,7 +107,7 @@ public class NoteActivity extends AppCompatActivity {
                 }
 
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                        "peter.provider",
+                        "file.provider",
                         image);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
@@ -153,8 +156,7 @@ public class NoteActivity extends AppCompatActivity {
                     Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
                     noteImage.setImageBitmap(adjustedBitmap);
                     relativeLayout.setVisibility(View.VISIBLE);
-                    photoButton.setVisibility(View.GONE);
-                    videoButton.setVisibility(View.GONE);
+
                     flag = PHOTO_FLAG;
 
                 }
@@ -167,8 +169,8 @@ public class NoteActivity extends AppCompatActivity {
 
                 Uri videoUri = Uri.parse(moodDiaryToday.getInfo2());
                 relativeLayout.setVisibility(View.VISIBLE);
-                photoButton.setVisibility(View.GONE);
-                videoButton.setVisibility(View.GONE);
+                photoButton.setText("Foto ändern");
+                videoButton.setText("Video ändern");
                 Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(moodDiaryToday.getInfo2(),MINI_KIND);
                 noteVideo.setVideoSize(thumbnail.getWidth() *4, thumbnail.getHeight()*4);
                 noteVideo.setVideoURI(videoUri);
@@ -207,10 +209,10 @@ public class NoteActivity extends AppCompatActivity {
 
             Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
             noteImage.setImageBitmap(adjustedBitmap);
-
+            noteVideo.setVisibility(View.GONE);
             relativeLayout.setVisibility(View.VISIBLE);
-            photoButton.setVisibility(View.GONE);
-            videoButton.setVisibility(View.GONE);
+            photoButton.setText("Foto ändern");
+            videoButton.setText("Video ändern");
             flag = PHOTO_FLAG;
         } else if (requestCode == ACTIVITY_START_CAMERA_APP && resultCode == RESULT_OK) {
             flag = VIDEO_FLAG;
@@ -218,8 +220,9 @@ public class NoteActivity extends AppCompatActivity {
             mediaController.setAnchorView(noteVideo);
             noteVideo.setMediaController(mediaController);
             relativeLayout.setVisibility(View.VISIBLE);
-            photoButton.setVisibility(View.GONE);
-            videoButton.setVisibility(View.GONE);
+            noteImage.setVisibility(View.GONE);
+            photoButton.setText("Foto ändern");
+            videoButton.setText("Video ändern");
 
 
             try {
@@ -357,7 +360,7 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                "peter.provider",
+                "file.provider",
                 image);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 

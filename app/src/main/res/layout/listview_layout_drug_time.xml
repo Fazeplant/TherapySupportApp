@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="4dp"
-            
+            android:autoSizeTextType="uniform"
             android:textSize="24dp"
             android:textStyle="bold"
             android:maxLines="1"
@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/text_view_drug_time_dosage_form"
-            
+            android:autoSizeTextType="uniform"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"

@@ -34,7 +34,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
     private static final String TAG = AlarmFragment.class.getName();
     private static final int TITLE = 1;
     private RadioGroup radioGroup;
-    private Switch aSwitch;
+   // private Switch aSwitch;
     private DrugEvent mDrugEvent;
     private Drug drug;
     private View view1;
@@ -62,7 +62,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
         drug = mDrugEvent.getDrug();
 
         radioGroup = view.findViewById(R.id.radio_group_alarm);
-        aSwitch = view.findViewById(R.id.switch_alarm_recurring_reminder);
+        //aSwitch = view.findViewById(R.id.switch_alarm_recurring_reminder);
 
         String[] stringDiscrete1 = new String[]{"Titel", "Inhalt"};
         stringDiscrete2 = new String[]{mDrugEvent.getDiscreteTitle(), mDrugEvent.getDiscreteBody()};
@@ -89,20 +89,19 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
         checkBoxSunday.setOnClickListener(this);
 
 
-
-
-
+/*
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
+                if (b) {
                     mDrugEvent.setRecurringReminder(true);
-                }else {
+                } else {
                     mDrugEvent.setRecurringReminder(false);
                 }
                 EventBus.getDefault().postSticky(mDrugEvent);
             }
         });
+*/
 
         listViewDiscrete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

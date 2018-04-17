@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,6 +54,8 @@ public class CalendarFragment extends BaseFragment {
     private CompactCalendarView compactCalendarView;
     private TextView textViewMood, textViewNote, textViewFood, textViewTakenDrug;
     private Long selectedDateLong;
+    private TextView textViewMonth;
+    private String month;
 
 
     public static CalendarFragment newInstance(int instance) {
@@ -70,14 +73,15 @@ public class CalendarFragment extends BaseFragment {
         getActivity().setTitle(R.string.title_calendar);
         mView = view;
         Bundle mBundle = savedInstanceState;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        textViewMonth = view.findViewById(R.id.text_view_month);
 
 
-
-
+        DateFormat dateFormat = new SimpleDateFormat("MMMM");
+        String dateMonth = dateFormat.format(Calendar.getInstance().getTime());
 
 
         compactCalendarView = view.findViewById(R.id.compactcalendar_view);
+        textViewMonth.setText(dateMonth);
         List<MoodDiary> moodDiaryList =AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAllByArtId(1);
         for (int i = 0; i < moodDiaryList.size(); i++) {
             Date date = moodDiaryList.get(i).getDate();
@@ -114,7 +118,6 @@ public class CalendarFragment extends BaseFragment {
             public void onDayClick(Date dateClicked) {
                 List<Event> events = compactCalendarView.getEvents(dateClicked);
                 Log.d(TAG, "Day was clicked: " + dateClicked + " with events " + events);
-                Date date = null;
 
                 calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
                 calStartOfDay.setTime(dateClicked); // compute start of the day for the timestamp
@@ -133,10 +136,49 @@ public class CalendarFragment extends BaseFragment {
 
 
             }
-
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                Log.d(TAG, "Month was scrolled to: " + firstDayOfNewMonth);
+                switch (firstDayOfNewMonth.getMonth()){
+                    case 0:
+                        textViewMonth.setText(R.string.january);
+                        break;
+                    case 1:
+                        textViewMonth.setText(R.string.february);
+                        break;
+                    case 2:
+                        textViewMonth.setText(R.string.march);
+                        break;
+                    case 3:
+                        textViewMonth.setText(R.string.april);
+                        break;
+                    case 4:
+                        textViewMonth.setText(R.string.may);
+                        break;
+                    case 5:
+                        textViewMonth.setText(R.string.june);
+                        break;
+                    case 6:
+                        textViewMonth.setText(R.string.july);
+                        break;
+                    case 7:
+                        textViewMonth.setText(R.string.august);
+                        break;
+                    case 8:
+                        textViewMonth.setText(R.string.september);
+                        break;
+                    case 9:
+                        textViewMonth.setText(R.string.october);
+                        break;
+                    case 10:
+                        textViewMonth.setText(R.string.november);
+                        break;
+                    case 11:
+                        textViewMonth.setText(R.string.december);
+                        break;
+
+
+
+                }
             }
         });
 
