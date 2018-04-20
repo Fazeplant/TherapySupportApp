@@ -84,26 +84,9 @@ public class TodayFragment extends BaseFragment {
 
 
 
+        //Zeigt den nächsten Alarm an
         if (AppDatabase.getAppDatabase(getContext()).drugDao().countDrugs() != 0) {
-/*            List<Drug> drugList = AppDatabase.getAppDatabase(getContext()).drugDao().getAll();
-            int count = 0;
-            for (int i = 0; i < drugList.size(); i++) {
-                DrugEventDb drugEventDb = AppDatabase.getAppDatabase(getContext()).drugEventDbDao().findById(drugList.get(i).getId());
-                if (drugEventDb.isRegularly()){
-                    count = count + 1;
-                }
-            }
-            if (drugList.size() == count){
-                relativeLayout.setVisibility(View.GONE);
-                textViewEmpty.setVisibility(View.VISIBLE);
-                return;
-            }
-            textViewEmpty.setVisibility(View.GONE);
-            if (drugEventDb.getAlarmTime() ==null){
-                relativeLayout.setVisibility(View.GONE);
-                textViewEmpty.setVisibility(View.VISIBLE);
-                return;
-            }*/
+
             drugEventDb = getLatestDrugEventDb();
             if (!drugEventDb.isRegularly()){
                 relativeLayout.setVisibility(View.GONE);
@@ -111,10 +94,6 @@ public class TodayFragment extends BaseFragment {
                 return;
             }
             String latestAlarmStringPlusId = getLatestAlarmString(drugEventDb);
-/*            if (latestAlarmStringPlusId.equals("-")){
-                textViewEmpty.setVisibility(View.VISIBLE);
-                return;
-            }*/
             String latestAlarmString = latestAlarmStringPlusId.substring(0, 5);
             int latestId = 0;
             try {
@@ -279,7 +258,7 @@ public class TodayFragment extends BaseFragment {
             textViewEmpty.setVisibility(View.VISIBLE);
         }
 
-
+        //Drug bearbeiten
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -472,7 +451,6 @@ public class TodayFragment extends BaseFragment {
                 }
             }
         }
-        //TODO +"0" ?
         return mostRecentAlarmString;
     }
 
@@ -482,22 +460,23 @@ public class TodayFragment extends BaseFragment {
         super.onResume();
 
         Calendar calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calStartOfDay.setTime(calStartOfDay.getTime()); // compute start of the day for the timestamp
+        calStartOfDay.setTime(calStartOfDay.getTime());
         calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
         calStartOfDay.set(Calendar.MINUTE, 0);
         calStartOfDay.set(Calendar.SECOND, 0);
         calStartOfDay.set(Calendar.MILLISECOND, 0);
 
         Calendar calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calEndOfDay.setTime(calEndOfDay.getTime()); // compute start of the day for the timestamp
+        calEndOfDay.setTime(calEndOfDay.getTime());
         calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
         calEndOfDay.set(Calendar.MINUTE, 59);
         calEndOfDay.set(Calendar.SECOND, 59);
         calEndOfDay.set(Calendar.MILLISECOND, 999);
 
-
+        //Alle MoodDiaries für den heutigen Tag
         List<MoodDiary> moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
 
+        //Anzeigen der RecyclerViews
         recyclerViewMood = mView.findViewById(R.id.mood_recyler_view);
 
         recyclerViewMood.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -545,7 +524,7 @@ public class TodayFragment extends BaseFragment {
         itemTouchHelperNoteFood.attachToRecyclerView(recyclerViewFood);
 
     }
-
+    //Sind für das Wegwischen zum löschen zuständig
     private final ItemTouchHelper.SimpleCallback simpleItemTouchCallbackMood = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {

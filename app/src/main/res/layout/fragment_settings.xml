@@ -1,29 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="@dimen/activity_vertical_margin"
     tools:context="michaelbumes.therapysupportapp.fragments.SettingsFragment">
 
-    <Button
-        android:id="@+id/nuke_button"
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_setting_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="5dp"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/text_view_daily_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/daily_notification"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_view_daily_notification_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_daily_notification"
+                android:text="20:00"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:id="@+id/card_view_setting_2"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_view_setting_1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="5dp"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/text_view_export"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@string/database_export"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_export"
+                android:text="E-Mail"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_setting_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nuke Table" />
+        android:layout_alignParentBottom="true">
 
-    <Button
-        android:id="@+id/create_drug_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create Druglist" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:padding="15dp">
 
-    <Button
-        android:id="@+id/test_button_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Test" />
+            <TextView
+                android:id="@+id/text_view_imprint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/imprint"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
 
-</LinearLayout>
+</RelativeLayout>

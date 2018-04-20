@@ -17,16 +17,16 @@
             android:id="@+id/add_mood_button"
             android:layout_width="match_parent"
             android:layout_marginStart="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/custom_button_fade"
             android:text="@string/add"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/grey9"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -35,8 +35,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linear_layout_alarm_button"
-        android:layout_margin="@dimen/activity_vertical_margin">
+        android:layout_above="@+id/linear_layout_alarm_button">
 
 
         <LinearLayout
@@ -46,6 +45,7 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_view_mood"
+                android:layout_margin="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -182,7 +182,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/custom_button_accent"
                 android:drawablePadding="-60dp"
-                android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"
+                android:drawableEnd="@drawable/ic_arrow_down_white_24dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/white"
                 android:paddingEnd="10dp"
@@ -345,7 +345,7 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_marginEnd="15dp"
                                 android:layout_marginTop="8dp"
-                                android:text="@string/furchtlos"
+                                android:text="@string/fearless"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 

@@ -21,6 +21,22 @@ public class DrugEvent {
     private String startingDate = sdf.format(currentDate);
     private String endDate = "-1";
 
+
+    private int runningTime = 1;
+    private int takingPattern = 1;
+    private int takingPatternDaysWithIntake = -1;
+    private int takingPatternDaysWithoutIntake = -1;
+    private int takingPatternDaysWithIntakeChange = -1;
+
+    private int takingPatternDaysWithoutIntakeChange = -1;
+    private int takingPatternEveryOtherDay = -1;
+    private String takingPatternHourStart = "-1";
+    private int takingPatternHourNumber = -1;
+    private int takingPatternHourInterval = -1;
+    private boolean isRegularly = true;
+
+
+
     public int getRunningTime() {
         return runningTime;
     }
@@ -28,12 +44,6 @@ public class DrugEvent {
     public void setRunningTime(int runningTime) {
         this.runningTime = runningTime;
     }
-
-    private int runningTime = 1;
-    private int takingPattern = 1;
-    private int takingPatternDaysWithIntake = -1;
-    private int takingPatternDaysWithoutIntake = -1;
-    private int takingPatternDaysWithIntakeChange = -1;
 
     public int getTakingPatternDaysWithIntakeChange() {
         return takingPatternDaysWithIntakeChange;
@@ -51,12 +61,6 @@ public class DrugEvent {
         this.takingPatternDaysWithoutIntakeChange = takingPatternDaysWithoutIntakeChange;
     }
 
-    private int takingPatternDaysWithoutIntakeChange = -1;
-    private int takingPatternEveryOtherDay = -1;
-    private String takingPatternHourStart = "-1";
-    private int takingPatternHourNumber = -1;
-    private int takingPatternHourInterval = -1;
-    private boolean isRegularly = true;
 
     private String discreteTitle = "Benachrichtigung";
 

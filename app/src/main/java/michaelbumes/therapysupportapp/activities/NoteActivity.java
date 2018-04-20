@@ -54,7 +54,6 @@ public class NoteActivity extends AppCompatActivity {
     private static final String TAG = NoteActivity.class.getName();
     private static final int REQUEST_TAKE_PHOTO = 0;
     private static final int ACTIVITY_START_CAMERA_APP = 1;
-    private static final int MIC_FLAG = 10;
     private static final int PHOTO_FLAG = 11;
     private static final int VIDEO_FLAG = 12;
 
@@ -94,7 +93,7 @@ public class NoteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int id = intent.getIntExtra("noteId", -1);
 
-
+        //Foto Intent
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,6 +121,7 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
+        //Video Intent
         videoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,6 +132,7 @@ public class NoteActivity extends AppCompatActivity {
                 startActivityForResult(callVideoIntent, ACTIVITY_START_CAMERA_APP);
             }
         });
+        //Falls der Eintrag bearbeitet wird wird das Bild und die Notiz angezeigt
         if (id != -1) {
             moodDiaryToday = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().findById(id);
             noteEdit.setText(moodDiaryToday.getInfo1());
@@ -139,6 +140,7 @@ public class NoteActivity extends AppCompatActivity {
                 mCurrentPhotoPath = moodDiaryToday.getInfo2();
                 File imgFile = new File(moodDiaryToday.getInfo2());
                 if (imgFile.exists()) {
+                    //Bild wird korrekt gedreht falls falsch abgespeichert
                     try {
                         exif = new ExifInterface(moodDiaryToday.getInfo2());
                     } catch (IOException e) {
@@ -160,7 +162,7 @@ public class NoteActivity extends AppCompatActivity {
                     flag = PHOTO_FLAG;
 
                 }
-
+            //Falls Video vorhanden wird es angezeigt
             }else if (moodDiaryToday.getInfo2() != null && NoteAdapter.isVideoFile(moodDiaryToday.getInfo2())){
                 mCurrentVideoPath = moodDiaryToday.getInfo2();
                 MediaController mediaController = new MediaController(this);
@@ -183,6 +185,7 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Löscht temporäres Foto
         if (resultCode == RESULT_CANCELED) {
             try {
                 File deleteFile = new File(mCurrentPhotoPath);
@@ -226,6 +229,7 @@ public class NoteActivity extends AppCompatActivity {
 
 
             try {
+                //Speichert das Video im externen Speicher und zeigt es an
                 String videoFileName = getVideoName();
                 File storageDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
                 AssetFileDescriptor videoAsset = getContentResolver().openAssetFileDescriptor(data.getData(), "r");
@@ -236,8 +240,6 @@ public class NoteActivity extends AppCompatActivity {
                 mCurrentVideoPath = video.getAbsolutePath();
 
 
-
-                Log.d(TAG, "createt File:" + videoFileName + " to:" + storageDir);
 
                 FileOutputStream fos = new FileOutputStream(video);
                 byte[] buf = new byte[1024];
@@ -274,12 +276,11 @@ public class NoteActivity extends AppCompatActivity {
         String imageFileName = getImageName();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -298,37 +299,28 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        sendBroadcast(mediaScanIntent);
-    }
-
     private void addNote() {
         noteText = noteEdit.getText().toString();
         if (TextUtils.isEmpty(noteText)) {
             noteEdit.setError("Sie müssen eine Notiz hinzufügen");
             return;
         } else {
+            //Falls Eintrag neu erstellt wird
             MoodDiary moodDiary = new MoodDiary();
             if (moodDiaryToday == null){
                 Date currentDate = Calendar.getInstance().getTime();
                 moodDiary.setDate(currentDate);
                 moodDiary.setArtID(3);
 
+                //Falls Eintrag bearbeitet wird
             }else {
                 moodDiary = moodDiaryToday;
             }
 
             moodDiary.setInfo1(noteText.toString());
             switch (flag) {
-                case 1:
-                    //ToDo: Notiz hinzufügen
-                    break;
                 case 2:
-                    //ToDo: Notiz + Sprache
+                    //Notiz + Sprache könnte man auch machen
                     break;
                 case PHOTO_FLAG:
                     //Notiz + Foto hinzufügen
@@ -336,6 +328,7 @@ public class NoteActivity extends AppCompatActivity {
                     break;
 
                 case VIDEO_FLAG:
+                    //Notiz + Video hinzufügen
                     moodDiary.setInfo2(mCurrentVideoPath);
                     break;
 
@@ -349,25 +342,7 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
-
-    public void add_photo(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        try {
-            image = createImageFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                "file.provider",
-                image);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-
-        startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-
-    }
-
+    //Gibt Grad zurück wie das Bild gedreht werden muss
     public static int exifToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
             return 90;

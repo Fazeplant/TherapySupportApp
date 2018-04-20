@@ -93,7 +93,6 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.taking_pattern);
-        //onCheckboxClicked(view);
 
         mDrugEvent = EventBus.getDefault().getStickyEvent(DrugEvent.class);
         drug = mDrugEvent.getDrug();
@@ -155,6 +154,8 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
         cardView3 = view.findViewById(R.id.card_view_taking_pattern_check_days);
         cardViewHour = view.findViewById(R.id.card_view_taking_pattern_daily_hour);
 
+
+        //Setzte alle Strings nach DrugEvent oder falls neues DrugEvent mit Standard Werten
         stringAll = new String[]{"Alle"};
         if (mDrugEvent.getTakingPatternEveryOtherDay() == -1){
             stringDuration = new String[]{"2 Tage"};
@@ -187,13 +188,14 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
         lst2.setAdapter(customListView2);
         lstHour.setAdapter(customListViewHours);
 
+        //Anzahl Tage zwischen den Alarmen
         lst1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 pickDays("Alle", 3, i);
             }
         });
-
+        //Zyklus
         lst2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -210,7 +212,7 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                 }
             }
         });
-
+        //Alarm Intervall
         lstHour.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -232,7 +234,7 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                 }
             }
         });
-
+        //Wechselt Einahmemuster und löscht die nicht benötigten Werte und setzt standard Werte
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -375,6 +377,7 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
 
             }
         });
+            //Wechselt auf den richtigen Zustand
             switch (mDrugEvent.getTakingPattern()){
                 case 1:
                     radioButtonDaily.performClick();
@@ -387,15 +390,6 @@ public class TakingPatternFragment extends BaseFragment implements View.OnClickL
                     break;
                 case 4:
                     radioButtonWeekdays.performClick();
-/*                    boolean[] eventDays = mDrugEvent.getTakingPatternWeekdays();
-                    checkBoxMonday.setChecked(eventDays[0]);
-                    checkBoxTuesday.setChecked(eventDays[1]);
-                    checkBoxWednesday.setChecked(eventDays[2]);
-                    checkBoxThursday.setChecked(eventDays[3]);
-                    checkBoxFriday.setChecked(eventDays[4]);
-                    checkBoxSaturday.setChecked(eventDays[5]);
-                    checkBoxSunday.setChecked(eventDays[6]);*/
-
                     break;
                 case 5:
                     radioButtonCycle.performClick();

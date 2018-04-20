@@ -32,7 +32,7 @@ public class TakenDrugAdapter extends RecyclerView.Adapter<TakenDrugAdapter.View
     private Context context;
     int instanceInt = 0;
 
-
+    //Es werden nur die gespeicher die zwischen dem Zeitraum liegen
     public TakenDrugAdapter(List<TakenDrug> takenDrug, Calendar calStartOfDay, Calendar calEndOfDay) {
         List<TakenDrug> returnList = new ArrayList<>();
         for (int i = 0; i < takenDrug.size(); i++) {

@@ -18,14 +18,14 @@ import michaelbumes.therapysupportapp.R;
  * Created by Michi on 08.03.2018.
  */
 
+//Ist für das Hinzufügen der Alarmzeiten verantwortlich
 public class CustomListViewDrugTime extends ArrayAdapter<String> {
 
     private final ArrayList<String> textViewDrugTime;
     private final ArrayList<String> textViewDosage;
     private final ArrayList<String> textViewDosageForm;
-    private ImageButton imageButtonCancle;
     private final Activity context;
-    private View.OnClickListener durgTimeOnclickListener,dosageOnclickListener,dosageFormOnclickListener, imageButtonOnclickListener;
+    private View.OnClickListener drugTimeOnclickListener,dosageOnclickListener,dosageFormOnclickListener, imageButtonOnclickListener;
 
 
     @NonNull
@@ -43,7 +43,7 @@ public class CustomListViewDrugTime extends ArrayAdapter<String> {
             viewHolder.tvw2.setText(textViewDosage.get(position));
             viewHolder.tvw3.setText(textViewDosageForm.get(position));
 
-            viewHolder.tvw1.setOnClickListener(this.durgTimeOnclickListener);
+            viewHolder.tvw1.setOnClickListener(this.drugTimeOnclickListener);
             viewHolder.tvw2.setOnClickListener(this.dosageOnclickListener);
             viewHolder.tvw3.setOnClickListener(this.dosageFormOnclickListener);
             viewHolder.imb.setOnClickListener(this.imageButtonOnclickListener);
@@ -86,13 +86,13 @@ public class CustomListViewDrugTime extends ArrayAdapter<String> {
 
         }
     }
-    public void setDurgTimeOnclickListener(final View.OnClickListener onClickListener){
-        this.durgTimeOnclickListener = onClickListener;
+    public void setDrugTimeOnclickListener(final View.OnClickListener onClickListener){
+        this.drugTimeOnclickListener = onClickListener;
     }
     public void setDosageOnclickListener(final View.OnClickListener onClickListener){
         this.dosageOnclickListener = onClickListener;
     }
-    public void setDosageFormeOnclickListener(final View.OnClickListener onClickListener){
+    public void setDosageFormOnclickListener(final View.OnClickListener onClickListener){
         this.dosageFormOnclickListener = onClickListener;
     }
     public void setImageButtonOnclickListener(final View.OnClickListener onClickListener){

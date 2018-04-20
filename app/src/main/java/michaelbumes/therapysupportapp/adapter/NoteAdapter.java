@@ -49,7 +49,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private Context context;
     int instanceInt = 0;
 
-
+    //Es werden nur die MoodDiarys gespeicher die Note = ArtID = 3 und zwischen dem Zeitraum liegen
     public NoteAdapter(List<MoodDiary> notes, Calendar calStartOfDay, Calendar calEndOfDay ) {
         List<MoodDiary> returnList = new ArrayList<>();
         for (int i = 0; i < notes.size(); i++) {
@@ -74,6 +74,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Entweder das Bild oder Video Thumbnail wird angezeigt
                 if (notes.get(holder.getAdapterPosition()).getInfo2() != null) {
                     if (isImageFile(notes.get(holder.getAdapterPosition()).getInfo2())) {
                         File imgFile = new File(notes.get(holder.getAdapterPosition()).getInfo2());
@@ -113,9 +114,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                 }
 
                 Bitmap myBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(notes.get(holder.getAdapterPosition()).getInfo2()), 150, 150);
-
-                //Bitmap myBitmap = BitmapFactory.decodeFile(notes.get(holder.getAdapterPosition()).getInfo2());
-
                 Bitmap adjustedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
                 holder.imageView.setImageBitmap(adjustedBitmap);
 
@@ -176,6 +174,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
         }
 
+        //Übernommen und bearbeitet von Google: https://developer.android.com/training/animation/zoom.html
+        //Vergrößert das Thumbnail und zeigt das volle Bild an
         private void zoomImageFromThumb(final View thumbView, Bitmap bitmap) {
             // If there's an animation in progress, cancel it
             // immediately and proceed with this one.
@@ -331,6 +331,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             });
         }
 
+        //Übernommen und bearbeitet von Google: https://developer.android.com/training/animation/zoom.html
+        //Vergrößert das Thumbnail und zeigt das volle Video an
         private void zoomVideoFromThumb(final View thumbView, String videoFilePath) {
             // If there's an animation in progress, cancel it
             // immediately and proceed with this one.

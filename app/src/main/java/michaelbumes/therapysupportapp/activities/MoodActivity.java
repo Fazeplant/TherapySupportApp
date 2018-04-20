@@ -105,7 +105,6 @@ public class MoodActivity extends AppCompatActivity {
 
 
 
-
         moodButton0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,6 +203,7 @@ public class MoodActivity extends AppCompatActivity {
 
             }
         });
+        //Speichert den Eintrag
         addMoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,18 +213,18 @@ public class MoodActivity extends AppCompatActivity {
                 }else  if (isExpanded){
                     Date currentDate = Calendar.getInstance().getTime();
                     MoodDiary moodDiary;
-
+                    //Falls der Eintrag neu erstellt wird
                     if (moodDiaryToday == null){
                         moodDiary = new MoodDiary();
                         moodDiary.setDate(currentDate);
                         moodDiary.setArtID(1);
 
-
-
                     }else {
                         moodDiary = moodDiaryToday;
                     }
+                    //Info1 = Stimmungseingabe -3 - 3
                     moodDiary.setInfo1(String.valueOf(moodFlag));
+                    //Info2 = Erweiterte Stimmungseingabe = seekbar progress
                     String arrayMood[] = {String.valueOf(seekBar1.getProgress()),String.valueOf(seekBar2.getProgress()),String.valueOf(seekBar3.getProgress()),String.valueOf(seekBar4.getProgress()),String.valueOf(seekBar5.getProgress()),String.valueOf(seekBar6.getProgress()),String.valueOf(seekBar7.getProgress()),String.valueOf(seekBar8.getProgress())};
 
                     StringBuilder buffer = new StringBuilder();
@@ -244,16 +244,18 @@ public class MoodActivity extends AppCompatActivity {
                     finish();
 
                 }else{
+                    //Keine erweiterte Eingabe
                     Date currentDate = Calendar.getInstance().getTime();
                     MoodDiary moodDiary;
 
+                    //Falls der Eintrag neu erstellt wird
                     if (moodDiaryToday == null){
                         moodDiary = new MoodDiary();
                         moodDiary.setDate(currentDate);
                         moodDiary.setArtID(1);
 
 
-
+                        //Falls der Eintrag bearbeitet wird
                     }else {
                         moodDiary = moodDiaryToday;
                     }
@@ -287,7 +289,7 @@ public class MoodActivity extends AppCompatActivity {
                 }
             }
         });
-
+        //Falls der Eintrag bearbeitet wird der ensprechende Knopf getriggert
         if (id != -1){
             moodDiaryToday = AppDatabase.getAppDatabase(getApplicationContext()).moodDiaryDao().findById(id);
             switch (Integer.valueOf(moodDiaryToday.getInfo1())){
@@ -314,6 +316,7 @@ public class MoodActivity extends AppCompatActivity {
                     break;
 
             }
+            //Seekbars werden auf den Stand des Eintrages gesetzt
             if(moodDiaryToday.getInfo2()!= null){
                 List<String> seekBarList = new ArrayList<String>(Arrays.asList(moodDiaryToday.getInfo2().split(",")));
                 seekBar1.setProgress(Integer.valueOf(seekBarList.get(0)));

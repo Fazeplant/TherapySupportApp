@@ -90,6 +90,7 @@ public class AddMedicineFragment extends BaseFragment {
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Initialisiert Barcode scanner
                 IntentIntegrator integrator = IntentIntegrator.forSupportFragment(AddMedicineFragment.this);
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
                 integrator.setPrompt("Scanne Barcode");
@@ -107,7 +108,9 @@ public class AddMedicineFragment extends BaseFragment {
                     nameEdit.setError("Geben Sie einen Namen ein");
                     return;
                 }else if(!isQR) {
+                    //Sucht den eingegebenen Namen in der Datenbank
                     drugList = databaseDrugList.drugListDao().findByName(drugName);
+                    //Falls nicht in der Datenbank wird der Benutzer gefragt ob er ein eigenes Medikament hinzufügen möchte
                     if (drugList == null){
                         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                         builder1.setMessage("Möchten Sie ein Medikament hinzufügen, welches nicht in der Datenbank ist?");
@@ -149,6 +152,7 @@ public class AddMedicineFragment extends BaseFragment {
                     Toast.makeText(getContext(), "Medizin nicht Gefunden", Toast.LENGTH_LONG).show();
                     return;
                 }else {
+                    //Falls mit Barcode gescannt wurde werden aus der Datenbank die Informationen geholt
                     drug = new Drug();
                     drug.setDrugName(drugList.getName());
                     drug.setDosageFormId(drugList.getDosageFormId());
@@ -173,7 +177,6 @@ public class AddMedicineFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_medicine, container, false);
     }
 
@@ -214,6 +217,7 @@ public class AddMedicineFragment extends BaseFragment {
         }
     }
 
+    //EventBus für das DrugEvent
     @Override
     public void onStart() {
         super.onStart();

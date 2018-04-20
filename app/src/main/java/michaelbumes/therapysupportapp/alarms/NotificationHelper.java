@@ -52,6 +52,7 @@ public class NotificationHelper extends ContextWrapper {
 
     }
 
+    //Channels sind ab Android O Pflicht damit können verschiedene Wichtigkeitstufen erstellt werden
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createChannels() {
         //IMPORTANCE_DEFAULT überall mit Ton
@@ -141,7 +142,9 @@ public class NotificationHelper extends ContextWrapper {
         int resId = getResources().getIdentifier("ic_medical_pills_couple", "drawable", getPackageName());
         okIntent.setAction(OK_ACTION);
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        //Switcht zu der richtigen Alarm Einstellungen
         switch(alarmtype){
+            //Alarm mit Klingelton
             case 1:
                 notiUri = null;
                 Uri alarmUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -154,6 +157,7 @@ public class NotificationHelper extends ContextWrapper {
 
                 notificationChannel = NOTIFICATION_ID_SOUND;
                 break;
+            //Alarm mit Benachrichtigungston
             case 2:
                 notiUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 try {
@@ -166,13 +170,16 @@ public class NotificationHelper extends ContextWrapper {
                 }
                 notificationChannel = NOTIFICATION_ID_SOUND;
                 break;
+            //Kein Alarm
             case 3:
                 break;
+            //Stumme Benachrichtigung
             case 4:
                 notificationChannel = NOTIFICATION_ID_SILENT;
                 notiUri = null;
                 notificationMode = Notification.DEFAULT_LIGHTS;
                 break;
+            //Vibration
             case 5:
                 notificationChannel = NOTIFICATION_ID_SILENT;
                 notiUri = null;
@@ -181,6 +188,7 @@ public class NotificationHelper extends ContextWrapper {
                 }
                 notificationMode = Notification.DEFAULT_VIBRATE;
                 break;
+            //Diskrete Notifikation mit eigenem Text und anderem Icon
             case 6:
                 int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
                 if (currentDay == Calendar.SUNDAY && !discretePattern[6]) {

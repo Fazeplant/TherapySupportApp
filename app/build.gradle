@@ -54,6 +54,10 @@ dependencies {
     //CalendarView
     compile 'com.github.sundeepk:compact-calendar-view:2.0.2.3'
 
+    //AutoFitTextView
+    compile 'me.grantland:autofittextview:0.2.+'
+
+
 
 
 

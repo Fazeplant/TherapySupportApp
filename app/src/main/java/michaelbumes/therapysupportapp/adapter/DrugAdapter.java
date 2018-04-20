@@ -56,12 +56,15 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
     public void onBindViewHolder(DrugAdapter.ViewHolder holder, int position) {
         holder.drugName.setText(drugs.get(position).getDrugName());
         holder.drugManufacturer.setText(drugs.get(position).getManufacturer());
+        //Falls ein Alarm gesetzt wurde
         if (AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drugs.get(position).getDrugEventDbId()).isRegularly()){
             holder.imageViewAlarm.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_black_24dp));
+            //Falls kein Alarm gesetzt wurde
         }else {
             holder.imageViewAlarm.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_off_black_24dp));
             holder.alarmTime.setText("    -    ");
         }
+        //Ändert Icon je nach DosageForm
         switch (drugs.get(position).getDosageFormId()){
             case 1:
                 holder.imageViewDrug.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ampoules));
@@ -200,8 +203,6 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
             updateAlarmTime(holder,position);
         }
 
-        //        holder.drugManufacturer.setText((CharSequence) AppDatabase.getAppDatabase(context).manufacturerDao().findById(drugs.get(position).getManufacturer()));
-
 
     }
 
@@ -251,6 +252,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
         }
 
     }
+    //Wird benötigt um komplexe Daten in der Datenbank zu speichern
     public static DrugEvent convertDrugEventDbToDrugEvent(DrugEvent drugEvent, DrugEventDb drugEventDb, Drug drug){
 
         if (drugEventDb.isRegularly()){
@@ -338,7 +340,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
 
             List<String> alarmTime = new ArrayList<>(Arrays.asList(replaceAlarmTime3.split(",")));
 
-
+            //Löscht die Einträge im Alarmmanager damit der Alarm nicht mehr ausgelöst wird
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent myIntent = new Intent(context.getApplicationContext(), AlarmMain.class);
             for (int i = 0; i < alarmTime.size() ; i++) {
@@ -360,7 +362,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder>{
         notifyItemRemoved(position);
         notifyItemRangeChanged(position,drugs.size());
     }
-
+    //Methode um die nächste Alarmzeit anzuzeigen
     private void updateAlarmTime(DrugAdapter.ViewHolder holder, int position){
         String alarmTimeString = "Error";
         String alarmTime1 = AppDatabase.getAppDatabase(context).drugEventDbDao().findById(drugs.get(position).getDrugEventDbId()).getAlarmTime();

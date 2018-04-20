@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TherapySupportApp</string>
+    <string name="app_name">Therapy Support App</string>
     <string name="title_today">Heute</string>
     <string name="title_drug_plan">Medikamentenplan</string>
     <string name="title_calendar">Kalender</string>
@@ -112,4 +112,10 @@
     <string name="november">November</string>
     <string name="december">Dezember</string>
     <string name="vibration">Vibration</string>
+    <string name="no_alarm_set">- Keine Alarme vorhanden -</string>
+    <string name="daily_notification">Tägliche Erinnerung</string>
+    <string name="database_export">Datenbank Export</string>
+    <string name="imprint">Impressum</string>
+    <string name="title_imprint">Impressum</string>
+    <string name="fearless">Furchtlos</string>
 </resources>

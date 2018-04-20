@@ -48,7 +48,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     private Context context;
     int instanceInt = 0;
 
-
+    //Es werden nur die MoodDiarys gespeicher die Food = ArtID = 2 und zwischen dem Zeitraum liegen
     public FoodAdapter(List<MoodDiary> food, Calendar calStartOfDay, Calendar calEndOfDay) {
 
         List<MoodDiary> returnList = new ArrayList<>();
@@ -70,14 +70,14 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final FoodAdapter.ViewHolder holder,int i ){
-        List<String> arrayList = new ArrayList<String>(Arrays.asList(food.get(holder.getAdapterPosition()).getInfo1().split(",")));
+        List<String> arrayList = new ArrayList<String>(Arrays.asList(food.get(holder.getAdapterPosition()).getInfo1().split("//")));
         holder.textViewFood.setText(arrayList.get(0));
         if (arrayList.size() >1){
             switch (Integer.valueOf(arrayList.get(1))){
                 case 2:
                     holder.textViewFoodType.setText(R.string.breakfast);
                     break;
-                case 3:
+                case 4:
                     holder.textViewFoodType.setText(R.string.lunch);
                     break;
                 case 6:
@@ -176,6 +176,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
         }
 
+        //Übernommen und bearbeitet von Google: https://developer.android.com/training/animation/zoom.html
+        //Vergrößert das Thumbnail und zeigt das volle Bild an
         private void zoomImageFromThumb(final View thumbView) {
             // If there's an animation in progress, cancel it
             // immediately and proceed with this one.

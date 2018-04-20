@@ -43,8 +43,6 @@ import michaelbumes.therapysupportapp.entity.TakenDrug;
  * A simple {@link Fragment} subclass.
  */
 public class CalendarFragment extends BaseFragment {
-    private static final String TAG = "Peter";
-    CalendarView cv;
 
     private Calendar calStartOfDay, calEndOfDay;
     private RecyclerView recyclerViewMood;
@@ -53,9 +51,7 @@ public class CalendarFragment extends BaseFragment {
     private View mView;
     private CompactCalendarView compactCalendarView;
     private TextView textViewMood, textViewNote, textViewFood, textViewTakenDrug;
-    private Long selectedDateLong;
     private TextView textViewMonth;
-    private String month;
 
 
     public static CalendarFragment newInstance(int instance) {
@@ -82,18 +78,19 @@ public class CalendarFragment extends BaseFragment {
 
         compactCalendarView = view.findViewById(R.id.compactcalendar_view);
         textViewMonth.setText(dateMonth);
+        //Bekommt alle moodDiary Einträge und färbt den Kalender mit der Farbe der durchschnittlichen Stimmung ein
         List<MoodDiary> moodDiaryList =AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAllByArtId(1);
         for (int i = 0; i < moodDiaryList.size(); i++) {
             Date date = moodDiaryList.get(i).getDate();
             Calendar calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-            calStartOfDay.setTime(date); // compute start of the day for the timestamp
+            calStartOfDay.setTime(date);
             calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
             calStartOfDay.set(Calendar.MINUTE, 0);
             calStartOfDay.set(Calendar.SECOND, 0);
             calStartOfDay.set(Calendar.MILLISECOND, 0);
 
             Calendar calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-            calEndOfDay.setTime(date); // compute start of the day for the timestamp
+            calEndOfDay.setTime(date);
             calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
             calEndOfDay.set(Calendar.MINUTE, 59);
             calEndOfDay.set(Calendar.SECOND, 59);
@@ -117,17 +114,16 @@ public class CalendarFragment extends BaseFragment {
             @Override
             public void onDayClick(Date dateClicked) {
                 List<Event> events = compactCalendarView.getEvents(dateClicked);
-                Log.d(TAG, "Day was clicked: " + dateClicked + " with events " + events);
 
                 calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-                calStartOfDay.setTime(dateClicked); // compute start of the day for the timestamp
+                calStartOfDay.setTime(dateClicked);
                 calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
                 calStartOfDay.set(Calendar.MINUTE, 0);
                 calStartOfDay.set(Calendar.SECOND, 0);
                 calStartOfDay.set(Calendar.MILLISECOND, 0);
 
                 calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-                calEndOfDay.setTime(dateClicked); // compute start of the day for the timestamp
+                calEndOfDay.setTime(dateClicked);
                 calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
                 calEndOfDay.set(Calendar.MINUTE, 59);
                 calEndOfDay.set(Calendar.SECOND, 59);
@@ -183,51 +179,20 @@ public class CalendarFragment extends BaseFragment {
         });
 
 
-/*        cv = view.findViewById(R.id.calendar_view);
-        selectedDateLong = cv.getDate();
-        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
-                Date date = null;
-                try {
-                    date = sdf.parse(String.valueOf(year)+"-"+String.valueOf(month+1)+ "-"+String.valueOf(dayOfMonth));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-                calStartOfDay.setTime(date); // compute start of the day for the timestamp
-                calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
-                calStartOfDay.set(Calendar.MINUTE, 0);
-                calStartOfDay.set(Calendar.SECOND, 0);
-                calStartOfDay.set(Calendar.MILLISECOND, 0);
-
-                calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-                calEndOfDay.setTime(date); // compute start of the day for the timestamp
-                calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
-                calEndOfDay.set(Calendar.MINUTE, 59);
-                calEndOfDay.set(Calendar.SECOND, 59);
-                calEndOfDay.set(Calendar.MILLISECOND, 999);
-                updateRecyclerViews();
 
 
-            }
-        });*/
-
-
-        //Date date = new Date(compactCalendarView);
         Date date = new Date(Calendar.getInstance().getTime().getTime());
 
 
         calStartOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calStartOfDay.setTime(date); // compute start of the day for the timestamp
+        calStartOfDay.setTime(date);
         calStartOfDay.set(Calendar.HOUR_OF_DAY, 0);
         calStartOfDay.set(Calendar.MINUTE, 0);
         calStartOfDay.set(Calendar.SECOND, 0);
         calStartOfDay.set(Calendar.MILLISECOND, 0);
 
         calEndOfDay = Calendar.getInstance(TimeZone.getDefault());
-        calEndOfDay.setTime(date); // compute start of the day for the timestamp
+        calEndOfDay.setTime(date);
         calEndOfDay.set(Calendar.HOUR_OF_DAY, 23);
         calEndOfDay.set(Calendar.MINUTE, 59);
         calEndOfDay.set(Calendar.SECOND, 59);
@@ -283,7 +248,7 @@ public class CalendarFragment extends BaseFragment {
 
     }
 
-
+    //Zeigt die RecyclerViews der Einträge an
     private void updateRecyclerViews() {
 
         List<MoodDiary> moodDiaries = AppDatabase.getAppDatabase(getContext()).moodDiaryDao().getAll();
@@ -348,7 +313,7 @@ public class CalendarFragment extends BaseFragment {
 
 
     }
-
+    //Sind für das Wegwischen zur löschung zuständig
     private final ItemTouchHelper.SimpleCallback simpleItemTouchCallbackMood = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {

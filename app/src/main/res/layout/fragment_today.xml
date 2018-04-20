@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="46dp"
                     android:layout_marginTop="46dp"
-                    android:text="@string/please_add_medicine_first"
+                    android:text="@string/no_alarm_set"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     android:textStyle="bold"

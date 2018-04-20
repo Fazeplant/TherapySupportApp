@@ -12,7 +12,7 @@
 
     <color name="colorPrimary">#88C542</color>
     <color name="colorPrimaryDark">#5a9216</color>
-    <color name="colorAccent">#5a9216</color>
+    <color name="colorAccent">#33691e</color>
 
     <color name="white">#ffffff</color>
     <color name="colorBackground">#EAEAEA</color>
@@ -32,6 +32,8 @@
     <color name="mood_5">#e60c00</color>
     <color name="black_150_transparent">#96000000</color>
     <color name="grey">#757575</color>
+    <color name="grey9">#212121</color>
+
 
 
 </resources>

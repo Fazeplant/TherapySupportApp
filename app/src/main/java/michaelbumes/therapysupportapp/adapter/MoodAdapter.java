@@ -50,6 +50,7 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(MoodAdapter.ViewHolder holder, final int position) {
+        //Indikator für eingegebene Stimmung
         switch (Integer.valueOf(moodDiaries.get(position).getInfo1())){
             case -3:
                 holder.moodButton0.setBackground(context.getResources().getDrawable(R.drawable.border_mood_0));
@@ -104,11 +105,6 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.ViewHolder>{
         public final Button moodButtonNormal;
         public final Button moodButton4;
         public final Button moodButton5;
-        public Button addMoodButton;
-        public Button expandMoodButton;
-        public SeekBar seekBar1, seekBar2, seekBar3, seekBar4, seekBar5, seekBar6, seekBar7, seekBar8;
-        CardView cardViewMoodExpand,cardViewMood;
-
 
 
 

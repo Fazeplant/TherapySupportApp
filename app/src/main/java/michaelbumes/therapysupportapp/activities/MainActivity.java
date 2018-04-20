@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -42,6 +43,8 @@ import michaelbumes.therapysupportapp.fragments.CalendarFragment;
 import michaelbumes.therapysupportapp.fragments.DrugPlanFragment;
 import michaelbumes.therapysupportapp.fragments.SettingsFragment;
 import michaelbumes.therapysupportapp.fragments.TodayFragment;
+
+import static michaelbumes.therapysupportapp.fragments.SettingsFragment.dailyNotificationTime;
 
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.FragmentNavigation, FragNavController.TransactionListener, FragNavController.RootFragmentListener {
@@ -94,8 +97,19 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Frag
 
         databaseDrugList = DatabaseDrugList.getAppDatabase(getApplicationContext());
 
+        //Wird nur beim ersten start ausgeführt. Setzt die tägliche Notifikation auf 20:00
+        SharedPreferences preferences = getSharedPreferences("preferences", MODE_PRIVATE);
+        boolean firstStart = preferences.getBoolean("firstStart", true);
+        if (firstStart){
+            dailyNotificationTime = "20:00";
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("firstStart", false);
+            editor.apply();
+            AlarmMain alarm = new AlarmMain(this);
 
-        AlarmMain alarm = new AlarmMain(this);
+        }
+
+
 
 
         //dim_layout verdunkelt den Bildschirm, beim drüchen des floatingActionButton

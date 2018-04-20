@@ -90,14 +90,10 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
                 getContext(), this, startYear, startMonth, startDay);
 
         RadioGroup radioGroup = view.findViewById(R.id.radio_group_running_time);
-        RadioButton radioButtonUnlimitedTerm = view.findViewById(R.id.radio_button_unlimited_term);
-        RadioButton radioButtonDefined = view.findViewById(R.id.radio_button_defined_end_date);
-        RadioButton radioButtonDays = view.findViewById(R.id.radio_button_term_in_days);
 
         ListView lst1 = view.findViewById(R.id.list_view_running_time_1);
         ListView lst2 = view.findViewById(R.id.list_view_running_time_2);
 
-        CardView cardView1 = view.findViewById(R.id.card_view_running_time_1);
         cardView2 = view.findViewById(R.id.card_view_running_time_2);
 
         String[] stringFirstNotification = new String[]{"Erste Erinnerung"};
@@ -112,6 +108,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
 
         }
 
+        //Zeigt die Laufzeit in Datum Form oder in Anzahl der Tage an
         if (myDrugEvent.getEndDate().equals("-1")){
             stringSecond2 = new String[]{sdf.format(c.getTime())};
         }else {
@@ -141,6 +138,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
         lst1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Start Datum
                 switch (i) {
                     case 0:
                         notificationFlag = START;
@@ -154,6 +152,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
         lst2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //End Datum in Datum oder Anzahl Tage
                 if (runningTimeFlag == DEFINED){
                     notificationFlag = END;
                     datePickerDialog.show();
@@ -172,6 +171,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
                     cardView2.setVisibility(View.GONE);
                     myDrugEvent.setEndDate("-1");
                     EventBus.getDefault().postSticky(myDrugEvent);
+
 
                 } else if (i == R.id.radio_button_defined_end_date) {
                     runningTimeFlag = DEFINED;
@@ -216,7 +216,7 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
             }
 
         });
-
+        //Falls DrugEvent bearbeitet wird wird der dementsprechende RadioButton getriggert
         switch (myDrugEvent.getRunningTime()){
             case 1:
                 radioGroup.check(R.id.radio_button_unlimited_term);
@@ -237,7 +237,6 @@ public class RunningTimeFragment extends BaseFragment implements DatePickerDialo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         if (view1 == null) {
             view1 = inflater.inflate(R.layout.fragment_running_time, container, false);
         }

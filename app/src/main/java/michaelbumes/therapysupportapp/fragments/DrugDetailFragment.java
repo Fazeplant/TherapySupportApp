@@ -102,7 +102,6 @@ public class DrugDetailFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         if (view1 == null) {
             view1 = inflater.inflate(R.layout.fragment_drug_detail, container, false);
         }
@@ -120,62 +119,8 @@ public class DrugDetailFragment extends BaseFragment {
 
             public void onClick(DialogInterface dialog, int item) {
 
-                switch(item)
-                {
-                    case 0:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 1:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 2:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 3:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        customListView.notifyDataSetChanged();
-                        break;
-                    case 4:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 5:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 6:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 7:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 8:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 9:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 10:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 11:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                    case 13:
-                        drug.setDosageFormId(item + 1);
-                        string2[2] = dosageFormList[item];
-                        break;
-                }
+                drug.setDosageFormId(item + 1);
+                string2[2] = dosageFormList[item];
                 customListView.notifyDataSetChanged();
 
                 mDrugEvent.setDrug(drug);

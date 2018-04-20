@@ -25,6 +25,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static michaelbumes.therapysupportapp.fragments.SettingsFragment.dailyNotificationTime;
+
 
 /**
  * Created by Michi on 06.03.2018.
@@ -43,30 +45,35 @@ public class AlarmMain extends BroadcastReceiver {
     private DrugEvent mDrugEvent;
     private Bundle mExtras;
     private int startDay, startMonth, startYear;
-    private Date startingDay, endDay;
+    private Date startingDay;
+    private String endDay;
     private int id;
 
     public AlarmMain(){
 
     }
 
-
+    //Konstruktor für tägliche Notifikation
     public AlarmMain(Context context) {
         Intent intent = new Intent(context, AlarmMain.class);
         Bundle bundle = new Bundle();
         bundle.putInt("dailyInt", 1);
         intent.putExtra("daily", bundle);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 0);
+        if (dailyNotificationTime == null){
+            dailyNotificationTime = "20:00";
+        }
+        int hr = Integer.parseInt(dailyNotificationTime.substring(0, 2));
+        int min = Integer.parseInt(dailyNotificationTime.substring(3, 5));
+        calendar.set(Calendar.HOUR_OF_DAY, hr);
+        calendar.set(Calendar.MINUTE, min);
         calendar.set(Calendar.SECOND, 0);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1111, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
-
+    //Konstruktor für Alarm
     public AlarmMain(Context context, Bundle extras, DrugEvent drugEvent) {
 
         mDrugEvent = drugEvent;
@@ -74,17 +81,20 @@ public class AlarmMain extends BroadcastReceiver {
         calendar = Calendar.getInstance();
         alarmTime = drugEvent.getAlarmTime();
         dosage = drugEvent.getDosage();
+        endDay = drugEvent.getEndDate();
         mExtras = extras;
+        mExtras.putString("endDay", endDay);
         id = extras.getInt("id");
 
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         try {
             startingDay = sdfDate.parse(mDrugEvent.getStartingDate());
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
+
         startDay = Integer.parseInt(DateFormat.format("dd", startingDay).toString());
         startMonth = Integer.parseInt(DateFormat.format("MM", startingDay).toString());
         startYear = Integer.parseInt(DateFormat.format("yyyy", startingDay).toString());
@@ -115,8 +125,10 @@ public class AlarmMain extends BroadcastReceiver {
 
 
     }
-
+    //Alarm im Zyklus (z.B. 5 Tage Alarm, 2 Pause)
     private void createAlarmCycle() {
+        //Die Tage müssen einmal variabel sein, da diese in onRecive verändert werden
+        //Wenn der Zyklus vorbei ist werden die Standartwerte wieder geladen und es geht von vorne los
         mExtras.putInt("daysWithIntake", mDrugEvent.getTakingPatternDaysWithIntakeChange());
         mExtras.putInt("daysWithoutIntake", mDrugEvent.getTakingPatternDaysWithoutIntakeChange());
         mExtras.putInt("daysWithIntakeStatic", mDrugEvent.getTakingPatternDaysWithIntakeChange());
@@ -129,6 +141,8 @@ public class AlarmMain extends BroadcastReceiver {
             String s = alarmTime.get(i);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
+            //Die ID muss immer unterschiedlich sein deswegen wird sie hier generiert
+            //Mit der ID der drug und der Nummer des Alarms
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
             mExtras.putString("alarmTimeI" , alarmTime.get(i));
@@ -140,26 +154,33 @@ public class AlarmMain extends BroadcastReceiver {
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
+            if (Calendar.getInstance().getTime().getTime() > startingDay.getTime()+ hr * 3600000+ min * 60000) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
 
 
     }
-
+    // Alarm an bestimmten Tagen
     private void createAlarmWeekdays() {
+        //Gleich mit täglichen Alarm, es werden nur noch die Tage an dem der Alarm klingeln soll übergeben
         mExtras.putBooleanArray("daysToAlarm", mDrugEvent.getTakingPatternWeekdays());
         intent.putExtra(REMINDER_BUNDLE, mExtras);
         createAlarmDaily();
     }
 
+    //Täglicher Alarm mit Intervall
     private void createAlarmEveryHour() {
-
+        //Zuerst wird der Alarm auf das Startintervall gesetzt
         String s = mDrugEvent.getTakingPatternHourStart();
         int hr = Integer.parseInt(s.substring(0, 2));
         int min = Integer.parseInt(s.substring(3, 5));
         mExtras.putInt("dosage", dosage.get(0));
         mExtras.putString("alarmTimeI" , s);
+        //Die ID muss immer unterschiedlich sein deswegen wird sie hier generiert
+        //Mit der ID der drug und der Nummer des Alarms
         mExtras.putInt("idGenerated" ,Integer.parseInt(id + "" +String.valueOf(0)));
         intent.putExtra(REMINDER_BUNDLE,mExtras);
         calendar.set(Calendar.HOUR_OF_DAY, hr);
@@ -168,13 +189,19 @@ public class AlarmMain extends BroadcastReceiver {
         calendar.set(Calendar.DAY_OF_WEEK, startDay);
         calendar.set(Calendar.MONTH, startMonth - 1);
         calendar.set(Calendar.YEAR, startYear);
+        //Falls der Uhrzeit Startzeitpunkt schon vergangen ist, wird der Alarm auf den Tag danach gesetzt
+        if (Calendar.getInstance().getTime().getTime() > startingDay.getTime()+ hr * 3600000+ min * 60000) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
         PendingIntent pendingIntentStart = PendingIntent.getBroadcast(mContext,Integer.parseInt(id + "" +String.valueOf(0)), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntentStart);
 
-
+        //Hier wird das Intervall auf den Startzeitpunkt gerechnet und der Alarm so oft gefeuert wie es Anzahl an Intervallen gibt
         for (int i = 0; i < mDrugEvent.getTakingPatternHourNumber(); i++) {
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i+1));
             mExtras.putInt("dosage", dosage.get(0));
+            //Die ID muss immer unterschiedlich sein deswegen wird sie hier generiert
+            //Mit der ID der drug und der Nummer des Alarms
             mExtras.putInt("idGenerated" ,idGenerated);
             int alarmTimeHr = hr + mDrugEvent.getTakingPatternHourInterval();
             String alarmTimeHrString;
@@ -202,12 +229,16 @@ public class AlarmMain extends BroadcastReceiver {
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
+            //Falls der Uhrzeit Startzeitpunkt schon vergangen ist, wird der Alarm auf den Tag danach gesetzt
+            if (Calendar.getInstance().getTime().getTime() > startingDay.getTime()+ hr * 3600000+ min * 60000) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         }
     }
-
+    //Täglicher Alarm mit verschiedenen Uhrzeiten
     private void createAlarmDaily() {
         for (int i = 0; i < alarmTime.size(); i++) {
             String s = alarmTime.get(i);
@@ -215,28 +246,37 @@ public class AlarmMain extends BroadcastReceiver {
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
 
             mExtras.putString("alarmTimeI" , alarmTime.get(i));
+            //Die ID muss immer unterschiedlich sein deswegen wird sie hier generiert
+            //Mit der ID der drug und der Nummer des Alarms
             mExtras.putInt("idGenerated" ,idGenerated);
 
             intent.putExtra(REMINDER_BUNDLE,mExtras);
             int hr = Integer.parseInt(s.substring(0, 2));
             int min = Integer.parseInt(s.substring(3, 5));
+
             calendar.set(Calendar.HOUR_OF_DAY, hr);
             calendar.set(Calendar.MINUTE, min);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
+            //Falls der Uhrzeit Startzeitpunkt schon vergangen ist, wird der Alarm auf den Tag danach gesetzt
+            if (Calendar.getInstance().getTime().getTime() > startingDay.getTime()+ hr * 3600000+ min * 60000) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
     }
-
+    //Alarm alle N Tage
     private void createAlarmEveryOtherDay() {
         long interval = mDrugEvent.getTakingPatternEveryOtherDay() * AlarmManager.INTERVAL_DAY;
         for (int i = 0; i < alarmTime.size(); i++) {
             String s = alarmTime.get(i);
             int idGenerated = Integer.parseInt(id + "" +String.valueOf(i));
             mExtras.putInt("dosage", dosage.get(i));
+            //Die ID muss immer unterschiedlich sein deswegen wird sie hier generiert
+            //Mit der ID der drug und der Nummer des Alarms
             mExtras.putInt("idGenerated" ,idGenerated);
             mExtras.putString("alarmTimeI" , alarmTime.get(i));
             intent.putExtra(REMINDER_BUNDLE,mExtras);
@@ -248,6 +288,10 @@ public class AlarmMain extends BroadcastReceiver {
             calendar.set(Calendar.DAY_OF_WEEK, startDay);
             calendar.set(Calendar.MONTH, startMonth - 1);
             calendar.set(Calendar.YEAR, startYear);
+            //Falls der Uhrzeit Startzeitpunkt schon vergangen ist, wird der Alarm auf den Tag danach gesetzt
+            if (Calendar.getInstance().getTime().getTime() > startingDay.getTime()+ hr * 3600000+ min * 60000) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idGenerated, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pendingIntent);
         }
@@ -256,7 +300,7 @@ public class AlarmMain extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // here you can get the extras you passed in when creating the alarm
+        //Alarm für tägliche Notifikation
         Bundle bundleDaily = null;
         try {
             bundleDaily = intent.getBundleExtra("daily");
@@ -268,6 +312,7 @@ public class AlarmMain extends BroadcastReceiver {
             helper.getManger().notify(111111, builder.build());
             return;
         }
+        //Sonstige  Alarme
         Bundle bundle = intent.getBundleExtra(REMINDER_BUNDLE);
         String drugName = bundle.getString("drugName");
         int alarmType = bundle.getInt("alarmType");
@@ -295,23 +340,15 @@ public class AlarmMain extends BroadcastReceiver {
 
 
 
-
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         Date startDate1 = cal.getTime();
         cal.setTime(startDate1);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        //int year  = cal.get(Calendar.HOUR_OF_DAY);
-        //int month = cal.get(Calendar.MONTH);
-        //int date  = cal.get(Calendar.DATE);
-        //cal.clear();
-        //cal.set(year, month, date);
         long todayMillis2 = cal.getTimeInMillis();
-        long millis = System.currentTimeMillis();
 
         Date todayDate = null;
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
 
         String todayString = sdfDate.format(startDate1);
         try {
@@ -320,11 +357,8 @@ public class AlarmMain extends BroadcastReceiver {
             e.printStackTrace();
         }
 
-
         Long hrLong = TimeUnit.HOURS.toMillis(Integer.parseInt(alarmTimeI.substring(0, 2)));
         Long minLong = TimeUnit.MINUTES.toMillis(Integer.parseInt(alarmTimeI.substring(3, 5)));
-
-
 
 
         try {
@@ -334,7 +368,7 @@ public class AlarmMain extends BroadcastReceiver {
         }
 
 
-        //600000 = 10 min Toleranz
+        //Hier wird gecheckt ob der Alarm für die Vergangenheit gesetzt wurde und er nicht auslösen soll
         if (todayMillis2  < startDayDate.getTime() + hrLong +minLong) {
             return;
         }
@@ -344,6 +378,7 @@ public class AlarmMain extends BroadcastReceiver {
 
         Date endDayDate = null;
 
+        //Falls Endatum erreicht wird Alarm gelöscht
         if (!endDayString.equals("-1")) {
             try {
                 endDayDate = sdfDate.parse(endDayString);
@@ -355,6 +390,10 @@ public class AlarmMain extends BroadcastReceiver {
                 return;
             }
         }
+        //Alarm Zyklus
+        //Falls der Alarm ausführen soll wird die Anzahl der Tage mit Einahme verringert
+        //Falls der Alarm nicht ausführen soll wird die Anzahl der Tage ohne Einahme verringert
+        //Falls beide bei 0 angekommen sind wird der ursprüngliche Wert geladen und es beginnt von vorne
         if (takingPattern == 5) {
             DrugEventDb drugEventDb = AppDatabase.getAppDatabase(context).drugEventDbDao().findById(AppDatabase.getAppDatabase(context).drugDao().findById(id).getDrugEventDbId());
             AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -366,7 +405,6 @@ public class AlarmMain extends BroadcastReceiver {
             String replaceAlarmTime3 = replaceAlarmTime2.replace(" ", "");
 
             List<String> alarmTime = new ArrayList<String>(Arrays.asList(replaceAlarmTime3.split(",")));
-            //ArrayList<String> alarmTimeArray = new ArrayList<String>(Integer.parseInt(drugEventDb.getAlarmTime()));
 
             if (daysWithIntake > 0) {
                 drugEventDb.setTakingPatternDaysWithIntakeChange(daysWithIntake - 1);
@@ -434,7 +472,7 @@ public class AlarmMain extends BroadcastReceiver {
 
             }
         }
-
+        //Es wird gecheckt ob der aktuelle Tag den Alarm ausführen soll
         if (takingPattern == 4) {
             boolean[] takingPatternWeekdays = bundle.getBooleanArray("daysToAlarm");
             if (currentDay == Calendar.SUNDAY && !takingPatternWeekdays[6]) {

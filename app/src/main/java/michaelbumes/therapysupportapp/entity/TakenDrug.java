@@ -14,6 +14,7 @@ import michaelbumes.therapysupportapp.TimestampConverter;
  * Created by Michi on 10.04.2018.
  */
 
+//Eingenommene Medikamente
 @Entity(tableName = "taken_drug")
 public class TakenDrug implements Serializable {
 

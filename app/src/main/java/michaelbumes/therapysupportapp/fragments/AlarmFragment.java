@@ -62,8 +62,8 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
         drug = mDrugEvent.getDrug();
 
         radioGroup = view.findViewById(R.id.radio_group_alarm);
-        //aSwitch = view.findViewById(R.id.switch_alarm_recurring_reminder);
 
+        //String für die ListViews
         String[] stringDiscrete1 = new String[]{"Titel", "Inhalt"};
         stringDiscrete2 = new String[]{mDrugEvent.getDiscreteTitle(), mDrugEvent.getDiscreteBody()};
 
@@ -88,20 +88,6 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
         checkBoxSunday = view.findViewById(R.id.check_box_alarm_sunday);
         checkBoxSunday.setOnClickListener(this);
 
-
-/*
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mDrugEvent.setRecurringReminder(true);
-                } else {
-                    mDrugEvent.setRecurringReminder(false);
-                }
-                EventBus.getDefault().postSticky(mDrugEvent);
-            }
-        });
-*/
 
         listViewDiscrete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -197,7 +183,6 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         if (view1 == null) {
             view1 = inflater.inflate(R.layout.fragment_alarm, container, false);
         }
@@ -223,7 +208,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
         mDrugEvent = event;
 
     }
-
+    //Berechnet die Größe des Layouts
     private void justifyListViewHeightBasedOnChildren(ListView listView) {
 
         ListAdapter adapter = listView.getAdapter();

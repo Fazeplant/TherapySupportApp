@@ -23,6 +23,7 @@ import michaelbumes.therapysupportapp.entity.Drug;
 /**
  * A simple {@link Fragment} subclass.
  */
+//Zeigt die RecyclerView der gespeicherten Medikamente an
 public class DrugPlanFragment extends BaseFragment {
     private FloatingActionButton fab;
    private RecyclerView recyclerView;
